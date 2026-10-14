@@ -49,7 +49,7 @@ const H = headingLevel;
     color: var(--text); text-decoration: none;
     transition: border-color var(--dur) var(--ease), transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
   }
-  a.sc:hover { border-color: var(--c-ink); box-shadow: var(--shadow-pop); transform: translateY(-2px); }
+  a.sc:hover { border-color: var(--border); box-shadow: var(--shadow-soft); transform: translateY(-2px); }
   .sc :global(.sc__pattern) { transition: height var(--dur) var(--ease); }
   a.sc:hover :global(.sc__pattern) { --band: 14px; }
   .sc__body { display: flex; flex-direction: column; gap: var(--sp-3); padding: var(--sp-6) var(--sp-6) var(--sp-6); flex: 1; }
@@ -64,7 +64,7 @@ const H = headingLevel;
   }
   .sc__more :global(svg) { transition: transform var(--dur) var(--ease); }
   a.sc:hover .sc__more :global(svg) { transform: translateX(4px); }
-  .sc--current { border-color: var(--c-ink); }
+  .sc--current { border-color: var(--c-blue); }
   .sg--compact .sc__body { padding: var(--sp-5); gap: var(--sp-2); }
   .sg--compact .sc__more { padding-top: var(--sp-3); }
   .sc--ask { background: var(--bg-dark); border: 0; color: var(--text-on-dark); }

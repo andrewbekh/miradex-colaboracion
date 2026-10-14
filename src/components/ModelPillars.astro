@@ -1,6 +1,7 @@
 ---
 // The core of the Spanish model (strategy 1): national sales, local installation, protected client.
-interface Pillar { kicker: string; title: string; text: string }
+import Icon from './Icon.astro';
+interface Pillar { kicker: string; title: string; text: string; icon?: string }
 interface Props { items: Pillar[] }
 const { items } = Astro.props;
 const swatches = ['blue', 'sky', 'mint'];
@@ -8,6 +9,7 @@ const swatches = ['blue', 'sky', 'mint'];
 <ol class="mp" role="list">
   {items.map((p, i) => (
     <li class={`mp__item mp__item--${swatches[i % 3]}`}>
+      {p.icon && <span class="mp__icon"><Icon name={p.icon} size={30} /></span>}
       <span class="mp__kicker eyebrow">{p.kicker}</span>
       <h3 class="mp__title">{p.title}</h3>
       <p class="mp__text">{p.text}</p>
@@ -21,8 +23,11 @@ const swatches = ['blue', 'sky', 'mint'];
   .mp__item--blue { background: var(--c-blue); color: var(--c-white); }
   .mp__item--sky { background: var(--c-sky); color: var(--c-white); }
   .mp__item--mint { background: var(--c-mint); }
+  .mp__icon { display: grid; place-items: center; width: 64px; height: 64px; margin-bottom: var(--sp-3); border-radius: var(--radius-md); background: var(--c-white); color: var(--c-ink); }
+  .mp__item--blue .mp__icon { color: var(--c-blue); }
+  .mp__item--sky .mp__icon { color: #4aa7e0; }
   .mp__kicker { opacity: 0.85; }
   .mp__title { font-size: var(--fs-h3); }
-  @media (max-width: 1199px) { .mp { grid-template-columns: 1fr; } .mp__item { grid-template-columns: 180px 1fr; column-gap: var(--sp-6); } .mp__kicker { grid-row: span 2; } }
-  @media (max-width: 767px) { .mp__item { grid-template-columns: 1fr; padding: var(--sp-5); } .mp__kicker { grid-row: auto; } }
+  @media (max-width: 1199px) { .mp { grid-template-columns: 1fr; } .mp__item { grid-template-columns: 64px 180px 1fr; column-gap: var(--sp-6); align-items: start; } .mp__icon { grid-row: span 2; margin: 0; } .mp__kicker { grid-row: span 2; padding-top: 6px; } }
+  @media (max-width: 767px) { .mp__item { grid-template-columns: 1fr; padding: var(--sp-5); } .mp__icon, .mp__kicker { grid-row: auto; } .mp__icon { margin-bottom: var(--sp-2); } .mp__kicker { padding-top: 0; } }
 </style>

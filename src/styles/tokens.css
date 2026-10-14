@@ -49,6 +49,8 @@
   --c-on-dark-muted: #b9b9b9; /* derived: white 72% on ink */
   --c-blue-hover: #6d8ef2;  /* derived: blue 10% darker, button hover */
   --c-mint-hover: #c2f1bb;  /* derived: mint 6% darker, button hover */
+  --c-mint-strong: #9fe796; /* derived: mint 25% stronger, small dots on white */
+  --shadow-soft: 0 16px 40px rgb(53 53 53 / 0.08);
 
   /* ---- Semantic roles ---- */
   --bg: var(--c-white);

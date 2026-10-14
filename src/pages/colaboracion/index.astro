@@ -22,9 +22,9 @@ import Faq from '../../components/Faq.astro';
 import FinalForm from '../../components/FinalForm.astro';
 
 const pillars = [
-  { kicker: 'Ventas', title: 'Nacionales', text: 'Puede estar en cualquier punto de España y vender MIRADEX en todo el país. MIRADEX también vende y desarrolla sus propios canales.' },
-  { kicker: 'Instalación', title: 'Local', text: 'El montaje y el servicio se organizan en cada zona con una red de instaladores verificados.' },
-  { kicker: 'Protección', title: 'Su cliente, no un territorio', text: 'No damos exclusividad por provincia o región. Protegemos los clientes y proyectos que usted registra.' },
+  { icon: 'map', kicker: 'Ventas', title: 'Nacionales', text: 'Puede estar en cualquier punto de España y vender MIRADEX en todo el país. MIRADEX también vende y desarrolla sus propios canales.' },
+  { icon: 'map-pin', kicker: 'Instalación', title: 'Local', text: 'El montaje y el servicio se organizan en cada zona con una red de instaladores verificados.' },
+  { icon: 'shield-check', kicker: 'Protección', title: 'Su cliente, no un territorio', text: 'No damos exclusividad por provincia o región. Protegemos los clientes y proyectos que usted registra.' },
 ];
 
 const production = [
@@ -105,7 +105,7 @@ const faq = [
 
   <!-- 5 · Production -->
   <Section id="produccion" tone="tint" title="Producción" lead="Producción europea a medida, con plazos claros para usted y para sus clientes.">
-    <SplitFeature items={production} media={{ placeholder: 'Fábrica en Rumanía' }} aside={{ value: '3-5 días', label: 'de producción a medida' }} />
+    <SplitFeature items={production} media={{ src: '/img/photos/texture-graphite.jpg', alt: 'Lamas de acero MIRADEX', placeholder: 'Fábrica en Rumanía' }} aside={{ value: '3-5 días', label: 'de producción a medida' }} />
   </Section>
 
   <!-- 6 · Range -->
@@ -133,6 +133,7 @@ const faq = [
         { icon: 'package', text: 'Fabricado a medida: sin stock de medidas y colores en su almacén.' },
         { icon: 'map-pin', text: 'Instalación local con socios verificados en cada zona.' },
         { icon: 'calendar-check', text: 'Plazos claros de producción y entrega para sus clientes.' },
+        { icon: 'truck', text: 'Entrega organizada a cualquier punto de España.' },
       ]}
     />
   </Section>

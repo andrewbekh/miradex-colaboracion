@@ -8,7 +8,7 @@ const swatches = ['blue', 'sky', 'mint', 'blue'];
 ---
 <ul class="sgp" role="list">
   {groups.map((g, i) => (
-    <li class="sgp__card">
+    <li class={`sgp__card sgp__card--${swatches[i % 4]}`}>
       <span class={`sgp__ic sgp__ic--${swatches[i % 4]}`}><Icon name={g.icon} size={24} /></span>
       <h3 class="sgp__title">{g.title}</h3>
       <ul role="list" class="sgp__items">
@@ -28,7 +28,9 @@ const swatches = ['blue', 'sky', 'mint', 'blue'];
   .sgp__title { font-size: var(--fs-h3); }
   .sgp__items { display: grid; gap: var(--sp-3); }
   .sgp__items li { position: relative; padding-left: 18px; color: var(--text-muted); font-size: var(--fs-small); }
-  .sgp__items li::before { content: ''; position: absolute; left: 0; top: 0.6em; width: 8px; height: 8px; border-radius: 2px; background: var(--c-ink); }
+  .sgp__items li::before { content: ''; position: absolute; left: 0; top: 0.62em; width: 8px; height: 8px; border-radius: 50%; background: var(--c-blue); }
+  .sgp__card--sky .sgp__items li::before { background: var(--c-sky); }
+  .sgp__card--mint .sgp__items li::before { background: var(--c-mint-strong); }
   @media (max-width: 1199px) { .sgp { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 767px) { .sgp { grid-template-columns: 1fr; } .sgp__card { padding: var(--sp-5); } }
 </style>

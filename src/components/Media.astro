@@ -23,7 +23,7 @@ const { src, alt = '', ratio = '4/3', placeholder, caption, class: cls = '', eag
         <Pattern seed={placeholder ?? 'media'} cols={3} units={10} fill />
       </div>
     )}
-    {!src && placeholder && <span class="media__label">{placeholder}</span>}
+    {placeholder && <span class="media__label">{placeholder}</span>}
   </div>
   {caption && <figcaption class="media__cap">{caption}</figcaption>}
 </figure>

@@ -5,12 +5,15 @@
 import Icon from './Icon.astro';
 import logo from '../assets/logo.svg?raw';
 import { mainNav } from '../data/nav';
-import { scenarios } from '../data/scenarios';
+import { scenarios, scenarioById } from '../data/scenarios';
 import { site } from '../data/site';
 
 interface Props { current?: string }
 const { current } = Astro.props;
 const inCollab = Astro.url.pathname.startsWith(site.hubPath);
+// On a scenario landing: the logo goes one level up (to the hub) and the breadcrumb docks into the header on scroll.
+const sc = scenarioById(current);
+const logoHref = sc ? site.hubPath : '/';
 ---
 <div class="topbar">
   <div class="container topbar__in">
@@ -24,7 +27,7 @@ const inCollab = Astro.url.pathname.startsWith(site.hubPath);
 
 <header class="hd" data-header>
   <div class="container hd__in">
-    <a class="hd__logo" href="/" aria-label="MIRADEX, inicio" set:html={logo} />
+    <a class="hd__logo" href={logoHref} aria-label={sc ? `MIRADEX, volver a ${site.navLabel}` : 'MIRADEX, inicio'} set:html={logo} />
 
     <nav class="hd__nav" aria-label="Principal" id="site-nav">
       <ul class="hd__list" role="list">
@@ -66,6 +69,15 @@ const inCollab = Astro.url.pathname.startsWith(site.hubPath);
       </button>
     </div>
   </div>
+  {sc && (
+    <div class="hd__crumb" data-crumb-bar aria-hidden="true">
+      <div class="container hd__crumb-in">
+        <a href={site.hubPath} class="hd__crumb-back" tabindex="-1"><Icon name="arrow-left" size={16} />{site.navLabel}</a>
+        <span class="hd__crumb-sep" aria-hidden="true">/</span>
+        <span class="hd__crumb-cur"><span class="hd__crumb-num">{sc.num}</span><span class="hd__crumb-long">{sc.title}</span><span class="hd__crumb-short">{sc.short}</span></span>
+      </div>
+    </div>
+  )}
 </header>
 
 <style>
@@ -76,6 +88,22 @@ const inCollab = Astro.url.pathname.startsWith(site.hubPath);
 
   /* no backdrop-filter: it would become the containing block of the fixed mobile menu */
   .hd { position: sticky; top: 0; z-index: 50; background: var(--c-white); border-bottom: 1px solid var(--border); }
+  /* breadcrumb docked under the header: absolutely positioned so the page does not jump */
+  .hd__crumb {
+    position: absolute; left: 0; right: 0; top: 100%; z-index: -1;
+    background: var(--c-white); border-bottom: 1px solid var(--border); box-shadow: var(--shadow-soft);
+    transform: translateY(-100%); opacity: 0; visibility: hidden;
+    transition: transform var(--dur) var(--ease), opacity var(--dur) var(--ease), visibility var(--dur);
+  }
+  .hd.is-docked .hd__crumb { transform: none; opacity: 1; visibility: visible; }
+  .hd.is-menu-open .hd__crumb { visibility: hidden; opacity: 0; }
+  .hd__crumb-in { display: flex; align-items: center; gap: 10px; min-height: 48px; font-size: var(--fs-small); color: var(--text-muted); }
+  .hd__crumb-back { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px 5px 8px; border-radius: var(--radius-sm); background: var(--bg-tint); color: var(--text); text-decoration: none; }
+  .hd__crumb-back:hover { background: var(--c-mint); color: var(--text); }
+  .hd__crumb-cur { display: inline-flex; align-items: center; gap: 8px; color: var(--text); font-weight: var(--fw-medium); min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .hd__crumb-num { display: grid; place-items: center; flex: none; width: 24px; height: 24px; border-radius: var(--radius-xs); background: var(--c-blue); color: var(--c-white); font-size: 12px; }
+  .hd__crumb-short { display: none; }
+  @media (max-width: 767px) { .hd__crumb-long { display: none; } .hd__crumb-short { display: inline; } }
   .hd__in { display: flex; align-items: center; gap: var(--sp-5); min-height: var(--header-h); }
   .hd__logo { display: block; width: 132px; flex: none; color: var(--c-ink); }
   .hd__logo :global(svg) { width: 100%; height: auto; }
@@ -174,6 +202,20 @@ const inCollab = Astro.url.pathname.startsWith(site.hubPath);
     header!.classList.toggle('is-menu-open', open);
     document.documentElement.style.overflow = open ? 'hidden' : '';
   });
+
+  // Dock the page breadcrumb into the header once the hero breadcrumb scrolls under it.
+  const bar = header?.querySelector<HTMLElement>('[data-crumb-bar]');
+  const pageCrumb = document.querySelector<HTMLElement>('.hero__crumb');
+  if (header && bar && pageCrumb) {
+    const backLink = bar.querySelector<HTMLAnchorElement>('a');
+    const io = new IntersectionObserver(([entry]) => {
+      const docked = !entry.isIntersecting && entry.boundingClientRect.top < header.offsetHeight;
+      header.classList.toggle('is-docked', docked);
+      bar.setAttribute('aria-hidden', String(!docked));
+      backLink?.setAttribute('tabindex', docked ? '0' : '-1');
+    }, { rootMargin: `-${header.offsetHeight}px 0px 0px 0px` });
+    io.observe(pageCrumb);
+  }
 
   header?.querySelectorAll<HTMLElement>('[data-dropdown]').forEach((item) => {
     const toggle = item.querySelector<HTMLButtonElement>('[data-dropdown-toggle]')!;

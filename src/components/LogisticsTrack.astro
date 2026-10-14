@@ -18,7 +18,7 @@ const { stages, total, notes = [] } = Astro.props;
   <p class="lt__total"><Icon name="clock" size={20} /><span>{total}</span></p>
   {notes.length > 0 && (
     <ul class="lt__notes" role="list">
-      {notes.map((n) => <li><Icon name={n.icon} size={22} /><span set:html={n.text} /></li>)}
+      {notes.map((n, i) => <li><span class={`lt__ic lt__ic--${['blue', 'sky', 'mint', 'blue'][i % 4]}`}><Icon name={n.icon} size={24} /></span><span set:html={n.text} /></li>)}
     </ul>
   )}
 </div>
@@ -36,11 +36,13 @@ const { stages, total, notes = [] } = Astro.props;
   .lt__title { font-size: 1.0625rem; }
   .lt__text { color: var(--text-muted); font-size: var(--fs-small); max-width: 32ch; }
   .lt__total { display: inline-flex; align-items: center; gap: 10px; justify-self: start; padding: 10px 16px; border-radius: var(--radius-sm); background: var(--c-ink); color: var(--c-white); font-weight: var(--fw-medium); }
-  .lt__notes { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--grid-gap); }
-  .lt__notes li { display: grid; grid-template-columns: 22px 1fr; gap: var(--sp-3); padding: var(--sp-5); border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--bg); color: var(--text-muted); font-size: var(--fs-small); }
-  .lt__notes :global(svg) { color: var(--c-ink); }
+  .lt__notes { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--grid-gap); }
+  .lt__notes li { display: grid; grid-template-columns: 48px 1fr; align-items: center; gap: var(--sp-4); padding: var(--sp-5); border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--bg); color: var(--text); }
+  .lt__ic { display: grid; place-items: center; width: 48px; height: 48px; border-radius: var(--radius-sm); }
+  .lt__ic--blue { background: var(--c-blue); color: var(--c-white); }
+  .lt__ic--sky { background: var(--c-sky); color: var(--c-white); }
+  .lt__ic--mint { background: var(--c-mint); color: var(--c-ink); }
   @media (max-width: 1199px) {
-    .lt__notes { grid-template-columns: 1fr; }
     .lt__track { flex-direction: column; gap: var(--sp-4); }
     .lt__stage { display: grid; grid-template-columns: clamp(112px, 22vw, 168px) 1fr; column-gap: var(--sp-4); }
     .lt__bar { grid-row: span 2; height: 100%; min-height: 64px; margin: 0; justify-content: center; padding: 0 8px; }
