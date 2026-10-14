@@ -24,7 +24,6 @@ import { scenarios } from '../data/scenarios';
   ))}
   <li>
     <div class="bn bn--ask">
-      <span class="bn__ask-art" aria-hidden="true"><Pattern seed="card-ask" cols={3} units={20} fill /></span>
       <span class="bn__body">
         <span class="bn__title">¿No sabe qué formato elegir?</span>
         <span class="bn__text">Cuéntenos sobre su negocio y sus planes: le propondremos el formato y las condiciones según su potencial. Una empresa puede combinar varios formatos.</span>
@@ -62,8 +61,7 @@ import { scenarios } from '../data/scenarios';
   a.bn:hover .bn__go { background: var(--c-mint); transform: rotate(45deg); }
 
   .bn--ask { background: var(--c-mint); color: var(--c-ink); }
-  .bn__ask-art { position: absolute; top: 0; right: 0; bottom: 0; width: 34%; z-index: -1; }
-  .bn--ask .bn__body { padding-right: calc(34% + var(--sp-6)); }
+  .bn--ask .bn__body { padding-right: var(--sp-7); }
   .bn--ask .bn__text { color: var(--c-ink); opacity: 0.8; }
   .bn__cta { justify-self: start; margin-top: var(--sp-2); }
 
@@ -82,8 +80,7 @@ import { scenarios } from '../data/scenarios';
     .bn__num { top: 16px; left: 16px; }
     .bn__go { top: 16px; right: 48px; width: 40px; height: 40px; }
     .bn__body { padding: var(--sp-5) calc(32px + var(--sp-5)) var(--sp-5) var(--sp-5); }
-    .bn__ask-art { width: 32px; }
-    .bn--ask .bn__body { padding-right: calc(32px + var(--sp-5)); }
+    .bn--ask .bn__body { padding-right: var(--sp-5); }
     .bn__cta { width: 100%; }
   }
 </style>
