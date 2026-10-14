@@ -1,0 +1,41 @@
+---
+// Image slot. Without src it renders a brand-pattern placeholder with a short neutral label.
+// Borrowed photos (miradex.bg) are tracked in docs/TODO.md, not marked on the page.
+import Pattern from './Pattern.astro';
+
+interface Props {
+  src?: string;
+  alt?: string;
+  ratio?: string;          // e.g. '4/3', '16/9'
+  placeholder?: string;   // label shown on the pattern when there is no photo yet
+  caption?: string;
+  class?: string;
+  eager?: boolean;
+}
+const { src, alt = '', ratio = '4/3', placeholder, caption, class: cls = '', eager = false } = Astro.props;
+---
+<figure class:list={['media', cls]} style={`--ratio:${ratio}`}>
+  <div class="media__frame">
+    {src ? (
+      <img src={src} alt={alt} loading={eager ? 'eager' : 'lazy'} decoding="async" />
+    ) : (
+      <div class="media__empty">
+        <Pattern seed={placeholder ?? 'media'} cols={3} units={10} fill />
+      </div>
+    )}
+    {!src && placeholder && <span class="media__label">{placeholder}</span>}
+  </div>
+  {caption && <figcaption class="media__cap">{caption}</figcaption>}
+</figure>
+
+<style>
+  .media { display: grid; gap: var(--sp-3); }
+  .media__frame { position: relative; aspect-ratio: var(--ratio); overflow: hidden; border-radius: var(--radius-lg); background: var(--bg-tint); }
+  .media__frame img { width: 100%; height: 100%; object-fit: cover; }
+  .media__empty { position: absolute; inset: 0; opacity: 0.9; }
+  .media__label {
+    position: absolute; left: 16px; bottom: 16px; padding: 6px 10px; border-radius: var(--radius-xs); background: rgb(255 255 255 / 0.92);
+    font-size: 11px; font-weight: var(--fw-medium); letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--c-ink);
+  }
+  .media__cap { font-size: var(--fs-small); color: var(--text-muted); }
+</style>

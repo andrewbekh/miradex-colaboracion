@@ -1,0 +1,137 @@
+/* ==========================================================================
+   MIRADEX design tokens: the single source of truth for the B2B section.
+   Source: brandbook readymag.website/wishnia/miradexbrandbook
+   (pages "Цветовая гамма", "Фирменная верстка", "Паттерн", "Логотип").
+   Copies of the brandbook pages live in docs/brandbook/.
+   Values marked "derived" are tints/shades of brand colors, not new hues.
+   ========================================================================== */
+
+@font-face {
+  font-family: 'CoFo Sans';
+  src: url('/fonts/CoFoSans-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'CoFo Sans';
+  src: url('/fonts/CoFoSans-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'CoFo Sans';
+  src: url('/fonts/CoFoSans-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'CoFo Sans';
+  src: url('/fonts/CoFoSans-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+}
+
+:root {
+  /* ---- Brand palette (brandbook) ---- */
+  --c-blue: #7a9bff;   /* базовый, Pantone 272 C */
+  --c-sky: #7dceff;    /* дополнительный, Pantone 284 C */
+  --c-mint: #d3f9cd;   /* дополнительный, Pantone 344 C */
+  --c-ink: #353535;    /* цвет знака в логотипе */
+  --c-white: #ffffff;
+
+  /* ---- Derived neutrals and tints ---- */
+  --c-ink-muted: #6e6e6e;  /* derived: ink 72% on white, 5.1:1 on white */
+  --c-ink-soft: #3f3f3f;   /* derived: ink +5% white, cards on dark */
+  --c-line: #e3e3e3;       /* derived: ink 14% */
+  --c-line-strong: #c2c2c2;/* derived: ink 30% */
+  --c-paper: #f7f9ff;      /* derived: blue 6% on white, section tint */
+  --c-blue-deep: #5b6da4;  /* derived: blue 55% + ink, text links, 4.7:1 */
+  --c-on-dark-muted: #b9b9b9; /* derived: white 72% on ink */
+  --c-blue-hover: #6d8ef2;  /* derived: blue 10% darker, button hover */
+  --c-mint-hover: #c2f1bb;  /* derived: mint 6% darker, button hover */
+
+  /* ---- Semantic roles ---- */
+  --bg: var(--c-white);
+  --bg-tint: var(--c-paper);
+  --bg-dark: var(--c-ink);
+  --text: var(--c-ink);
+  --text-muted: var(--c-ink-muted);
+  --text-on-dark: var(--c-white);
+  --text-on-dark-muted: var(--c-on-dark-muted);
+  --accent: var(--c-blue);
+  --link: var(--c-blue-deep);
+  --border: var(--c-line);
+  --border-strong: var(--c-line-strong);
+  --focus: var(--c-blue-deep);
+  /* Client rule: text on blue and sky is always white; buttons are blue + white or mint + ink. */
+  --cta-bg: var(--c-blue);
+  --cta-text: var(--c-white);
+  --on-blue: var(--c-white);
+  --success-bg: var(--c-mint);
+  --danger: #b3261e;       /* form errors only, not a brand color */
+
+  /* ---- Typography ---- */
+  --font: 'CoFo Sans', 'Helvetica Neue', Arial, system-ui, sans-serif;
+  --fw-light: 300;
+  --fw-regular: 400;
+  --fw-medium: 500;  /* headings, brandbook: Medium + uppercase */
+  --fw-bold: 700;
+
+  /* fluid between 390 and 1440 */
+  --fs-display: clamp(2.25rem, 1.2rem + 3.6vw, 4rem);     /* 36 to 64 */
+  --fs-h2: clamp(1.75rem, 1.2rem + 1.9vw, 2.75rem);       /* 28 to 44 */
+  --fs-h3: clamp(1.125rem, 1rem + 0.45vw, 1.375rem);      /* 18 to 22 */
+  --fs-stat: clamp(1.75rem, 1.3rem + 1.6vw, 2.75rem);     /* 28 to 44 */
+  --fs-lead: clamp(1.125rem, 1rem + 0.45vw, 1.375rem);    /* 18 to 22 */
+  --fs-body: clamp(1rem, 0.95rem + 0.15vw, 1.0625rem);    /* 16 to 17 */
+  --fs-small: 0.9375rem;                                  /* 15 */
+  --fs-micro: 0.8125rem;                                  /* 13, eyebrows and labels */
+
+  --lh-tight: 1.04;
+  --lh-heading: 1.12;
+  --lh-body: 1.55;
+  --tracking-caps: 0.02em;
+  --tracking-label: 0.08em;
+
+  /* ---- Spacing (4px base) ---- */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 40px;
+  --sp-8: 48px;
+  --sp-9: 64px;
+  --sp-10: 80px;
+  --sp-11: 96px;
+  --sp-12: 128px;
+  --section-y: clamp(64px, 3rem + 5vw, 128px);
+  --stack-gap: clamp(32px, 1.5rem + 2vw, 56px);  /* heading to content */
+
+  /* ---- Layout ---- */
+  --container: 1280px;
+  --gutter: clamp(20px, 5.5vw, 80px);  /* 1440: 80, 768: 42, 390: 21 */
+  --grid-gap: clamp(16px, 0.75rem + 1vw, 24px);
+  /* Breakpoints (used literally in media queries):
+     mobile < 768, tablet 768 to 1199, desktop >= 1200 (design at 1440) */
+
+  /* ---- Brand pattern ---- */
+  /* One pattern unit = ½x of the brandbook grid (a square split in 5 bands). */
+  --band: clamp(8px, 0.4rem + 0.35vw, 12px);
+
+  /* ---- Shape, elevation, motion ---- */
+  /* Corner radius scale (client: 4, 8, 12, 16, 24). Brand pattern bands stay square. */
+  --radius-xs: 4px;   /* tags, chips, badges, small marks */
+  --radius-sm: 8px;   /* buttons, inputs, icon tiles */
+  --radius-md: 12px;  /* cards, list panels */
+  --radius-lg: 16px;  /* media, video, form panel, popup */
+  --radius-xl: 24px;  /* hero image, CTA bands */
+  --border-w: 1px;
+  --shadow-pop: 0 24px 64px rgb(53 53 53 / 0.18);
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --dur: 220ms;
+
+  /* ---- Header ---- */
+  --header-h: 72px;
+}

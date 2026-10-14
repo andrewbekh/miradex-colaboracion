@@ -1,0 +1,10 @@
+node_modules
+dist
+.astro
+shots
+.DS_Store
+# Client source documents (internal pricing, briefs): never publish
+docs/*.docx
+docs/*.pdf
+docs/*.pptx
+docs/brandbook/

@@ -1,0 +1,185 @@
+---
+// Site header. Structure follows miradex.bg: top bar, main nav, call CTA, cart.
+// "Colaboración" is the last nav item, visually separated; link goes to the hub, chevron opens the 5 scenarios.
+// The right-hand CTA stays the main site's ("Solicitar llamada") so two accent CTAs do not compete.
+import Icon from './Icon.astro';
+import logo from '../assets/logo.svg?raw';
+import { mainNav } from '../data/nav';
+import { scenarios } from '../data/scenarios';
+import { site } from '../data/site';
+
+interface Props { current?: string }
+const { current } = Astro.props;
+const inCollab = Astro.url.pathname.startsWith(site.hubPath);
+---
+<div class="topbar">
+  <div class="container topbar__in">
+    <p>Entrega de vallas metálicas en toda España</p>
+    <ul class="topbar__contacts" role="list">
+      <li><Icon name="phone" size={16} /> {site.contacts.phone}</li>
+      <li><Icon name="mail" size={16} /> {site.contacts.email}</li>
+    </ul>
+  </div>
+</div>
+
+<header class="hd" data-header>
+  <div class="container hd__in">
+    <a class="hd__logo" href="/" aria-label="MIRADEX, inicio" set:html={logo} />
+
+    <nav class="hd__nav" aria-label="Principal" id="site-nav">
+      <ul class="hd__list" role="list">
+        {mainNav.map((item) => (
+          <li class="hd__item">
+            <a class="hd__link" href={item.href}>
+              {item.label}{item.hasMenu && <Icon name="chevron-down" size={16} class="hd__chev" />}
+            </a>
+          </li>
+        ))}
+        <li class:list={['hd__item', 'hd__collab', { 'is-current': inCollab }]} data-dropdown>
+          <a class="hd__link hd__link--collab" href={site.hubPath} aria-current={inCollab ? 'page' : undefined}>{site.navLabel}</a>
+          <button class="hd__toggle" type="button" aria-expanded="false" aria-controls="collab-menu" aria-label={`Abrir menú ${site.navLabel}`} data-dropdown-toggle>
+            <Icon name="chevron-down" size={16} />
+          </button>
+          <div class="hd__drop" id="collab-menu">
+            <ul role="list">
+              {scenarios.map((s) => (
+                <li>
+                  <a href={s.href} class:list={['hd__drop-link', { 'is-current': current === s.id }]} aria-current={current === s.id ? 'page' : undefined}>
+                    <span class="hd__drop-num">{s.num}</span>
+                    <span>{s.title}</span>
+                  </a>
+                </li>
+              ))}
+              <li class="hd__drop-all"><a href={site.hubPath} class="hd__drop-link"><span>Todas las opciones</span><Icon name="arrow-right" size={16} /></a></li>
+            </ul>
+          </div>
+        </li>
+        <li class="hd__menu-cta"><a class="btn btn--mint btn--block" href="#">Solicitar llamada</a></li>
+      </ul>
+    </nav>
+
+    <div class="hd__actions">
+      <a class="btn btn--mint btn--sm hd__call" href="#">Solicitar llamada</a>
+      <a class="hd__icon" href="#" aria-label="Carrito"><Icon name="shopping-cart" size={22} /></a>
+      <button class="hd__icon hd__burger" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Abrir menú" data-burger>
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<style>
+  .topbar { background: var(--bg-tint); font-size: var(--fs-micro); color: var(--text-muted); border-bottom: 1px solid var(--border); }
+  .topbar__in { display: flex; justify-content: space-between; align-items: center; min-height: 36px; gap: var(--sp-4); }
+  .topbar__contacts { display: flex; gap: var(--sp-5); }
+  .topbar__contacts li { display: inline-flex; align-items: center; gap: 6px; }
+
+  /* no backdrop-filter: it would become the containing block of the fixed mobile menu */
+  .hd { position: sticky; top: 0; z-index: 50; background: var(--c-white); border-bottom: 1px solid var(--border); }
+  .hd__in { display: flex; align-items: center; gap: var(--sp-5); min-height: var(--header-h); }
+  .hd__logo { display: block; width: 132px; flex: none; color: var(--c-ink); }
+  .hd__logo :global(svg) { width: 100%; height: auto; }
+
+  .hd__nav { margin-left: auto; }
+  .hd__list { display: flex; align-items: center; gap: 2px; }
+  .hd__item { position: relative; display: flex; align-items: center; }
+  .hd__link {
+    display: inline-flex; align-items: center; gap: 4px; padding: 10px 10px; border-radius: var(--radius-sm);
+    color: var(--text); text-decoration: none; font-size: var(--fs-small); white-space: nowrap;
+  }
+  .hd__link:hover { background: var(--bg-tint); color: var(--text); }
+  .hd__link :global(.hd__chev) { color: var(--text-muted); }
+
+  /* Colaboración: last item, separated by a rule, medium weight; not a button */
+  .hd__collab { margin-left: var(--sp-3); padding-left: var(--sp-3); border-left: 1px solid var(--border); }
+  .hd__link--collab { font-weight: var(--fw-medium); padding-right: 4px; }
+  .hd__collab.is-current .hd__link--collab { box-shadow: inset 0 -3px 0 var(--c-blue); border-radius: var(--radius-sm) var(--radius-sm) 0 0; }
+  .hd__toggle { display: grid; place-items: center; width: 28px; height: 36px; border: 0; background: transparent; border-radius: var(--radius-sm); color: var(--text); }
+  .hd__toggle:hover { background: var(--bg-tint); }
+  .hd__toggle :global(svg) { transition: transform var(--dur) var(--ease); }
+  .hd__collab.is-open .hd__toggle :global(svg) { transform: rotate(180deg); }
+
+  .hd__drop {
+    position: absolute; top: calc(100% + 10px); right: 0; width: 340px; padding: var(--sp-2);
+    background: var(--c-white); border: 1px solid var(--border); border-radius: var(--radius-md); box-shadow: var(--shadow-pop);
+    opacity: 0; visibility: hidden; transform: translateY(-4px);
+    transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease), visibility var(--dur);
+  }
+  .hd__drop::before { content: ''; position: absolute; left: 0; right: 0; top: -12px; height: 12px; }
+  .hd__collab.is-open .hd__drop { opacity: 1; visibility: visible; transform: none; }
+  @media (hover: hover) and (min-width: 1200px) {
+    .hd__collab:hover .hd__drop { opacity: 1; visibility: visible; transform: none; }
+  }
+  .hd__drop-link {
+    display: flex; align-items: center; gap: var(--sp-3); padding: 10px 12px; border-radius: var(--radius-sm);
+    color: var(--text); text-decoration: none; font-size: var(--fs-small);
+  }
+  .hd__drop-link:hover, .hd__drop-link.is-current { background: var(--bg-tint); color: var(--text); }
+  .hd__drop-num { display: grid; place-items: center; width: 28px; height: 28px; border-radius: var(--radius-xs); background: var(--c-mint); font-size: 12px; font-weight: var(--fw-medium); flex: none; }
+  .hd__drop li:nth-child(2) .hd__drop-num, .hd__drop li:nth-child(5) .hd__drop-num { background: var(--c-sky); color: var(--c-white); }
+  .hd__drop li:nth-child(3) .hd__drop-num { background: var(--c-blue); color: var(--c-white); }
+  .hd__drop-all { margin-top: var(--sp-2); padding-top: var(--sp-2); border-top: 1px solid var(--border); }
+  .hd__drop-all .hd__drop-link { justify-content: space-between; font-weight: var(--fw-medium); }
+
+  .hd__menu-cta { display: none; }
+  .hd__actions { display: flex; align-items: center; gap: var(--sp-2); flex: none; }
+  .hd__icon { display: grid; place-items: center; width: 44px; height: 44px; border-radius: var(--radius-sm); color: var(--text); background: transparent; border: 0; }
+  .hd__icon:hover { background: var(--bg-tint); color: var(--text); }
+  .hd__burger { display: none; position: relative; }
+  .hd__burger span { position: absolute; left: 12px; right: 12px; height: 1.5px; background: var(--c-ink); transition: transform var(--dur) var(--ease), opacity var(--dur); }
+  .hd__burger span:nth-child(1) { top: 15px; }
+  .hd__burger span:nth-child(2) { top: 21px; }
+  .hd__burger span:nth-child(3) { top: 27px; }
+  .hd__burger[aria-expanded='true'] span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+  .hd__burger[aria-expanded='true'] span:nth-child(2) { opacity: 0; }
+  .hd__burger[aria-expanded='true'] span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+  /* Tablet and mobile: burger; Colaboración stays on the first level of the menu */
+  @media (max-width: 1199px) {
+    .topbar { display: none; }
+    .hd__burger { display: grid; }
+    .hd__actions { margin-left: auto; }
+    .hd__nav {
+      position: fixed; inset: var(--header-h) 0 0 0; margin: 0; padding: var(--sp-5) var(--gutter) var(--sp-8);
+      background: var(--c-white); overflow-y: auto; display: none;
+    }
+    .hd.is-menu-open .hd__nav { display: block; }
+    .hd__list { flex-direction: column; align-items: stretch; gap: 0; }
+    .hd__item { flex-wrap: wrap; border-bottom: 1px solid var(--border); }
+    .hd__link { flex: 1; padding: 16px 0; font-size: 1.0625rem; border-radius: 0; }
+    .hd__link:hover { background: transparent; }
+    .hd__collab { order: -1; margin: 0; padding: 0; border-left: 0; }
+    .hd__link--collab { font-size: 1.125rem; }
+    .hd__collab.is-current .hd__link--collab { box-shadow: none; }
+    .hd__collab.is-current .hd__link--collab::after { content: ''; width: 8px; height: 8px; margin-left: 10px; border-radius: 2px; background: var(--c-blue); }
+    .hd__toggle { width: 44px; height: 44px; }
+    .hd__drop { position: static; width: 100%; padding: 0 0 var(--sp-3); border: 0; box-shadow: none; display: none; opacity: 1; visibility: visible; transform: none; }
+    .hd__collab.is-open .hd__drop { display: block; }
+    .hd__drop::before { display: none; }
+    .hd__drop-link { padding: 12px 0; }
+  }
+  @media (max-width: 767px) {
+    .hd__call { display: none; }
+    .hd__menu-cta { display: block; padding-top: var(--sp-5); border: 0; }
+    .hd__logo { width: 116px; }
+  }
+</style>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-header]');
+  const burger = header?.querySelector<HTMLButtonElement>('[data-burger]');
+  burger?.addEventListener('click', () => {
+    const open = burger.getAttribute('aria-expanded') !== 'true';
+    burger.setAttribute('aria-expanded', String(open));
+    header!.classList.toggle('is-menu-open', open);
+    document.documentElement.style.overflow = open ? 'hidden' : '';
+  });
+
+  header?.querySelectorAll<HTMLElement>('[data-dropdown]').forEach((item) => {
+    const toggle = item.querySelector<HTMLButtonElement>('[data-dropdown-toggle]')!;
+    const set = (open: boolean) => { item.classList.toggle('is-open', open); toggle.setAttribute('aria-expanded', String(open)); };
+    toggle.addEventListener('click', (e) => { e.stopPropagation(); set(!item.classList.contains('is-open')); });
+    item.addEventListener('keydown', (e) => { if (e.key === 'Escape') { set(false); toggle.focus(); } });
+    document.addEventListener('click', (e) => { if (!item.contains(e.target as Node)) set(false); });
+  });
+</script>

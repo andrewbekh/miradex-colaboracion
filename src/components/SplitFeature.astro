@@ -1,0 +1,58 @@
+---
+// Text + media split used for production and training blocks.
+import Media from './Media.astro';
+import Icon from './Icon.astro';
+
+interface Item { title: string; text: string }
+interface Props {
+  items: Item[];
+  media: { src?: string; alt?: string; placeholder?: string };
+  reverse?: boolean;
+  aside?: { value: string; label: string };
+}
+const { items, media, reverse = false, aside } = Astro.props;
+---
+<div class:list={['sf', { 'sf--reverse': reverse }]}>
+  <div class="sf__media">
+    <Media src={media.src} alt={media.alt} placeholder={media.placeholder} ratio="4/3.2" />
+    {aside && (
+      <div class="sf__aside">
+        <span class="sf__aside-value">{aside.value}</span>
+        <span class="sf__aside-label">{aside.label}</span>
+      </div>
+    )}
+  </div>
+  <div class="sf__body">
+    <ul class="sf__list" role="list">
+      {items.map((it) => (
+        <li>
+          <span class="sf__ic"><Icon name="check" size={18} /></span>
+          <div><h3 class="sf__title">{it.title}</h3><p class="sf__text">{it.text}</p></div>
+        </li>
+      ))}
+    </ul>
+    <slot />
+  </div>
+</div>
+
+<style>
+  .sf { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 5vw, 96px); align-items: center; }
+  .sf--reverse .sf__media { order: 2; }
+  .sf__media { position: relative; }
+  .sf__aside { position: absolute; right: -12px; bottom: -20px; display: grid; gap: 2px; padding: var(--sp-4) var(--sp-5); border-radius: var(--radius-md); background: var(--c-ink); color: var(--c-white); box-shadow: var(--shadow-pop); }
+  .sf--reverse .sf__aside { right: auto; left: -12px; }
+  .sf__aside-value { font-size: var(--fs-stat); font-weight: var(--fw-medium); line-height: 1; }
+  .sf__aside-label { font-size: var(--fs-small); color: var(--text-on-dark-muted); }
+  .sf__body { display: grid; gap: var(--sp-6); }
+  .sf__list { display: grid; gap: var(--sp-5); }
+  .sf__list li { display: grid; grid-template-columns: 32px 1fr; gap: var(--sp-4); align-items: start; }
+  .sf__ic { display: grid; place-items: center; width: 32px; height: 32px; border-radius: var(--radius-sm); background: var(--c-mint); }
+  .sf__title { font-size: 1.0625rem; margin-bottom: 4px; }
+  .sf__text { color: var(--text-muted); }
+  @media (max-width: 1199px) {
+    .sf { grid-template-columns: 1fr; }
+    .sf--reverse .sf__media { order: 0; }
+    .sf__aside { right: 16px; bottom: 16px; }
+    .sf--reverse .sf__aside { left: 16px; }
+  }
+</style>

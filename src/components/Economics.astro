@@ -1,0 +1,79 @@
+---
+// "Economía de la colaboración": income sources, what defines the conditions, pricing principle.
+// No coefficients or discount levels: strategy section 17 is internal.
+import Icon from './Icon.astro';
+
+interface Source { title: string; text: string }
+interface Props {
+  sources: Source[];
+  factors?: string[];
+  principle: string;
+  model?: { title: string; text: string };
+  sourcesLabel?: string;
+  factorsLabel?: string;
+}
+const { sources, factors = [], principle, model, sourcesLabel = 'De qué se compone su ingreso', factorsLabel = 'Qué tenemos en cuenta' } = Astro.props;
+const swatches = ['blue', 'sky', 'mint', 'blue'];
+---
+<div class="eco">
+  <div class="eco__sources">
+    <p class="eco__label eyebrow">{sourcesLabel}</p>
+    <ol role="list">
+      {sources.map((s, i) => (
+        <li class="eco__source">
+          <span class={`eco__bar eco__bar--${swatches[i % 4]}`} aria-hidden="true" />
+          <div>
+            <h3 class="eco__src-title">{s.title}</h3>
+            <p class="eco__src-text">{s.text}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+  <div class="eco__side">
+    <div class="eco__card">
+      {factors.length > 0 && (
+        <>
+          <p class="eco__label eyebrow">{factorsLabel}</p>
+          <ul class="eco__factors" role="list">
+            {factors.map((f) => <li>{f}</li>)}
+          </ul>
+        </>
+      )}
+      <p class:list={['eco__principle', { 'eco__principle--solo': factors.length === 0 }]}><Icon name="scale" size={22} /><span>{principle}</span></p>
+    </div>
+    {model && (
+      <div class="eco__model">
+        <Icon name="chart-no-axes-combined" size={28} />
+        <div>
+          <h3 class="eco__src-title">{model.title}</h3>
+          <p>{model.text}</p>
+        </div>
+      </div>
+    )}
+  </div>
+</div>
+
+<style>
+  .eco { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--grid-gap); align-items: start; }
+  .eco__label { color: var(--text-muted); margin-bottom: var(--sp-5); }
+  .eco__sources ol { display: grid; gap: var(--sp-3); }
+  .eco__source { display: grid; grid-template-columns: 10px 1fr; gap: var(--sp-5); padding: var(--sp-5) var(--sp-5) var(--sp-5) 0; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; }
+  .eco__bar { align-self: stretch; margin: calc(var(--sp-5) * -1) 0; }
+  .eco__bar--blue { background: var(--c-blue); }
+  .eco__bar--sky { background: var(--c-sky); }
+  .eco__bar--mint { background: var(--c-mint); }
+  .eco__src-title { font-size: 1.0625rem; margin-bottom: 6px; }
+  .eco__src-text { color: var(--text-muted); }
+  .eco__side { display: grid; gap: var(--grid-gap); }
+  .eco__card { padding: var(--sp-6); background: var(--bg-dark); color: var(--text-on-dark); border-radius: var(--radius-md); }
+  .eco__card .eco__label { color: var(--text-on-dark-muted); }
+  .eco__factors { display: flex; flex-wrap: wrap; gap: 8px; }
+  .eco__factors li { padding: 8px 12px; border: 1px solid rgb(255 255 255 / 0.22); border-radius: var(--radius-sm); font-size: var(--fs-small); }
+  .eco__principle { display: grid; grid-template-columns: 22px 1fr; gap: var(--sp-3); margin-top: var(--sp-6); padding-top: var(--sp-5); border-top: 1px solid rgb(255 255 255 / 0.16); }
+  .eco__principle--solo { margin-top: 0; padding-top: 0; border-top: 0; font-size: var(--fs-lead); font-weight: var(--fw-light); line-height: 1.45; }
+  .eco__principle :global(svg) { color: var(--c-blue); }
+  .eco__model { display: grid; grid-template-columns: 28px 1fr; gap: var(--sp-4); padding: var(--sp-6); background: var(--c-mint); border-radius: var(--radius-md); }
+  @media (max-width: 1199px) { .eco { grid-template-columns: 1fr; } }
+  @media (max-width: 767px) { .eco__card, .eco__model { padding: var(--sp-5); } }
+</style>

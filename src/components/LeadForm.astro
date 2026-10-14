@@ -1,0 +1,284 @@
+---
+// The single lead form for every page: inline (final block) and inside the popup.
+// Role-aware: the visitor picks a cooperation format first and the form shows the fields that matter
+// for that role (strategy 6.11 base fields + CRM data per scenario, sections 11 and 12).
+// Behaviour lives in src/scripts/lead-form.ts.
+import Icon from './Icon.astro';
+import { scenarios, businessTypes } from '../data/scenarios';
+import { site, whatsappHref } from '../data/site';
+
+interface Props {
+  uid: string;              // unique per instance: ids must not clash between inline form and popup
+  scenario?: string;        // preselected scenario id
+  lockScenario?: boolean;   // send scenario as hidden field instead of the role picker
+  layout?: 'wide' | 'compact';
+}
+const { uid, scenario = '', lockScenario = false, layout = 'wide' } = Astro.props;
+const id = (n: string) => `${uid}-${n}`;
+const current = scenario || 'no-se';
+
+const roles = [...scenarios.map((s) => ({ id: s.id, num: s.num, label: s.short })), { id: 'no-se', num: '?', label: 'Aún no lo sé' }];
+
+const profile = ['Equipo comercial', 'Showroom o tienda', 'Marketing propio', 'Clientes B2B u obras', 'Venta online'];
+const install = ['Equipo propio', 'Subcontratado', 'No instalamos'];
+const crew = ['1-2 instaladores', '3-5 instaladores', '6-10 instaladores', 'Más de 10'];
+const projectTypes = ['Viviendas unifamiliares', 'Promoción o urbanización', 'Hotel u obra comercial', 'Compras recurrentes'];
+const projectTiming = ['Obra en marcha', 'En los próximos 3 meses', 'Más adelante'];
+const referralClients = ['Compradores de vivienda', 'Proyectos de arquitectura o diseño', 'Jardines, piscinas y exteriores', 'Clientes de tienda o showroom'];
+const businessPlan = ['Sí, listo', 'En preparación', 'Aún no'];
+// Placeholder options: real ranges (linear metres or €) come from the client, see docs/TODO.md
+const volumes = ['Pedido de prueba', 'Pedidos regulares', 'Obra o proyecto grande', 'Aún no lo sé'];
+
+/** field visible only for these roles */
+const forRoles = (...r: string[]) => ({ 'data-for': r.join(' ') });
+---
+<form class:list={['lf', `lf--${layout}`]} data-lead-form action={site.formEndpoint ?? '#'} method="post" novalidate>
+  <input type="hidden" name="landing" value={Astro.url.pathname} />
+  <input type="hidden" name="utm" value="" data-utm />
+  <input type="hidden" name="video_watched" value="" data-video-watched />
+  {lockScenario && <input type="hidden" name="scenario" value={current} data-scenario-fixed />}
+
+  <div class="lf__steps">
+    {!lockScenario && (
+      <fieldset class="lf__group">
+        <legend class="lf__legend eyebrow"><span>1</span> ¿Cómo quiere colaborar?</legend>
+        <div class="lf__roles" role="radiogroup">
+          {roles.map((r) => (
+            <label class="role">
+              <input type="radio" name="scenario" value={r.id} checked={r.id === current} data-scenario-radio />
+              <span class="role__box"><span class="role__num">{r.num}</span><span class="role__label">{r.label}</span></span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+    )}
+
+    <fieldset class="lf__group">
+      <legend class="lf__legend eyebrow"><span>{lockScenario ? 1 : 2}</span> Su negocio</legend>
+      <div class="lf__grid">
+        <div class="lf__field">
+          <label for={id('type')}>Tipo de empresa</label>
+          <select id={id('type')} name="business_type" required>
+            <option value="" selected disabled>Seleccione</option>
+            {businessTypes.map((t) => <option>{t}</option>)}
+          </select>
+          <p class="lf__err" aria-live="polite"></p>
+        </div>
+        <div class="lf__field">
+          <label for={id('city')}>Ciudad</label>
+          <input id={id('city')} name="city" type="text" autocomplete="address-level2" placeholder="Madrid" required />
+          <p class="lf__err" aria-live="polite"></p>
+        </div>
+        <div class="lf__field lf__field--full">
+          <label for={id('web')}>Sitio web <span class="lf__opt">opcional</span></label>
+          <input id={id('web')} name="website" type="text" inputmode="url" autocomplete="url" placeholder="www.suempresa.es" />
+        </div>
+
+        <!-- Sell / business / not sure: business profile -->
+        <div class="lf__field lf__field--full" {...forRoles('vender', 'negocio', 'no-se')}>
+          <span class="lf__label" id={id('profile-l')}>Perfil del negocio <span class="lf__opt">puede marcar varios</span></span>
+          <div class="lf__chips" role="group" aria-labelledby={id('profile-l')}>
+            {profile.map((p) => <label class="chip"><input type="checkbox" name="profile" value={p} /><span>{p}</span></label>)}
+          </div>
+        </div>
+
+        <!-- Business MIRADEX: plan and budget (CRM, section 12) -->
+        <div class="lf__field" {...forRoles('negocio')}>
+          <span class="lf__label" id={id('plan-l')}>Plan de negocio</span>
+          <div class="lf__chips" role="radiogroup" aria-labelledby={id('plan-l')}>
+            {businessPlan.map((p) => <label class="chip"><input type="radio" name="business_plan" value={p} /><span>{p}</span></label>)}
+          </div>
+        </div>
+        <div class="lf__field" {...forRoles('negocio')}>
+          <label for={id('budget')}>Presupuesto de lanzamiento <span class="lf__opt">opcional</span></label>
+          <input id={id('budget')} name="launch_budget" type="text" placeholder="Importe aproximado en €" />
+        </div>
+
+        <!-- Sell / not sure: installation -->
+        <div class="lf__field" {...forRoles('vender', 'no-se')}>
+          <span class="lf__label" id={id('install-l')}>Instalación</span>
+          <div class="lf__chips" role="radiogroup" aria-labelledby={id('install-l')}>
+            {install.map((p) => <label class="chip"><input type="radio" name="installation" value={p} /><span>{p}</span></label>)}
+          </div>
+        </div>
+
+        <!-- Sell and install: zone and crew (installation network, section 11) -->
+        <div class="lf__field" {...forRoles('instalar')}>
+          <label for={id('zone')}>Zona de trabajo</label>
+          <input id={id('zone')} name="work_zone" type="text" placeholder="Provincias o radio en km" />
+        </div>
+        <div class="lf__field" {...forRoles('instalar')}>
+          <label for={id('crew')}>Equipo de instalación</label>
+          <select id={id('crew')} name="crew_size">
+            <option value="" selected>Seleccione</option>
+            {crew.map((c) => <option>{c}</option>)}
+          </select>
+        </div>
+
+        <!-- Projects: type, size, timing (strategy 3.3: specification, terms, volumes) -->
+        <div class="lf__field lf__field--full" {...forRoles('proyectos')}>
+          <span class="lf__label" id={id('ptype-l')}>Tipo de proyecto</span>
+          <div class="lf__chips" role="group" aria-labelledby={id('ptype-l')}>
+            {projectTypes.map((p) => <label class="chip"><input type="checkbox" name="project_type" value={p} /><span>{p}</span></label>)}
+          </div>
+        </div>
+        <div class="lf__field" {...forRoles('proyectos')}>
+          <label for={id('meters')}>Metros lineales aproximados <span class="lf__opt">opcional</span></label>
+          <input id={id('meters')} name="linear_meters" type="text" inputmode="numeric" placeholder="Por ejemplo, 800" />
+        </div>
+        <div class="lf__field" {...forRoles('proyectos')}>
+          <label for={id('timing')}>Plazo de la obra</label>
+          <select id={id('timing')} name="project_timing">
+            <option value="" selected>Seleccione</option>
+            {projectTiming.map((p) => <option>{p}</option>)}
+          </select>
+        </div>
+
+        <!-- Referral: who their clients are -->
+        <div class="lf__field lf__field--full" {...forRoles('recomendar')}>
+          <span class="lf__label" id={id('ref-l')}>Con qué clientes trabaja <span class="lf__opt">puede marcar varios</span></span>
+          <div class="lf__chips" role="group" aria-labelledby={id('ref-l')}>
+            {referralClients.map((p) => <label class="chip"><input type="checkbox" name="referral_clients" value={p} /><span>{p}</span></label>)}
+          </div>
+        </div>
+
+        <!-- Volume: sellers, installers, not sure -->
+        <div class="lf__field" {...forRoles('vender', 'instalar', 'no-se')}>
+          <label for={id('volume')}>Volumen aproximado</label>
+          <select id={id('volume')} name="volume">
+            <option value="" selected>Seleccione</option>
+            {volumes.map((v) => <option>{v}</option>)}
+          </select>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset class="lf__group">
+      <legend class="lf__legend eyebrow"><span>{lockScenario ? 2 : 3}</span> Contacto</legend>
+      <div class="lf__grid lf__grid--3">
+        <div class="lf__field">
+          <label for={id('name')}>Nombre</label>
+          <input id={id('name')} name="name" type="text" autocomplete="name" required />
+          <p class="lf__err" aria-live="polite"></p>
+        </div>
+        <div class="lf__field">
+          <label for={id('email')}>Email</label>
+          <input id={id('email')} name="email" type="email" autocomplete="email" placeholder="nombre@empresa.es" required />
+          <p class="lf__err" aria-live="polite"></p>
+        </div>
+        <div class="lf__field">
+          <label for={id('phone')}>Teléfono</label>
+          <div class="lf__phone">
+            <span aria-hidden="true">+34</span>
+            <input id={id('phone')} name="phone" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="600 000 000" data-phone-es required />
+          </div>
+          <p class="lf__err" aria-live="polite"></p>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="lf__footer">
+    <label class="lf__consent">
+      <input type="checkbox" name="consent" required />
+      <span>Acepto la <a href={site.privacyUrl}>política de privacidad</a> y el tratamiento de mis datos para recibir una propuesta.</span>
+    </label>
+    <p class="lf__err lf__err--consent" aria-live="polite"></p>
+    <div class="lf__submit">
+      <button type="submit" class="btn btn--primary btn--lg">
+        <span>Enviar solicitud</span><Icon name="arrow-right" size={18} />
+      </button>
+      <p class="lf__note">{site.responsePromise}<br />¿Prefiere hablar ahora? <a href={whatsappHref()}>Escríbanos por WhatsApp</a></p>
+    </div>
+  </div>
+
+  <div class="lf__done" hidden tabindex="-1">
+    <span class="lf__done-ic"><Icon name="check" size={28} /></span>
+    <p class="lf__done-title">Solicitud enviada</p>
+    <p>Gracias. Revisaremos la información sobre su negocio y le responderemos en 24 horas con una propuesta de formato y condiciones.</p>
+    <a class="btn btn--mint" href={whatsappHref()}>Escribir por WhatsApp</a>
+  </div>
+</form>
+
+<style>
+  .lf { position: relative; display: grid; gap: var(--sp-6); border-radius: inherit; }
+  .lf__steps { display: grid; gap: var(--sp-6); }
+  .lf__group { display: grid; gap: var(--sp-4); }
+  .lf__legend { display: flex; align-items: center; gap: 10px; margin-bottom: var(--sp-4); padding: 0; color: var(--text); }
+  .lf__legend span { display: grid; place-items: center; width: 24px; height: 24px; border-radius: var(--radius-xs); background: var(--c-mint); font-size: 12px; }
+
+  /* role picker */
+  .lf__roles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .role { position: relative; cursor: pointer; }
+  .role input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+  .role__box {
+    display: flex; align-items: center; gap: 10px; min-height: 56px; padding: 10px 12px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+    background: var(--c-white); font-size: var(--fs-small); font-weight: var(--fw-medium); line-height: 1.2;
+    transition: background-color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+  }
+  .role__num { display: grid; place-items: center; flex: none; width: 28px; height: 28px; border-radius: var(--radius-xs); background: var(--bg-tint); font-size: 12px; }
+  .role:hover .role__box { border-color: var(--c-ink); }
+  .role input:checked + .role__box { background: var(--c-blue); border-color: var(--c-blue); color: var(--c-white); }
+  .role input:checked + .role__box .role__num { background: var(--c-white); color: var(--c-ink); }
+  .role input:focus-visible + .role__box { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+  .lf__grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-4) var(--sp-4); }
+  .lf__grid--3 { grid-template-columns: repeat(3, 1fr); }
+  .lf__field { display: grid; gap: 6px; align-content: start; min-width: 0; }
+  .lf__field[hidden] { display: none; }
+  .lf__field--full { grid-column: 1 / -1; }
+  .lf label, .lf__label { font-size: var(--fs-small); font-weight: var(--fw-medium); }
+  .lf__opt { font-weight: var(--fw-regular); color: var(--text-muted); }
+  .lf input[type='text'], .lf input[type='email'], .lf input[type='tel'], .lf select {
+    width: 100%; height: 52px; padding: 0 14px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+    background: var(--c-white); font-size: 1rem; color: var(--text);
+    transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+  }
+  .lf select {
+    appearance: none; padding-right: 40px; text-overflow: ellipsis;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%23353535' stroke-width='1.6'%3E%3Cpath d='m4 6 4 4 4-4'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 14px center;
+  }
+  .lf input::placeholder { color: #9a9a9a; }
+  .lf input:hover, .lf select:hover { border-color: var(--c-ink); }
+  .lf input:focus, .lf select:focus { outline: none; border-color: var(--c-ink); box-shadow: 0 0 0 3px rgb(122 155 255 / 0.45); }
+  .lf [aria-invalid='true'] { border-color: var(--danger) !important; }
+  .lf__phone { position: relative; }
+  .lf__phone span { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; }
+  .lf__phone input { padding-left: 52px !important; letter-spacing: 0.02em; }
+  .lf__err { min-height: 0; font-size: var(--fs-micro); color: var(--danger); }
+  .lf__err:empty { display: none; }
+
+  .lf__chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { position: relative; cursor: pointer; }
+  .chip input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+  .chip span {
+    display: inline-flex; align-items: center; min-height: 40px; padding: 0 14px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+    font-size: var(--fs-small); font-weight: var(--fw-regular); background: var(--c-white);
+    transition: background-color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+  }
+  .chip:hover span { border-color: var(--c-ink); }
+  .chip input:checked + span { background: var(--c-mint); border-color: var(--c-ink); }
+  .chip input:focus-visible + span { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+  .lf__footer { display: grid; gap: var(--sp-4); padding-top: var(--sp-5); border-top: 1px solid var(--border); }
+  .lf__consent { display: grid !important; grid-template-columns: 22px 1fr; gap: 10px; font-weight: var(--fw-regular) !important; color: var(--text-muted); }
+  .lf__consent input { width: 20px; height: 20px; margin: 1px 0 0; accent-color: var(--c-ink); border-radius: var(--radius-xs); }
+  .lf__submit { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-4) var(--sp-6); }
+  .lf__note { font-size: var(--fs-small); color: var(--text-muted); }
+
+  .lf__done { position: absolute; inset: 0; border-radius: inherit; display: grid; align-content: center; justify-items: start; gap: var(--sp-4); padding: var(--sp-6); background: var(--c-white); }
+  .lf__done[hidden] { display: none; }
+  .lf__done-ic { display: grid; place-items: center; width: 56px; height: 56px; border-radius: var(--radius-md); background: var(--c-mint); }
+  .lf__done-title { font-size: var(--fs-h2); font-weight: var(--fw-medium); text-transform: uppercase; }
+  .lf__done p:not(.lf__done-title) { color: var(--text-muted); max-width: 48ch; }
+
+  .lf--compact .lf__grid--3 { grid-template-columns: 1fr 1fr; }
+  .lf--compact .lf__grid--3 .lf__field:first-child { grid-column: 1 / -1; }
+
+  @media (max-width: 767px) {
+    .lf__roles { grid-template-columns: 1fr 1fr; }
+    .lf__grid, .lf__grid--3, .lf--compact .lf__grid--3 { grid-template-columns: 1fr; }
+    .lf__submit .btn { width: 100%; }
+  }
+</style>

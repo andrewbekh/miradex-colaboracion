@@ -1,0 +1,41 @@
+---
+// Brandbook heading: pattern above, uppercase Medium title, ½x strip under it.
+// Pattern width follows the heading width; 1 to 3 columns by heading length.
+import Pattern from './Pattern.astro';
+import { colsForText } from '../lib/pattern';
+
+interface Props {
+  title: string;
+  eyebrow?: string;
+  lead?: string;
+  level?: 1 | 2;
+  seed?: string;
+  align?: 'start' | 'center';
+  tone?: 'light' | 'dark';
+}
+const { title, eyebrow, lead, level = 2, seed = title, align = 'start', tone = 'light' } = Astro.props;
+const cols = colsForText(title);
+const Tag = level === 1 ? 'h1' : 'h2';
+---
+<header class:list={['sh', `sh--${align}`, `sh--${tone}`]}>
+  {eyebrow && <p class="eyebrow sh__eyebrow">{eyebrow}</p>}
+  <div class="sh__block" data-shrinkwrap>
+    <Pattern seed={seed} cols={cols} units={6} />
+    <Tag class:list={['sh__title', level === 1 ? 'h-display' : 'h2']} set:html={title} />
+    <Pattern seed={`${seed}-under`} cols={cols} units={1} gaps={false} />
+  </div>
+  {lead && <p class="lead sh__lead">{lead}</p>}
+  <slot />
+</header>
+
+<style>
+  .sh { display: grid; gap: var(--sp-5); justify-items: start; }
+  .sh--center { justify-items: center; text-align: center; }
+  .sh__eyebrow { color: var(--text-muted); }
+  .sh--dark .sh__eyebrow { color: var(--text-on-dark-muted); }
+  .sh__block { display: grid; width: fit-content; max-width: 100%; }
+  .sh__title { padding: var(--sp-4) 0 var(--sp-3); max-width: 26ch; }
+  .sh__title.h-display { max-width: 18ch; }
+  .sh__lead { max-width: 60ch; color: var(--text-muted); }
+  .sh--dark .sh__lead { color: var(--text-on-dark-muted); }
+</style>

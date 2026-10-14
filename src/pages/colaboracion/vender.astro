@@ -1,0 +1,219 @@
+---
+// Landing 01 · "Quiero vender MIRADEX" (dealer). Sources: strategy 3.1, 4, 6, 7.1, pricing model (dealer role,
+// no numbers); video script nº4 (Spanish version).
+import Page from '../../layouts/Page.astro';
+import Hero from '../../components/Hero.astro';
+import Section from '../../components/Section.astro';
+import FeatureGrid from '../../components/FeatureGrid.astro';
+import VideoPlaceholder from '../../components/VideoPlaceholder.astro';
+import WhyMiradex from '../../components/WhyMiradex.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import ScenarioLinks from '../../components/ScenarioLinks.astro';
+import Economics from '../../components/Economics.astro';
+import SupportGroups from '../../components/SupportGroups.astro';
+import Responsibilities from '../../components/Responsibilities.astro';
+import Stats from '../../components/Stats.astro';
+import CategoryCards from '../../components/CategoryCards.astro';
+import FitList from '../../components/FitList.astro';
+import Steps from '../../components/Steps.astro';
+import Gallery from '../../components/Gallery.astro';
+import Faq from '../../components/Faq.astro';
+import FinalForm from '../../components/FinalForm.astro';
+import { scenarioById } from '../../data/scenarios';
+import { productStats, statsFootnote, faq as commonFaq, finalPoints } from '../../data/shared';
+
+const s = scenarioById('vender')!;
+
+const drivers = [
+  { icon: 'users', title: 'Clientes que ya tiene', text: 'Si vende cerramientos, puertas, ventanas o materiales, sus clientes ya buscan vallas y fachadas.' },
+  { icon: 'coins', title: 'Margen en cada venta', text: 'Condiciones especiales para colaboradores que permiten un buen margen en cada pedido.' },
+  { icon: 'package-check', title: 'Sin stock ni producción', text: 'Fabricado a medida para cada proyecto: no necesita stock de medidas y colores.' },
+  { icon: 'store', title: 'Su sistema de ventas', text: 'Use lo que ya tiene: web, publicidad, equipo comercial y cartera de clientes.' },
+  { icon: 'wrench', title: 'También con instalación', text: 'Si tiene equipos de instalación, gane además con el montaje.' },
+  { icon: 'layers', title: 'Ticket medio mayor', text: 'Vallas, puertas y fachada en un mismo concepto para el mismo cliente.' },
+];
+
+const ways = [
+  { icon: 'store', title: 'Venta propia', text: 'Usted atiende al cliente, calcula el pedido y vende con precio de socio.' },
+  { icon: 'qr-code', title: 'Expositor en su tienda', text: 'Muestras en tienda u oficina: vende su equipo, o el cliente escanea el QR y vende MIRADEX.' },
+  { icon: 'wrench', title: 'Venta e instalación', text: 'Si instala, gane con el producto y con el montaje.' },
+  { icon: 'handshake', title: 'Recomendación', text: 'El cliente que no quiere atender, páselo a MIRADEX y reciba una recompensa.' },
+];
+
+const sources = [
+  { title: 'Margen en la venta', text: 'Compra a precio de socio y vende a sus clientes particulares y empresas.' },
+  { title: 'Instalación', text: 'Si ofrece el montaje, es un ingreso aparte del producto.' },
+  { title: 'Su propia red', text: 'Puede trabajar con sus propios instaladores y fijar las condiciones dentro de su red.' },
+  { title: 'Pedidos grandes', text: 'Para una obra grande se aplica una condición especial según el tamaño del pedido.' },
+];
+const factors = ['Volumen real de ventas', 'Equipo comercial', 'Web y marketing', 'Tienda o showroom', 'Instalación', 'Cartera de clientes'];
+
+const support = [
+  { icon: 'handshake', title: 'Comercial', items: ['Precio de socio', 'Fotos, textos y documentación para su web', 'Catálogos y materiales de venta'] },
+  { icon: 'graduation-cap', title: 'Formación', items: ['Formación de su equipo comercial', 'Ayuda con los primeros cálculos y pedidos', 'Apoyo en los primeros proyectos'] },
+  { icon: 'file-text', title: 'Técnica', items: ['Documentación técnica', 'Instrucciones y vídeos de montaje', 'Soporte técnico'] },
+  { icon: 'qr-code', title: 'Muestras y expositores', items: ['Muestras de modelos, colores y acabados', 'Expositores para tienda u oficina', 'Código QR personal'] },
+];
+
+const steps = [
+  { title: 'Solicitud', text: 'Nos cuenta sobre su empresa y sus clientes.' },
+  { title: 'Cualificación', text: 'Analizamos su perfil, canales y volumen previsto.' },
+  { title: 'Condiciones', text: 'Le presentamos la gama, los precios para colaboradores y las condiciones.' },
+  { title: 'Formación y muestras', text: 'Formación del equipo, materiales para su web y muestras.' },
+  { title: 'Primeros pedidos', text: 'Le ayudamos con los primeros cálculos y pedidos.' },
+  { title: 'Trabajo regular', text: 'Expositores y más herramientas de venta a medida que crecen las ventas.' },
+];
+
+const sectors = [
+  { icon: 'fence', title: 'Vallas y cerramientos', text: 'Añada una línea premium a su gama y aumente el ticket medio y el margen.' },
+  { icon: 'door-open', title: 'Puertas y automatismos', text: 'Venda al cliente todo el perímetro, no solo la puerta.' },
+  { icon: 'store', title: 'Almacenes y showrooms', text: 'Expositor con muestras y QR, o venta propia con su equipo.' },
+  { icon: 'globe', title: 'Tiendas online', text: 'Cobertura digital en toda España con producto fabricado a medida.' },
+];
+const gallery = [
+  { src: '/img/photos/sigma-red-house.jpg', caption: 'Sigma · Rojo óxido RAL 3009' },
+  { src: '/img/photos/romb-mini-street.jpg', caption: 'Romb Mini · RAL 7016' },
+  { src: '/img/photos/gate-wood-2.jpg', caption: 'Puerta Romb Grande · Nogal' },
+  { src: '/img/photos/simetrica-slats.jpg', caption: 'Simetrica · Gris grafito RAL 7024' },
+];
+
+const faq = [
+  commonFaq.stock,
+  { q: '¿Puedo vender fuera de mi provincia?', a: '<p>Sí. Puede vender MIRADEX en toda España. La zona solo importa para la instalación física.</p>' },
+  { q: '¿Cómo se fija mi precio de socio?', a: '<p>Según su volumen real de ventas y su forma de trabajar: equipo, marketing, tienda o showroom e instalación. Le presentamos los precios para colaboradores tras conocer su empresa.</p>' },
+  { q: '¿Qué pasa con los pedidos grandes?', a: '<p>Para una obra grande se aplica una condición especial según el tamaño del pedido. Siempre se aplica la condición más ventajosa para usted.</p>' },
+  { q: '¿Qué materiales recibo para mi web?', a: '<p>Fotos, textos, documentación técnica, instrucciones y vídeos para presentar y vender los productos.</p>' },
+  { q: '¿Puedo instalar yo mismo?', a: '<p>Sí. Si tiene equipos de instalación, puede ganar también con el montaje. Vea también el formato «Vender e instalar».</p>' },
+  { q: '¿Y si un cliente no encaja con mi venta?', a: '<p>Puede pasarlo a MIRADEX: nosotros asesoramos, calculamos y vendemos, y usted recibe una recompensa.</p>' },
+  commonFaq.territory,
+  commonFaq.leadTimes,
+  commonFaq.warranty,
+  commonFaq.protection,
+];
+---
+<Page
+  title="Venda MIRADEX · Vallas metálicas para su catálogo · Colaboración MIRADEX"
+  description="Añada las vallas metálicas MIRADEX a su catálogo: precio de socio, margen en cada venta, sin stock ni producción propia. En toda España."
+  scenario="vender"
+  current="vender"
+>
+  <!-- 01 · First screen -->
+  <Hero
+    crumb={{ num: s.num, label: s.short }}
+    eyebrow="Para empresas con clientes y equipo comercial"
+    title="Añada MIRADEX a su catálogo"
+    lead="Una nueva categoría de vallas metálicas para sus clientes actuales: precio de socio, margen en cada venta y sin producción propia."
+    scenario="vender"
+    image={s.image}
+    imageAlt="Valla metálica Romb Pro en una vivienda"
+    note="Le respondemos en 24 horas. Vende en toda España, sin límite de zona."
+  />
+
+  <!-- 02 · Why it pays off -->
+  <Section id="por-que" tone="tint" title="Por qué es rentable para su empresa" lead="Una nueva categoría rentable sin producción propia.">
+    <FeatureGrid items={drivers} />
+  </Section>
+
+  <!-- 03 · Video nº4 -->
+  <Section id="video" title="Una nueva línea en 3 minutos" lead="Qué añade a su catálogo, cómo se integra en sus ventas, margen, producción y apoyo.">
+    <VideoPlaceholder num={s.video.num} title={s.video.title} duration={s.video.duration} poster="/img/photos/sigma-red-house.jpg" />
+  </Section>
+
+  <WhyMiradex />
+
+  <CtaBand title="¿Quiere conocer los precios para colaboradores?" text="Cuéntenos sobre su empresa. Le respondemos en 24 horas." scenario="vender" />
+
+  <!-- 04 · How to work with MIRADEX -->
+  <Section id="como-funciona" title="Cómo puede trabajar con MIRADEX" lead="Elija lo que encaja con su empresa. Puede combinar varias opciones.">
+    <FeatureGrid items={ways} cols={4} />
+    <div class="gap-top"><ScenarioLinks ids={['instalar', 'recomendar', 'negocio']} /></div>
+  </Section>
+
+  <!-- 05 · Economics -->
+  <Section id="economia" tone="tint" title="Economía de la colaboración" lead="Su precio de socio depende de su volumen real de ventas, no del territorio ni del nombre de la empresa.">
+    <Economics
+      sources={sources}
+      factors={factors}
+      principle="En cada pedido se aplica la condición más ventajosa para usted: su nivel de socio o la condición por tamaño del pedido."
+      model={{ title: 'Precios para colaboradores', text: 'Tras conocer su empresa le presentamos la gama, los precios para colaboradores y las condiciones de cooperación.' }}
+    />
+  </Section>
+
+  <!-- 06 · What the partner receives -->
+  <Section id="apoyo" title="Qué recibe como socio" lead="Todo lo que su equipo necesita para presentar y vender MIRADEX.">
+    <SupportGroups groups={support} />
+  </Section>
+
+  <Section id="funciones" tone="tint" title="Qué asume MIRADEX" lead="Usted vende a su cliente. MIRADEX produce, entrega y le da soporte.">
+    <Responsibilities
+      miradex={[
+        'Producción a medida en la UE y control de calidad',
+        'Garantía técnica de hasta 30 años y estética de hasta 15, según acabado',
+        'Entrega en España en 5-10 días laborables',
+        'Documentación, formación y soporte técnico',
+        'Protección de sus clientes y proyectos registrados',
+      ]}
+      partner={[
+        'Atención al cliente y presupuesto',
+        'Cálculo y confirmación del pedido',
+        'Comunicación comercial con su cliente',
+        'Instalación, si la ofrece',
+      ]}
+      note="Su nivel de condiciones crece con su volumen real de ventas."
+    />
+  </Section>
+
+  <CtaBand title="Hablemos de su catálogo" text="Formulario o WhatsApp: como le resulte más cómodo." tone="dark" scenario="vender" />
+
+  <!-- 07 · Why their clients want MIRADEX -->
+  <Section id="producto" title="Por qué sus clientes elegirán MIRADEX" lead="Diseño moderno, medidas a la carta, vallas, puertas y fachada en un mismo concepto, con plazos claros.">
+    <Stats stats={productStats} footnote={statsFootnote} />
+    <div class="gap-top"><CategoryCards /></div>
+  </Section>
+
+  <Section id="para-quien" tone="tint" title="¿Es para usted?">
+    <FitList
+      fit={[
+        'Ya tiene clientes en construcción, reformas o equipamiento de viviendas.',
+        'Tiene web, equipo comercial, tienda o showroom.',
+        'Quiere una nueva categoría sin producción propia.',
+        'Quiere vender en toda España, sin límite de zona.',
+      ]}
+      notFit={[
+        'Busca exclusividad territorial: no la ofrecemos.',
+        'No tiene equipo para atender y presupuestar clientes: vea el programa de referidos.',
+        'Espera mejores condiciones sin volumen real de ventas.',
+      ]}
+    />
+  </Section>
+
+  <!-- 08 · How it starts -->
+  <Section id="inicio" title="Cómo empieza la colaboración">
+    <Steps steps={steps} />
+  </Section>
+
+  <!-- 09 · Scenarios by sector -->
+  <Section id="proyectos" tone="tint" title="Escenarios por sector" lead="Cómo encaja MIRADEX en empresas como la suya.">
+    <FeatureGrid items={sectors} cols={4} />
+    <div class="gap-top"><Gallery items={gallery} /></div>
+  </Section>
+
+  <CtaBand title="Una nueva categoría para su negocio" text="Y una nueva fuente de ingresos con sus clientes actuales." tone="mint" scenario="vender" />
+
+  <!-- 10 · FAQ -->
+  <Section id="faq" title="Preguntas frecuentes">
+    <Faq items={faq} />
+  </Section>
+
+  <!-- 11 · Final CTA + form -->
+  <FinalForm
+    title="Añada MIRADEX a su catálogo"
+    text="Le presentaremos la gama, los precios para colaboradores y las condiciones, y le ayudaremos a integrar MIRADEX en su sistema de ventas."
+    scenario="vender"
+    points={finalPoints}
+  />
+</Page>
+
+<style>
+  .gap-top { margin-top: var(--stack-gap); }
+</style>

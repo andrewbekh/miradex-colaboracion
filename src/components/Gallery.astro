@@ -1,0 +1,36 @@
+---
+// Realized projects grid (photos from miradex.bg, marked provisional). Optional lead card on the left.
+interface Item { src: string; caption: string }
+interface Props { items: Item[] }
+const { items } = Astro.props;
+---
+<div class="gl">
+  <div class="gl__lead"><slot /></div>
+  {items.map((it) => (
+    <figure class="gl__item">
+      <img src={it.src} alt={it.caption} loading="lazy" />
+      <figcaption>{it.caption}</figcaption>
+    </figure>
+  ))}
+</div>
+
+<style>
+  .gl { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: clamp(160px, 14vw, 220px); gap: var(--grid-gap); }
+  .gl__lead { grid-column: span 2; grid-row: span 2; }
+  .gl__lead:empty { display: none; }
+  .gl__item { position: relative; margin: 0; border-radius: var(--radius-md); overflow: hidden; background: var(--bg-tint); }
+  .gl__item img { width: 100%; height: 100%; object-fit: cover; }
+  .gl__item figcaption {
+    position: absolute; left: 10px; bottom: 10px; right: 10px; width: fit-content; padding: 4px 8px; border-radius: var(--radius-xs);
+    background: rgb(255 255 255 / 0.92); font-size: 12px; line-height: 1.3;
+  }
+  @media (max-width: 1199px) {
+    .gl { grid-template-columns: repeat(2, 1fr); grid-auto-rows: auto; }
+    .gl__lead { grid-column: 1 / -1; grid-row: auto; }
+    .gl__item { aspect-ratio: 4 / 3; }
+  }
+  @media (max-width: 767px) {
+    .gl { gap: 10px; }
+    .gl__item figcaption { font-size: 11px; }
+  }
+</style>

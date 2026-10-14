@@ -1,0 +1,245 @@
+---
+// Design system showcase: tokens and every shared component in one page (internal, noindex).
+import Base from '../layouts/Base.astro';
+import Section from '../components/Section.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import Pattern from '../components/Pattern.astro';
+import Button from '../components/Button.astro';
+import ScenarioGrid from '../components/ScenarioGrid.astro';
+import FactsStrip from '../components/FactsStrip.astro';
+import FeatureGrid from '../components/FeatureGrid.astro';
+import FitList from '../components/FitList.astro';
+import Responsibilities from '../components/Responsibilities.astro';
+import Steps from '../components/Steps.astro';
+import Faq from '../components/Faq.astro';
+import VideoPlaceholder from '../components/VideoPlaceholder.astro';
+import CtaBand from '../components/CtaBand.astro';
+import FinalForm from '../components/FinalForm.astro';
+import Media from '../components/Media.astro';
+
+const swatches = [
+  { name: 'blue', hex: '#7a9bff', note: 'Базовий · Pantone 272 C', dark: false },
+  { name: 'sky', hex: '#7dceff', note: 'Додатковий · Pantone 284 C', dark: false },
+  { name: 'mint', hex: '#d3f9cd', note: 'Додатковий · Pantone 344 C', dark: false },
+  { name: 'ink', hex: '#353535', note: 'Колір знака в лого', dark: true },
+  { name: 'paper', hex: '#f7f9ff', note: 'Похідний: blue 6%', dark: false },
+  { name: 'ink-muted', hex: '#6e6e6e', note: 'Похідний: текст 2-го рівня', dark: true },
+];
+
+const advantages = [
+  { icon: 'ruler', title: 'Individualización', text: 'Medidas para cada obra, paleta RAL y diferentes texturas.' },
+  { icon: 'trending-up', title: 'Escalabilidad', text: 'Trabajamos en los países balcánicos de la UE y ahora crecemos en España.' },
+  { icon: 'badge-check', title: 'Resultados', text: 'Más de 1000 proyectos realizados en países de la UE.' },
+  { icon: 'hourglass', title: 'Durabilidad', text: 'Sin repintar, barnizar ni tratar: dura décadas.' },
+  { icon: 'layers', title: 'Materiales', text: 'Acero premium KG Dongbu Steel (Corea del Sur), conforme a normas europeas.' },
+  { icon: 'factory', title: 'Producción en la UE', text: 'Fábrica en Rumanía, ciclo completo y automatización: calidad estable.' },
+];
+
+const steps = [
+  { title: 'Solicitud', text: 'Nos cuenta sobre su negocio en el formulario.' },
+  { title: 'Cualificación', text: 'Analizamos su perfil, volumen y planes.' },
+  { title: 'Condiciones', text: 'Proponemos formato y condiciones según su potencial.' },
+  { title: 'Formación y muestras', text: 'Formación del equipo, muestras y materiales de venta.' },
+  { title: 'Primer proyecto', text: 'Le acompañamos en las primeras ventas.' },
+  { title: 'Trabajo regular', text: 'Pedidos regulares con soporte de MIRADEX.' },
+];
+
+const faq = [
+  { q: '¿Ofrecen exclusividad territorial?', a: '<p>No. Puede vender MIRADEX en toda España. En lugar de un territorio, protegemos a los clientes y proyectos que usted registra.</p>' },
+  { q: '¿Cómo se definen las condiciones comerciales?', a: '<p>Según el potencial, el modelo de negocio y el volumen del socio, no según el territorio. Cuéntenos sobre su negocio y le propondremos el formato y las condiciones.</p>' },
+  { q: '¿Cuáles son los plazos de producción y entrega?', a: '<p>Producción en 3-5 días laborables. Entrega en España en 5-10 días laborables.</p>' },
+  { q: '¿Cómo se protege a mi cliente?', a: '<p>Los clientes y proyectos que usted registra quedan protegidos frente a la venta directa. Antes de empezar le explicamos las reglas de registro y protección.</p>' },
+];
+---
+<Base title="Componentes · MIRADEX" scenario="negocio" noindex>
+  <header class="ds-top">
+    <div class="container ds-top__in">
+      <img src="/img/logo.svg" alt="MIRADEX" width="150" height="31" class="ds-logo" />
+      <p class="eyebrow">Дизайн-система · B2B España · крок 2</p>
+    </div>
+  </header>
+
+  <!-- 1. Tokens -->
+  <Section id="tokens" title="Токени" eyebrow="00 · Кольори, шрифт, паттерн">
+    <div class="ds-grid ds-grid--swatches">
+      {swatches.map((s) => (
+        <div class="ds-swatch">
+          <span class="ds-swatch__chip" style={`background:${s.hex}`} />
+          <p class="ds-swatch__name">{s.name}</p>
+          <p class="ds-swatch__meta">{s.hex} · {s.note}</p>
+        </div>
+      ))}
+    </div>
+
+    <div class="ds-type">
+      <p class="ds-label">Типографіка · CoFo Sans</p>
+      <p class="h-display ds-type__row" style="text-transform:uppercase;font-weight:500">Display 64</p>
+      <p class="h2 ds-type__row" style="text-transform:uppercase;font-weight:500">Heading 2 · 44</p>
+      <p class="h3 ds-type__row" style="text-transform:uppercase;font-weight:500">Heading 3 · 22</p>
+      <p class="lead ds-type__row">Lead · Light 22. Desarrolle su negocio con un fabricante europeo.</p>
+      <p class="ds-type__row">Body · Regular 17. Producción a medida en 3-5 días laborables y entrega en toda España en 5-10 días laborables.</p>
+      <p class="eyebrow ds-type__row">Eyebrow · Medium 13 · tracking 0.08em</p>
+    </div>
+
+    <div class="ds-patterns">
+      <p class="ds-label">Паттерн · 1, 2 і 3 колонки (вузька = ½ широкої)</p>
+      <div class="ds-patterns__row">
+        <div style="width:120px"><Pattern seed="demo-1" cols={1} units={10} /></div>
+        <div style="width:240px"><Pattern seed="demo-2" cols={2} units={10} /></div>
+        <div style="width:400px;max-width:100%"><Pattern seed="demo-3" cols={3} units={10} /></div>
+      </div>
+    </div>
+
+    <div class="ds-logos">
+      <div class="ds-logos__item"><img src="/img/logo.svg" alt="MIRADEX" /></div>
+      <div class="ds-logos__item ds-logos__item--dark"><img src="/img/logo-white.svg" alt="MIRADEX" /></div>
+    </div>
+  </Section>
+
+  <!-- 2. Headings + buttons -->
+  <Section id="headings" tone="tint" title="Заголовок секції" eyebrow="01 · SectionHeading">
+    <div class="ds-stack">
+      <SectionHeading title="Producción" seed="h-short" />
+      <SectionHeading title="Cómo empezar a colaborar" seed="h-mid" />
+      <SectionHeading title="Desarrolle su negocio con MIRADEX en toda España" seed="h-long" lead="Ширина паттерну дорівнює ширині заголовка; 1-3 колонки залежно від довжини, під заголовком смуга ½x (брендбук, «Оформление заголовков»)." />
+    </div>
+  </Section>
+
+  <Section id="buttons" title="Кнопки" eyebrow="02 · Button">
+    <div class="ds-buttons">
+      <div class="ds-buttons__row">
+        <Button openForm scenario="negocio" icon="arrow-right">Enviar solicitud</Button>
+        <Button variant="mint" icon="arrow-right">Ver formato</Button>
+        <Button variant="mint" iconStart="whatsapp">WhatsApp</Button>
+        <Button size="sm" variant="mint">Pequeño</Button>
+        <Button size="lg" icon="arrow-right">Grande</Button>
+      </div>
+      <div class="ds-buttons__row ds-buttons__row--dark">
+        <Button icon="arrow-right">Enviar solicitud</Button>
+        <Button variant="mint" iconStart="whatsapp">WhatsApp</Button>
+      </div>
+      <div class="ds-buttons__row ds-buttons__row--blue on-blue">
+        <Button icon="arrow-right">Enviar solicitud</Button>
+        <Button variant="white" iconStart="whatsapp">WhatsApp</Button>
+      </div>
+      <p class="muted ds-note">Кнопки: фіолетова з білим текстом або зелена з чорним. На фіолетовому й блакитному фоні текст завжди білий; головна кнопка на фіолетовому фоні стає зеленою.</p>
+    </div>
+  </Section>
+
+  <!-- 3. Scenario cards -->
+  <Section id="scenarios" tone="tint" title="Elija su formato de colaboración" eyebrow="03 · ScenarioGrid" lead="5 рівнозначних карток + плитка «Не знаю, що обрати». 3×2 desktop, 2×3 tablet, 1 колонка mobile.">
+    <ScenarioGrid />
+  </Section>
+
+  <!-- 4. Why MIRADEX -->
+  <Section id="why" title="Por qué MIRADEX" eyebrow="04 · FactsStrip + FeatureGrid" lead="MIRADEX es una marca europea de vallas metálicas modernas. No somos una startup.">
+    <FactsStrip />
+    <div style="margin-top:var(--sp-9)"><FeatureGrid items={advantages} /></div>
+  </Section>
+
+  <!-- 5. Fit / not fit -->
+  <Section id="fit" tone="tint" title="¿Es para usted?" eyebrow="05 · FitList">
+    <FitList
+      fit={[
+        'Quiere crear un negocio propio o una unidad de negocio MIRADEX.',
+        'Está dispuesto a invertir en web, equipo, publicidad y showroom.',
+        'Quiere construir su propia red de instaladores, distribuidores y socios.',
+        'Piensa en el mercado nacional, no en una sola zona.',
+      ]}
+      notFit={[
+        'Busca exclusividad territorial: no la ofrecemos.',
+        'Espera las mejores condiciones solo por prometer volumen.',
+        'No quiere dedicar equipo propio a las ventas.',
+        'Prefiere solo recomendar clientes: para eso existe el programa de referidos.',
+      ]}
+    />
+  </Section>
+
+  <!-- 6. Responsibilities -->
+  <Section id="resp" title="Qué asume MIRADEX" eyebrow="06 · Responsibilities (замість «Без ризиків»)">
+    <Responsibilities
+      miradex={[
+        'Producto listo y base de producción en la UE',
+        'Estructura web y materiales para el lanzamiento',
+        'Formación del propietario, gerentes e instaladores',
+        'Catálogos, fotos, vídeos, guiones y materiales comerciales',
+        'Muestras y stands de demostración',
+        'Ayuda con la publicidad, el sistema de ventas y el showroom',
+      ]}
+      partner={[
+        'Web propia o sección MIRADEX completa',
+        'Gerentes dedicados y formados',
+        'Inversión en publicidad, showroom y muestras',
+        'Infraestructura de instalación y CRM',
+        'Desarrollo de su propia red de distribuidores y referidos',
+      ]}
+      note="Las condiciones se definen según inversión, funciones y resultados reales."
+    />
+  </Section>
+
+  <!-- 7. Steps -->
+  <Section id="steps" tone="tint" title="Cómo empieza la colaboración" eyebrow="07 · Steps">
+    <Steps steps={steps} />
+  </Section>
+
+  <!-- 8. Video -->
+  <Section id="video" title="Vídeo" eyebrow="08 · VideoPlaceholder">
+    <VideoPlaceholder num={2} title="Cree su propio negocio con Miradex" duration="3:00-3:20" poster="/img/photos/atlas-modern-house.jpg" />
+    <div class="ds-media">
+      <Media src="/img/photos/simetrica-black-house.jpg" alt="Valla Simetrica negra" ratio="4/3" caption="Media · фото" />
+      <Media placeholder="Fábrica en Rumanía" ratio="4/3" caption="Media · плейсхолдер без фото" />
+    </div>
+  </Section>
+
+  <!-- 9. CTA bands -->
+  <div class="ds-label-row container"><p class="ds-label">09 · CtaBand: blue / dark / mint</p></div>
+  <CtaBand title="¿Listo para crear su negocio MIRADEX?" text="Cuéntenos sobre su proyecto. Le respondemos en 24 horas." scenario="negocio" />
+  <CtaBand title="Hablemos de su formato" text="Formulario o WhatsApp: como le resulte más cómodo." tone="dark" />
+  <CtaBand title="¿Tiene una obra en marcha?" tone="mint" scenario="proyectos" cta="Pedir propuesta" />
+
+  <!-- 10. FAQ -->
+  <Section id="faq" title="Preguntas frecuentes" eyebrow="10 · Faq">
+    <Faq items={faq} />
+  </Section>
+
+  <!-- 11. Final form -->
+  <FinalForm
+    title="Empecemos a trabajar juntos"
+    text="Cuéntenos sobre su negocio y sus planes: le propondremos el formato de colaboración y las condiciones según su potencial."
+    scenario="negocio"
+    points={['Le respondemos en 24 horas', 'Sus datos son confidenciales', 'Sin exclusividad territorial: protegemos a su cliente']}
+  />
+</Base>
+
+<style>
+  .ds-top { border-bottom: 1px solid var(--border); }
+  .ds-top__in { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-4); min-height: 72px; flex-wrap: wrap; }
+  .ds-top .eyebrow { color: var(--text-muted); }
+  .ds-logo { width: 150px; height: auto; color: var(--c-ink); }
+  .ds-label { font-size: var(--fs-micro); font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: var(--sp-4); }
+  .ds-label-row { padding-top: var(--sp-9); }
+  .ds-grid--swatches { display: grid; grid-template-columns: repeat(6, 1fr); gap: var(--grid-gap); }
+  .ds-swatch__chip { display: block; aspect-ratio: 4/3; border: 1px solid var(--border); border-radius: var(--radius-md); }
+  .ds-swatch__name { margin-top: var(--sp-3); font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; }
+  .ds-swatch__meta { font-size: var(--fs-micro); color: var(--text-muted); }
+  .ds-type { margin-top: var(--sp-10); display: grid; gap: var(--sp-3); }
+  .ds-type__row { border-bottom: 1px solid var(--border); padding-bottom: var(--sp-3); }
+  .ds-patterns { margin-top: var(--sp-10); }
+  .ds-patterns__row { display: flex; flex-wrap: wrap; gap: var(--sp-6); align-items: flex-end; }
+  .ds-logos { margin-top: var(--sp-10); display: grid; grid-template-columns: 1fr 1fr; gap: var(--grid-gap); }
+  .ds-logos__item { display: grid; place-items: center; aspect-ratio: 3/1; border: 1px solid var(--border); border-radius: var(--radius-lg); }
+  .ds-logos__item img { width: 46%; }
+  .ds-logos__item--dark { background: var(--c-ink); border-color: var(--c-ink); }
+  .ds-stack { display: grid; gap: var(--sp-10); }
+  .ds-buttons { display: grid; gap: var(--sp-4); }
+  .ds-buttons__row { display: flex; flex-wrap: wrap; gap: var(--sp-3); padding: var(--sp-6); border: 1px solid var(--border); border-radius: var(--radius-md); align-items: center; }
+  .ds-buttons__row--dark { background: var(--c-ink); border-color: var(--c-ink); }
+  .ds-buttons__row--blue { background: var(--c-blue); border-color: var(--c-blue); }
+  .ds-note { font-size: var(--fs-small); max-width: 70ch; }
+  .ds-media { margin-top: var(--sp-8); display: grid; grid-template-columns: 1fr 1fr; gap: var(--grid-gap); }
+  @media (max-width: 1199px) { .ds-grid--swatches { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 767px) {
+    .ds-grid--swatches { grid-template-columns: repeat(2, 1fr); }
+    .ds-logos, .ds-media { grid-template-columns: 1fr; }
+  }
+</style>

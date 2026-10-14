@@ -1,0 +1,38 @@
+---
+// "Le encaja / No le encaja" (reference: "Кому подходит / Кому не подходит").
+import Icon from './Icon.astro';
+interface Props { fit: string[]; notFit: string[]; fitTitle?: string; notFitTitle?: string }
+const { fit, notFit, fitTitle = 'Le encaja si…', notFitTitle = 'No le encaja si…' } = Astro.props;
+---
+<div class="fit">
+  <section class="fit__col fit__col--yes">
+    <h3 class="fit__title">{fitTitle}</h3>
+    <ul role="list">
+      {fit.map((t) => <li><span class="fit__ic"><Icon name="check" size={18} /></span><span>{t}</span></li>)}
+    </ul>
+  </section>
+  <section class="fit__col fit__col--no">
+    <h3 class="fit__title">{notFitTitle}</h3>
+    <ul role="list">
+      {notFit.map((t) => <li><span class="fit__ic"><Icon name="x" size={18} /></span><span>{t}</span></li>)}
+    </ul>
+  </section>
+</div>
+
+<style>
+  .fit { display: grid; grid-template-columns: 1fr 1fr; gap: var(--grid-gap); }
+  .fit__col { padding: var(--sp-7); border-radius: var(--radius-md); display: grid; align-content: start; gap: var(--sp-5); }
+  .fit__col--yes { background: var(--c-mint); }
+  .fit__col--no { background: var(--bg); border: 1px solid var(--border); }
+  .fit__title { font-size: var(--fs-h3); }
+  .fit ul { display: grid; gap: var(--sp-4); }
+  .fit li { display: grid; grid-template-columns: 28px 1fr; gap: var(--sp-3); align-items: start; }
+  .fit__ic { display: grid; place-items: center; width: 28px; height: 28px; margin-top: -2px; border-radius: var(--radius-xs); }
+  .fit__col--yes .fit__ic { background: var(--c-ink); color: var(--c-mint); }
+  .fit__col--no .fit__ic { border: 1px solid var(--border-strong); color: var(--text-muted); }
+  .fit__col--no li { color: var(--text-muted); }
+  @media (max-width: 767px) {
+    .fit { grid-template-columns: 1fr; }
+    .fit__col { padding: var(--sp-5); }
+  }
+</style>

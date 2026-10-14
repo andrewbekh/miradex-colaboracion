@@ -1,0 +1,52 @@
+---
+// Final screen of every page: promise + contacts on the left, the shared lead form on the right.
+import SectionHeading from './SectionHeading.astro';
+import LeadForm from './LeadForm.astro';
+import Icon from './Icon.astro';
+import { site, whatsappHref } from '../data/site';
+
+interface Props { title: string; text: string; scenario?: string; lockScenario?: boolean; points?: string[] }
+const { title, text, scenario = '', lockScenario = false, points = [] } = Astro.props;
+---
+<section class="ff" id="solicitud">
+  <div class="container ff__inner">
+    <div class="ff__aside">
+      <SectionHeading title={title} lead={text} tone="dark" seed="final-form" />
+      {points.length > 0 && (
+        <ul class="ff__points" role="list">
+          {points.map((p) => <li><Icon name="check" size={20} /><span>{p}</span></li>)}
+        </ul>
+      )}
+      <div class="ff__contacts">
+        <a class="btn btn--mint" href={whatsappHref()}><Icon name="whatsapp" size={18} /><span>WhatsApp</span></a>
+        <p class="ff__mail">
+          <a href={`mailto:${site.contacts.email}`}>{site.contacts.email}</a><br />
+          <span>{site.contacts.phone}</span>
+        </p>
+      </div>
+    </div>
+    <div class="ff__panel">
+      <LeadForm uid="final" scenario={scenario} lockScenario={lockScenario} />
+    </div>
+  </div>
+</section>
+
+<style>
+  .ff { background: var(--bg-dark); color: var(--text-on-dark); padding-block: var(--section-y); }
+  .ff__inner { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 5vw, 96px); align-items: start; }
+  .ff__aside { display: grid; gap: var(--sp-7); position: sticky; top: calc(var(--header-h) + 24px); }
+  .ff__points { display: grid; gap: var(--sp-3); }
+  .ff__points li { display: grid; grid-template-columns: 24px 1fr; gap: var(--sp-3); color: var(--text-on-dark-muted); }
+  .ff__points :global(svg) { color: var(--c-blue); }
+  .ff__contacts { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-4); }
+  .ff__mail { color: var(--text-on-dark-muted); font-size: var(--fs-small); line-height: 1.6; }
+  .ff__mail a { color: var(--c-white); }
+  .ff__panel { background: var(--c-white); color: var(--text); padding: clamp(20px, 3vw, 48px); border-radius: var(--radius-lg); }
+  @media (max-width: 1199px) {
+    .ff__inner { grid-template-columns: 1fr; }
+    .ff__aside { position: static; }
+  }
+  @media (max-width: 767px) {
+    .ff__panel { margin-inline: calc(var(--gutter) * -0.5); border-radius: var(--radius-md); }
+  }
+</style>

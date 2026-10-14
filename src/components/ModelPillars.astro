@@ -1,0 +1,28 @@
+---
+// The core of the Spanish model (strategy 1): national sales, local installation, protected client.
+interface Pillar { kicker: string; title: string; text: string }
+interface Props { items: Pillar[] }
+const { items } = Astro.props;
+const swatches = ['blue', 'sky', 'mint'];
+---
+<ol class="mp" role="list">
+  {items.map((p, i) => (
+    <li class={`mp__item mp__item--${swatches[i % 3]}`}>
+      <span class="mp__kicker eyebrow">{p.kicker}</span>
+      <h3 class="mp__title">{p.title}</h3>
+      <p class="mp__text">{p.text}</p>
+    </li>
+  ))}
+</ol>
+
+<style>
+  .mp { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--grid-gap); }
+  .mp__item { display: grid; align-content: start; gap: var(--sp-3); padding: var(--sp-6); border-radius: var(--radius-md); color: var(--c-ink); }
+  .mp__item--blue { background: var(--c-blue); color: var(--c-white); }
+  .mp__item--sky { background: var(--c-sky); color: var(--c-white); }
+  .mp__item--mint { background: var(--c-mint); }
+  .mp__kicker { opacity: 0.85; }
+  .mp__title { font-size: var(--fs-h3); }
+  @media (max-width: 1199px) { .mp { grid-template-columns: 1fr; } .mp__item { grid-template-columns: 180px 1fr; column-gap: var(--sp-6); } .mp__kicker { grid-row: span 2; } }
+  @media (max-width: 767px) { .mp__item { grid-template-columns: 1fr; padding: var(--sp-5); } .mp__kicker { grid-row: auto; } }
+</style>

@@ -1,0 +1,14 @@
+---
+// Page shell for the hub and all landings: header, content, footer, shared popup form.
+import Base from './Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props { title: string; description?: string; scenario?: string; current?: string }
+const { title, description, scenario, current } = Astro.props;
+---
+<Base title={title} description={description} scenario={scenario}>
+  <Header slot="header" current={current} />
+  <slot />
+  <Footer slot="footer" />
+</Base>

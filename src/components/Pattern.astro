@@ -1,0 +1,40 @@
+---
+// Brand pattern block. Height = units × --band (one unit = ½x of the brandbook grid).
+import { makePattern } from '../lib/pattern';
+
+interface Props {
+  seed: string;
+  cols?: 1 | 2 | 3;
+  units?: number;
+  gaps?: boolean;
+  narrowFirst?: boolean;
+  class?: string;
+  /** fill parent height instead of units × band */
+  fill?: boolean;
+}
+const { seed, cols = 2, units = 6, gaps = true, narrowFirst = false, class: cls = '', fill = false } = Astro.props;
+const columns = makePattern(seed, cols, units, { gaps, narrowFirst });
+const template = columns.map((c) => `${c.w}fr`).join(' ');
+---
+<div
+  class:list={['pattern', cls, { 'pattern--fill': fill }]}
+  style={`--units:${units};grid-template-columns:${template}`}
+  aria-hidden="true"
+>
+  {columns.map((col) => (
+    <div class="pattern__col">
+      {col.bands.map((b) => <span class={`pattern__band pattern__band--${b.c}`} style={`flex-grow:${b.h}`} />)}
+    </div>
+  ))}
+</div>
+
+<style>
+  .pattern { display: grid; height: calc(var(--units) * var(--band)); width: 100%; }
+  .pattern--fill { height: 100%; }
+  .pattern__col { display: flex; flex-direction: column; min-width: 0; }
+  .pattern__band { flex-basis: 0; display: block; }
+  .pattern__band--blue { background: var(--c-blue); }
+  .pattern__band--sky { background: var(--c-sky); }
+  .pattern__band--mint { background: var(--c-mint); }
+  .pattern__band--none { background: transparent; }
+</style>

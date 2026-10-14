@@ -1,0 +1,34 @@
+---
+// "Qué recibe el socio": support grouped by type (commercial, marketing, technical, logistics).
+import Icon from './Icon.astro';
+interface Group { icon: string; title: string; items: string[] }
+interface Props { groups: Group[] }
+const { groups } = Astro.props;
+const swatches = ['blue', 'sky', 'mint', 'blue'];
+---
+<ul class="sgp" role="list">
+  {groups.map((g, i) => (
+    <li class="sgp__card">
+      <span class={`sgp__ic sgp__ic--${swatches[i % 4]}`}><Icon name={g.icon} size={24} /></span>
+      <h3 class="sgp__title">{g.title}</h3>
+      <ul role="list" class="sgp__items">
+        {g.items.map((t) => <li>{t}</li>)}
+      </ul>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .sgp { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--grid-gap); }
+  .sgp__card { display: grid; align-content: start; gap: var(--sp-4); padding: var(--sp-6); background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-md); }
+  .sgp__ic { display: grid; place-items: center; width: 48px; height: 48px; border-radius: var(--radius-sm); }
+  .sgp__ic--blue { background: var(--c-blue); color: var(--c-white); }
+  .sgp__ic--sky { background: var(--c-sky); color: var(--c-white); }
+  .sgp__ic--mint { background: var(--c-mint); }
+  .sgp__title { font-size: var(--fs-h3); }
+  .sgp__items { display: grid; gap: var(--sp-3); }
+  .sgp__items li { position: relative; padding-left: 18px; color: var(--text-muted); font-size: var(--fs-small); }
+  .sgp__items li::before { content: ''; position: absolute; left: 0; top: 0.6em; width: 8px; height: 8px; border-radius: 2px; background: var(--c-ink); }
+  @media (max-width: 1199px) { .sgp { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 767px) { .sgp { grid-template-columns: 1fr; } .sgp__card { padding: var(--sp-5); } }
+</style>

@@ -1,0 +1,261 @@
+---
+// Landing 05 · "Quiero crear un negocio MIRADEX" (Business Partner). Reference landing for the template.
+// Sources: strategy 3.5, 4, 6, 6.1, section 6 "MIRADEX Business Partner"; video script nº2 (Spanish version).
+import Page from '../../layouts/Page.astro';
+import Hero from '../../components/Hero.astro';
+import Section from '../../components/Section.astro';
+import FeatureGrid from '../../components/FeatureGrid.astro';
+import VideoPlaceholder from '../../components/VideoPlaceholder.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import ScenarioLinks from '../../components/ScenarioLinks.astro';
+import Economics from '../../components/Economics.astro';
+import SupportGroups from '../../components/SupportGroups.astro';
+import Responsibilities from '../../components/Responsibilities.astro';
+import Stats from '../../components/Stats.astro';
+import CategoryCards from '../../components/CategoryCards.astro';
+import FitList from '../../components/FitList.astro';
+import Steps from '../../components/Steps.astro';
+import Gallery from '../../components/Gallery.astro';
+import Faq from '../../components/Faq.astro';
+import FinalForm from '../../components/FinalForm.astro';
+import Icon from '../../components/Icon.astro';
+import { scenarioById } from '../../data/scenarios';
+import { productStats, statsFootnote, faq as commonFaq, finalPoints } from '../../data/shared';
+import WhyMiradex from '../../components/WhyMiradex.astro';
+
+const s = scenarioById('negocio')!;
+
+// 02 · Why it makes sense for this business (strategy 6.2 drivers, video nº2)
+const drivers = [
+  { icon: 'factory', title: 'Sin fábrica ni maquinaria', text: 'No necesita producción propia ni desarrollar el producto. La inversión va a ventas, publicidad y captación de clientes.' },
+  { icon: 'package-check', title: 'Producto listo', text: 'Más de 10 modelos de vallas, soluciones de fachada y más de 25 colores y acabados, fabricados a medida.' },
+  { icon: 'coins', title: 'Varias fuentes de ingresos', text: 'Margen en la venta de producto y, si lo ofrece, ingresos por la instalación.' },
+  { icon: 'map', title: 'Toda España', text: 'Vende en todo el país. No limitamos el territorio: protegemos los clientes y proyectos que registra.' },
+  { icon: 'network', title: 'Su propia red', text: 'Puede crear su red de distribuidores, instaladores y socios de referidos.' },
+  { icon: 'trending-up', title: 'Usted decide la escala', text: 'Empiece con web y equipo comercial. Añada showroom, stands e instalación a medida que crece.' },
+];
+
+// 04 · How a MIRADEX business works (relevant modules of the 5 scenarios)
+const modules = [
+  { icon: 'store', title: 'Venta propia', text: 'Web con productos MIRADEX, equipo comercial formado y publicidad.' },
+  { icon: 'wrench', title: 'Instalación', text: 'Equipo de instalación propio o equipos colaboradores.' },
+  { icon: 'building-2', title: 'Proyectos', text: 'Clientes particulares, constructoras, promotoras y obras comerciales.' },
+  { icon: 'network', title: 'Su red', text: 'Distribuidores y socios de referidos dentro de su estructura.' },
+];
+
+// 05 · Economics (strategy 4 and section 6; no coefficients, they are internal)
+const sources = [
+  { title: 'Margen en la venta de producto', text: 'Compra a precio de socio y vende a sus clientes particulares y empresas.' },
+  { title: 'Ingresos por instalación', text: 'Si ofrece el montaje, es una fuente de ingresos aparte del producto.' },
+  { title: 'Margen dentro de su red', text: 'Sus condiciones dejan espacio para trabajar con sus propios distribuidores e instaladores.' },
+  { title: 'Proyectos grandes', text: 'También con constructoras y promotoras le queda un margen suficiente.' },
+];
+const factors = [
+  'Volumen previsto', 'Equipo comercial', 'Marketing propio', 'Showroom o presencia física',
+  'Infraestructura de instalación', 'Acceso a clientes y obras', 'Inversión en el lanzamiento', 'Plan para su red',
+];
+
+// 06 · What the partner receives (strategy 3.5)
+const support = [
+  { icon: 'handshake', title: 'Comercial', items: ['Condiciones comerciales individuales', 'Catálogos, fotos, vídeos y guiones de venta', 'Materiales comerciales para su web'] },
+  { icon: 'megaphone', title: 'Lanzamiento y marketing', items: ['Estructura web lista y materiales de lanzamiento', 'Ayuda con la publicidad y el sistema de ventas', 'Ayuda con el showroom'] },
+  { icon: 'graduation-cap', title: 'Formación', items: ['Formación del propietario, gerentes e instaladores', 'Acompañamiento en el lanzamiento y el crecimiento', 'Apoyo en los primeros proyectos'] },
+  { icon: 'truck', title: 'Técnica y logística', items: ['Documentación técnica, instrucciones y vídeos', 'Ayuda con los cálculos', 'Muestras y stands de demostración', 'Producción a medida y coordinación de la entrega'] },
+];
+
+
+// 08 · How it starts (strategy 6.8, adapted to Business: plan, budget and team are qualified first)
+const steps = [
+  { title: 'Solicitud', text: 'Nos cuenta sobre su negocio y sus planes.' },
+  { title: 'Cualificación', text: 'Revisamos plan de negocio, presupuesto de lanzamiento, equipo y canales.' },
+  { title: 'Modelo y condiciones', text: 'Le presentamos el modelo financiero y las condiciones.' },
+  { title: 'Lanzamiento', text: 'Web, materiales, formación del equipo, muestras y stands.' },
+  { title: 'Primeros proyectos', text: 'Le acompañamos en las primeras ventas e instalaciones.' },
+  { title: 'Crecimiento', text: 'Showroom, instalación y su propia red de socios.' },
+];
+
+// 09 · Three ways to start (strategy 3.5 "Подходит для")
+const paths = [
+  { icon: 'rocket', title: 'Nueva empresa', text: 'Emprendedores y equipos listos para crear una línea de negocio dedicada a MIRADEX.' },
+  { icon: 'building', title: 'Nueva unidad de negocio', text: 'Constructoras o empresas comerciales que separan MIRADEX en una unidad propia.' },
+  { icon: 'warehouse', title: 'Distribuidor que crece', text: 'Distribuidores que invierten en marketing, personas, showroom y su propia red.' },
+];
+const gallery = [
+  { src: '/img/photos/atlas-villas.jpg', caption: 'Atlas · Gris grafito RAL 7024' },
+  { src: '/img/photos/jupiter-facade-black.jpg', caption: 'Fachada Jupiter · RAL 9005' },
+  { src: '/img/photos/romb-pro-house.jpg', caption: 'Romb Pro · RAL 7016' },
+  { src: '/img/photos/terra-wood.jpg', caption: 'Terra · Roble dorado' },
+];
+
+// 10 · FAQ (segment specific)
+const faq = [
+  { q: '¿Qué inversión necesito para empezar?', a: '<p>No necesita invertir en fábrica, maquinaria ni desarrollo de producto. La inversión se centra en ventas, publicidad y captación de clientes. Antes de empezar le mostramos un modelo financiero con el margen, la inversión necesaria y el potencial del negocio.</p>' },
+  { q: '¿Ofrecen exclusividad territorial?', a: '<p>No. Puede vender MIRADEX en toda España. En lugar de un territorio, protegemos a los clientes y proyectos que usted registra.</p>' },
+  { q: '¿Cómo se definen mis condiciones comerciales?', a: '<p>Antes de empezar evaluamos su potencial real: volumen previsto, equipo, marketing, showroom, instalación, inversión y plan de desarrollo. Con eso le proponemos directamente las condiciones más fuertes que tienen sentido económico. Las mejores condiciones se dan por inversión confirmada y resultados reales.</p>' },
+  { q: '¿Necesito un showroom desde el principio?', a: '<p>No necesariamente. A medida que el negocio crece, puede abrir una sala de exposición o colocar stands. MIRADEX le ayuda a crear el showroom.</p>' },
+  { q: '¿Puedo instalar yo mismo y tener mis propios distribuidores?', a: '<p>Sí. Puede crear su propio equipo de instalación o trabajar con equipos colaboradores, y construir su propia red de distribuidores y socios de referidos.</p>' },
+  { q: '¿Qué apoyo recibo al empezar?', a: '<p>Estructura web y materiales de lanzamiento, formación del propietario, gerentes e instaladores, catálogos, fotos, vídeos y guiones, muestras y stands, ayuda con la publicidad, el sistema de ventas y el showroom, y acompañamiento en los primeros proyectos.</p>' },
+  { q: '¿Cuáles son los plazos de producción y entrega?', a: '<p>Producción a medida en 3-5 días laborables. Entrega en España en 5-10 días laborables.</p>' },
+  { q: '¿Cómo se protegen mis clientes y proyectos?', a: '<p>Los clientes y proyectos que usted registra quedan protegidos frente a la venta directa. Antes de empezar le explicamos las reglas de registro y protección.</p>' },
+];
+---
+<Page
+  title="Cree su negocio MIRADEX en España · Colaboración MIRADEX"
+  description="Construya su propio negocio con el producto, la producción y el apoyo de un fabricante europeo de vallas metálicas. Sin fábrica ni maquinaria, en toda España."
+  scenario="negocio"
+  current="negocio"
+>
+  <!-- 01 · First screen -->
+  <Hero
+    crumb={{ num: s.num, label: s.short }}
+    eyebrow="Para emprendedores y empresas"
+    title="Construya su negocio MIRADEX en España"
+    lead="Colabore con un fabricante europeo de vallas metálicas. Usted desarrolla su negocio y MIRADEX aporta el producto, la producción y el apoyo que necesita para crecer."
+    scenario="negocio"
+    image="/img/photos/atlas-modern-house.jpg"
+    imageAlt="Valla metálica Atlas en una vivienda moderna"
+    note="Le respondemos en 24 horas. Sin exclusividad territorial: protegemos a sus clientes."
+  />
+
+  <!-- 02 · Why it pays off for this business -->
+  <Section id="por-que" tone="tint" title="Por qué un negocio MIRADEX" lead="Usted invierte en ventas y clientes. La fábrica, el producto y la gama ya existen.">
+    <FeatureGrid items={drivers} />
+  </Section>
+
+  <!-- 03 · Industry video (upper third) -->
+  <Section id="video" title="El modelo en 3 minutos" lead="Producto y producción, su propio sistema de ventas, modelo de negocio y apoyo de MIRADEX.">
+    <VideoPlaceholder num={s.video.num} title={s.video.title} duration={s.video.duration} poster="/img/photos/atlas-villas.jpg" />
+  </Section>
+
+  <!-- Positioning (reference: "Мы не стартап и не франшиза") -->
+  <WhyMiradex />
+
+  <CtaBand
+    title="¿Quiere ver el modelo financiero?"
+    text="Cuéntenos sus planes y le presentaremos el producto, el modelo financiero y las opciones de colaboración."
+    scenario="negocio"
+  />
+
+  <!-- 04 · How you can work with MIRADEX -->
+  <Section id="como-funciona" title="Cómo funciona un negocio MIRADEX" lead="Usted decide el tamaño de su negocio y cómo hacerlo crecer. Estos son sus bloques.">
+    <FeatureGrid items={modules} cols={4} />
+    <div class="gap-top"><ScenarioLinks ids={['vender', 'instalar', 'recomendar']} title="¿Prefiere empezar con un formato más ligero?" /></div>
+  </Section>
+
+  <!-- 05 · Economics -->
+  <Section id="economia" tone="tint" title="Economía de la colaboración" lead="Antes de empezar evaluamos el potencial real de su negocio y le proponemos directamente las condiciones más fuertes que tienen sentido económico. Sin escaleras artificiales de descuentos.">
+    <Economics
+      sources={sources}
+      factors={factors}
+      principle="Las mejores condiciones se dan por inversión confirmada y resultados reales, no por promesas de volumen."
+      model={{ title: 'Modelo financiero antes de empezar', text: 'Le mostramos el margen, la inversión necesaria y el potencial del negocio para que decida con números.' }}
+    />
+  </Section>
+
+  <!-- 06 · What the partner receives -->
+  <Section id="apoyo" title="Qué recibe como socio" lead="Apoyo comercial, de marketing, técnico y logístico desde el primer día.">
+    <SupportGroups groups={support} />
+  </Section>
+
+  <!-- Reference "Без рисков", adapted: who takes care of what -->
+  <Section id="funciones" tone="tint" title="Qué asume MIRADEX" lead="Usted se centra en las ventas y en sus clientes. MIRADEX se encarga del apoyo comercial, técnico y de producción.">
+    <Responsibilities
+      miradex={[
+        'Producción en la UE y control de calidad',
+        'Desarrollo del producto y de la gama',
+        'Garantía técnica de hasta 30 años y estética de hasta 15, según acabado',
+        'Fabricación a medida y coordinación de la entrega',
+        'Protección de sus clientes y proyectos registrados',
+        'Soporte comercial y técnico continuo',
+      ]}
+      partner={[
+        'Web propia o sección MIRADEX completa',
+        'Gerentes dedicados y formados',
+        'Inversión en publicidad, showroom y muestras',
+        'Infraestructura de instalación y CRM',
+        'Desarrollo de su propia red de distribuidores y referidos',
+      ]}
+      note="Sus condiciones crecen con la inversión confirmada, las funciones que asume y los resultados reales."
+    />
+  </Section>
+
+  <CtaBand title="Hablemos de su negocio" text="Formulario o WhatsApp: como le resulte más cómodo." tone="dark" scenario="negocio" />
+
+  <!-- 07 · Why MIRADEX interests their clients -->
+  <Section id="producto" title="Por qué sus clientes elegirán MIRADEX" lead="Diseño moderno, medidas a la carta, vallas, puertas y fachada en un mismo concepto, con plazos claros.">
+    <Stats stats={productStats} footnote={statsFootnote} />
+    <div class="gap-top"><CategoryCards /></div>
+  </Section>
+
+  <!-- Fit / not fit -->
+  <Section id="para-quien" tone="tint" title="¿Es para usted?">
+    <FitList
+      fit={[
+        'Quiere crear un negocio propio o una unidad de negocio MIRADEX.',
+        'Está dispuesto a invertir en web, equipo, publicidad y showroom.',
+        'Quiere construir su propia red de instaladores, distribuidores y socios.',
+        'Piensa en el mercado nacional, no en una sola zona.',
+      ]}
+      notFit={[
+        'Busca exclusividad territorial: no la ofrecemos.',
+        'Espera las mejores condiciones solo por prometer volumen.',
+        'No quiere dedicar equipo propio a las ventas.',
+        'Prefiere solo recomendar clientes: para eso existe el programa de referidos.',
+      ]}
+    />
+  </Section>
+
+  <!-- 08 · How cooperation starts -->
+  <Section id="inicio" title="Cómo empieza la colaboración">
+    <Steps steps={steps} />
+  </Section>
+
+  <!-- 09 · Real projects and scenarios -->
+  <Section id="proyectos" tone="tint" title="Proyectos y escenarios" lead="Tres caminos habituales para crear un negocio MIRADEX.">
+    <FeatureGrid items={paths} />
+    <div class="gap-top">
+      <Gallery items={gallery}>
+        <article class="ref">
+          <p class="eyebrow ref__eyebrow">Modelo de referencia</p>
+          <h3 class="ref__title">MIRADEX Bulgaria</h3>
+          <p class="ref__text">El negocio MIRADEX en España sigue la lógica de MIRADEX Bulgaria, con el mayor potencial del mercado español.</p>
+          <dl class="ref__stats">
+            <div><dt>XX</dt><dd>años en el mercado</dd></div>
+            <div><dt>XXX</dt><dd>proyectos realizados</dd></div>
+            <div><dt>XX</dt><dd>socios y showrooms</dd></div>
+          </dl>
+          <a class="ref__link" href="https://miradex.bg/" target="_blank" rel="noopener">miradex.bg <Icon name="arrow-up-right" size={16} /></a>
+        </article>
+      </Gallery>
+    </div>
+  </Section>
+
+  <CtaBand title="¿Listo para crear su negocio MIRADEX?" text="Cuéntenos sobre su proyecto. Le respondemos en 24 horas." tone="mint" scenario="negocio" />
+
+  <!-- 10 · FAQ -->
+  <Section id="faq" title="Preguntas frecuentes">
+    <Faq items={faq} />
+  </Section>
+
+  <!-- 11 · Final CTA + form -->
+  <FinalForm
+    title="Cuéntenos sus planes"
+    text="Le presentaremos los productos de MIRADEX, el modelo financiero y las opciones de colaboración para que valore las posibilidades de su negocio."
+    scenario="negocio"
+    points={finalPoints}
+  />
+</Page>
+
+<style>
+  .gap-top { margin-top: var(--stack-gap); }
+  .ref { height: 100%; display: flex; flex-direction: column; gap: var(--sp-3); padding: var(--sp-6); border-radius: var(--radius-md); background: var(--bg-dark); color: var(--text-on-dark); }
+  .ref__eyebrow { color: var(--c-mint); }
+  .ref__title { font-size: var(--fs-h2); }
+  .ref__text { color: var(--text-on-dark-muted); max-width: 40ch; }
+  .ref__stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-3); margin-top: var(--sp-3); }
+  .ref__stats div { padding: var(--sp-4); border-radius: var(--radius-sm); background: var(--c-ink-soft); }
+  .ref__stats dt { font-size: var(--fs-stat); font-weight: var(--fw-medium); line-height: 1; }
+  .ref__stats dd { margin-top: 6px; font-size: var(--fs-micro); color: var(--text-on-dark-muted); }
+  .ref__link { margin-top: auto; display: inline-flex; align-items: center; gap: 6px; color: var(--c-white); font-weight: var(--fw-medium); }
+  .ref__link:hover { color: var(--c-mint); }
+</style>

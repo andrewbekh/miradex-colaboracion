@@ -1,0 +1,21 @@
+---
+// Second entry level (strategy 5.2): start from your sector instead of the format.
+import { sectorLinks } from '../data/nav';
+interface Props { title?: string }
+const { title = '¿Prefiere empezar por su sector?' } = Astro.props;
+---
+<div class="sx">
+  <p class="sx__title">{title}</p>
+  <ul class="sx__list" role="list">
+    {sectorLinks.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+  </ul>
+</div>
+
+<style>
+  .sx { display: grid; gap: var(--sp-4); padding: var(--sp-6); border-radius: var(--radius-md); background: var(--bg); border: 1px solid var(--border); }
+  .sx__title { font-weight: var(--fw-medium); }
+  .sx__list { display: flex; flex-wrap: wrap; gap: 8px; }
+  .sx__list a { display: inline-flex; padding: 8px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border); color: var(--text); text-decoration: none; font-size: var(--fs-small); background: var(--bg-tint); }
+  .sx__list a:hover { border-color: var(--c-ink); background: var(--bg); }
+  @media (max-width: 767px) { .sx { padding: var(--sp-5); } }
+</style>
