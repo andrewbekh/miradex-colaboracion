@@ -51,7 +51,7 @@
   --c-mint-hover: #c2f1bb;  /* derived: mint 6% darker, button hover */
   --c-mint-strong: #9fe796; /* derived: mint 25% stronger, small dots on white */
   --c-ink-80: #5d5d5d;      /* derived: ink 80%, menu text before hover */
-  --c-collab-active: #ecf1ff; /* derived: blue 14% on white, active menu box */
+  --c-collab-active: #f4f4f4; /* derived: ink 5% on white, active menu box */
   --shadow-soft: 0 16px 40px rgb(53 53 53 / 0.08);
 
   /* ---- Semantic roles ---- */
