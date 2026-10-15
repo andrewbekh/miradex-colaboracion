@@ -4,6 +4,25 @@ import { scenarios } from '../data/scenarios';
 import { sectorLinks, productLines } from '../data/nav';
 import { site } from '../data/site';
 import logo from '../assets/logo.svg?raw';
+import Icon from './Icon.astro';
+
+// Bottom bar as on miradex.bg: payments and social networks (links are placeholders, see docs/TODO.md).
+const payments = [
+  { icon: 'si:Mastercard', label: 'Mastercard' },
+  { icon: 'si:Visa', label: 'Visa' },
+  { icon: 'si:Stripe', label: 'Stripe' },
+  { icon: 'si:Googlepay', label: 'Google Pay' },
+  { icon: 'si:Applepay', label: 'Apple Pay' },
+];
+const socials = [
+  { icon: 'si:Pinterest', label: 'Pinterest' },
+  { icon: 'linkedin', label: 'LinkedIn' },
+  { icon: 'si:Facebook', label: 'Facebook' },
+  { icon: 'si:Instagram', label: 'Instagram' },
+  { icon: 'si:X', label: 'X' },
+  { icon: 'si:Youtube', label: 'YouTube' },
+  { icon: 'si:Tiktok', label: 'TikTok' },
+];
 
 const half = Math.ceil(sectorLinks.length / 2);
 ---
@@ -39,15 +58,23 @@ const half = Math.ceil(sectorLinks.length / 2);
         <ul role="list">{productLines.map((p) => <li><a href="#">{p.title}</a></li>)}</ul>
       </nav>
     </div>
-    <div class="ft__bottom">
-      <p>© {new Date().getFullYear()} MIRADEX. Todos los derechos reservados.</p>
-      <a href={site.privacyUrl}>Política de privacidad</a>
+  </div>
+  <div class="ft__bar">
+    <div class="container ft__bar-in">
+      <p class="ft__copy">© {new Date().getFullYear()} MIRADEX. Todos los derechos reservados. <a href={site.privacyUrl}>Política de privacidad</a></p>
+      <ul class="ft__pay" role="list" aria-label="Formas de pago">
+        {payments.map((p) => <li title={p.label}><Icon name={p.icon} size={26} label={p.label} /></li>)}
+      </ul>
+      <ul class="ft__social" role="list">
+        {socials.map((n) => <li><a href="#" aria-label={n.label}><Icon name={n.icon} size={24} /></a></li>)}
+      </ul>
     </div>
   </div>
 </footer>
 
 <style>
   .ft { background: var(--bg-tint); border-top: 1px solid var(--border); padding-top: var(--sp-10); font-size: var(--fs-small); }
+  .ft a:hover { text-decoration: underline; }
   .ft__grid { display: grid; grid-template-columns: 1.2fr 1fr 2fr 0.9fr; gap: var(--sp-7); }
   .ft__logo { display: block; width: 132px; color: var(--c-ink); }
   .ft__logo :global(svg) { width: 100%; height: auto; }
@@ -59,12 +86,27 @@ const half = Math.ceil(sectorLinks.length / 2);
   .ft a:hover { text-decoration: underline; }
   .ft__all { font-weight: var(--fw-medium); }
   .ft__split { display: grid; grid-template-columns: 1fr 1fr; gap: 10px var(--sp-6); }
-  .ft__bottom { display: flex; justify-content: space-between; gap: var(--sp-4); flex-wrap: wrap; margin-top: var(--sp-9); padding-block: var(--sp-5); border-top: 1px solid var(--border); color: var(--text-muted); }
+  .ft__bar { margin-top: var(--sp-10); background: var(--c-blue); color: var(--c-white); }
+  .ft__bar-in { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: var(--sp-5); min-height: 72px; padding-block: var(--sp-4); }
+  .ft__copy { font-size: var(--fs-small); }
+  .ft__copy a { color: var(--c-white); text-decoration: underline; text-underline-offset: 0.2em; margin-left: 8px; }
+  .ft__pay { display: flex !important; gap: 10px; }
+  .ft__pay li { display: grid; place-items: center; width: 52px; height: 34px; border-radius: 6px; background: var(--c-white); color: var(--c-blue); }
+  .ft__social { display: flex !important; justify-self: end; gap: 18px; margin-right: 56px; }
+  .ft__social a { display: grid; place-items: center; color: var(--c-white); opacity: 0.95; transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease); }
+  .ft__social a:hover { opacity: 1; transform: translateY(-2px); }
   @media (max-width: 1199px) {
     .ft__grid { grid-template-columns: 1fr 1fr; }
     .ft__col--sectors { grid-column: 1 / -1; grid-row: 3; }
   }
+  @media (max-width: 1199px) {
+    .ft__bar-in { grid-template-columns: 1fr; justify-items: center; text-align: center; padding-block: var(--sp-6); }
+    .ft__social { justify-self: center; margin-right: 0; }
+    .ft__bar-in { padding-bottom: 88px; }
+  }
   @media (max-width: 767px) {
+    .ft__pay { flex-wrap: wrap; justify-content: center; }
+    .ft__social { flex-wrap: wrap; justify-content: center; gap: 16px; }
     .ft__grid { grid-template-columns: 1fr; }
     .ft__col--sectors { grid-row: auto; }
     .ft__split { grid-template-columns: 1fr; }

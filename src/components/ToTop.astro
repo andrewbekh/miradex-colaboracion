@@ -1,0 +1,29 @@
+---
+// Floating "back to top" button, bottom-right on every page; appears after the first screen.
+import Icon from './Icon.astro';
+---
+<button type="button" class="totop" data-totop aria-label="Volver arriba"><Icon name="arrow-up" size={22} /></button>
+
+<style>
+  .totop {
+    position: fixed; right: clamp(16px, 2vw, 32px); bottom: clamp(16px, 2vw, 32px); z-index: 40;
+    display: grid; place-items: center; width: 52px; height: 52px; border: 0; border-radius: var(--radius-md);
+    background: var(--c-blue); color: var(--c-white); box-shadow: 0 0 0 2px var(--c-white), 0 10px 28px rgb(53 53 53 / 0.22);
+    opacity: 0; visibility: hidden; transform: translateY(12px);
+    transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease), visibility var(--dur), background-color var(--dur) var(--ease);
+  }
+  .totop.is-visible { opacity: 1; visibility: visible; transform: none; }
+  .totop:hover { background: var(--c-blue-hover); }
+  .totop:hover :global(svg) { transform: translateY(-2px); }
+  .totop :global(svg) { transition: transform var(--dur) var(--ease); }
+</style>
+
+<script>
+  const btn = document.querySelector<HTMLButtonElement>('[data-totop]');
+  if (btn) {
+    const update = () => btn.classList.toggle('is-visible', window.scrollY > window.innerHeight * 0.8);
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+    btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  }
+</script>

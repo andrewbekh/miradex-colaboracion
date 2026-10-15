@@ -6,6 +6,7 @@ import Pattern from './Pattern.astro';
 import FactsStrip from './FactsStrip.astro';
 import Icon from './Icon.astro';
 import { whatsappHref, site } from '../data/site';
+import { toneStyle, type Tone } from '../data/scenarios';
 
 interface Props {
   eyebrow: string;
@@ -19,7 +20,7 @@ interface Props {
   secondary?: { label: string; href: string };
   facts?: boolean;
   /** breadcrumb back to the hub, shown on scenario landings */
-  crumb?: { num: string; label: string };
+  crumb?: { num: string; label: string; tone?: string };
 }
 const { eyebrow, title, lead, scenario, image, imageAlt = '', note, cta = 'Enviar solicitud', secondary, facts = true, crumb } = Astro.props;
 ---
@@ -31,7 +32,7 @@ const { eyebrow, title, lead, scenario, image, imageAlt = '', note, cta = 'Envia
           <nav class="hero__crumb" aria-label="Ruta">
             <a href={site.hubPath}><Icon name="arrow-left" size={16} />{site.navLabel}</a>
             <span aria-hidden="true">/</span>
-            <span class="hero__crumb-cur"><span class="hero__crumb-num">{crumb.num}</span>{crumb.label}</span>
+            <span class="hero__crumb-cur"><span class="hero__crumb-num" style={crumb.tone ? toneStyle(crumb.tone as Tone) : undefined}>{crumb.num}</span>{crumb.label}</span>
           </nav>
         )}
         <p class="eyebrow hero__eyebrow"><span class="hero__dot" aria-hidden="true"></span>{eyebrow}</p>
@@ -63,7 +64,7 @@ const { eyebrow, title, lead, scenario, image, imageAlt = '', note, cta = 'Envia
   .hero__eyebrow { display: inline-flex; align-items: center; gap: 10px; color: var(--text-muted); }
   .hero__crumb { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: var(--fs-small); color: var(--text-muted); margin-bottom: var(--sp-2); }
   .hero__crumb a { display: inline-flex; align-items: center; gap: 6px; color: var(--text); text-decoration: none; padding: 6px 10px 6px 8px; border-radius: var(--radius-sm); background: var(--bg-tint); }
-  .hero__crumb a:hover { background: var(--c-mint); }
+  .hero__crumb a:hover { color: var(--c-ink); }
   .hero__crumb-cur { display: inline-flex; align-items: center; gap: 8px; color: var(--text); font-weight: var(--fw-medium); }
   .hero__crumb-num { display: grid; place-items: center; width: 26px; height: 26px; border-radius: var(--radius-xs); background: var(--c-blue); color: var(--c-white); font-size: 12px; }
   .hero__dot { width: 22px; height: 8px; border-radius: 2px; background: var(--c-blue); }

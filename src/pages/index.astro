@@ -5,12 +5,12 @@ import Base from '../layouts/Base.astro';
 import Pattern from '../components/Pattern.astro';
 import Icon from '../components/Icon.astro';
 import logo from '../assets/logo.svg?raw';
-import { scenarios } from '../data/scenarios';
+import { scenarios, toneStyle } from '../data/scenarios';
 import { site } from '../data/site';
 
 const pages = [
-  { num: 'Хаб', title: site.navLabel, text: 'Общая страница раздела: все форматы сотрудничества, производство, ассортимент, поддержка, логистика, FAQ и заявка.', href: site.hubPath },
-  ...scenarios.map((s) => ({ num: s.num, title: s.title, text: s.promise, href: s.href })),
+  { num: 'Хаб', title: site.navLabel, text: 'Общая страница раздела: все форматы сотрудничества, производство, ассортимент, поддержка, логистика, FAQ и заявка.', href: site.hubPath, style: 'background:var(--c-ink);color:var(--c-white)' },
+  ...scenarios.map((s) => ({ num: s.num, title: s.title, text: s.promise, href: s.href, style: toneStyle(s.tone) })),
 ];
 const notes = [
   'Страницы адаптивные: откройте их на телефоне или сузьте окно браузера (1440, 768, 390).',
@@ -33,7 +33,7 @@ const notes = [
         {pages.map((p) => (
           <li>
             <a class="ix__card" href={p.href}>
-              <span class="ix__num">{p.num}</span>
+              <span class="ix__num" style={p.style}>{p.num}</span>
               <span class="ix__body"><span class="ix__title">{p.title}</span><span class="ix__text">{p.text}</span></span>
               <Icon name="arrow-up-right" size={22} />
             </a>
@@ -64,8 +64,7 @@ const notes = [
     transition: border-color var(--dur) var(--ease), transform var(--dur) var(--ease);
   }
   .ix__card:hover { border-color: var(--c-blue); transform: translateY(-2px); }
-  .ix__num { display: grid; place-items: center; height: 48px; border-radius: var(--radius-sm); background: var(--c-blue); color: var(--c-white); font-weight: var(--fw-medium); font-size: var(--fs-small); }
-  .ix__list li:first-child .ix__num { background: var(--c-mint); color: var(--c-ink); }
+  .ix__num { display: grid; place-items: center; height: 48px; border-radius: var(--radius-sm); font-weight: var(--fw-medium); font-size: var(--fs-small); }
   .ix__body { display: grid; gap: 4px; }
   .ix__title { font-weight: var(--fw-medium); text-transform: uppercase; letter-spacing: var(--tracking-caps); }
   .ix__text { color: var(--text-muted); font-size: var(--fs-small); }

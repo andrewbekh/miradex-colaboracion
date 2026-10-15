@@ -24,7 +24,7 @@ const { stages, total, notes = [] } = Astro.props;
 </div>
 
 <style>
-  .lt { display: grid; gap: var(--sp-6); }
+  .lt { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--sp-6); }
   .lt__track { display: flex; gap: 6px; }
   .lt__stage { flex: var(--w) 1 0; min-width: 0; display: grid; align-content: start; gap: var(--sp-2); }
   .lt__bar { display: flex; align-items: center; height: 56px; padding: 0 var(--sp-4); border-radius: var(--radius-sm); margin-bottom: var(--sp-3); }
@@ -47,5 +47,8 @@ const { stages, total, notes = [] } = Astro.props;
     .lt__stage { display: grid; grid-template-columns: clamp(112px, 22vw, 168px) 1fr; column-gap: var(--sp-4); }
     .lt__bar { grid-row: span 2; height: 100%; min-height: 64px; margin: 0; justify-content: center; padding: 0 8px; }
     .lt__time { white-space: normal; text-align: center; }
+  }
+  @media (max-width: 767px) {
+    .lt__notes { grid-template-columns: 1fr; }
   }
 </style>

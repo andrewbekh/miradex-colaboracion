@@ -3,9 +3,12 @@
 
 export type ScenarioId = 'vender' | 'instalar' | 'proyectos' | 'recomendar' | 'negocio';
 
+export type Tone = 'mint' | 'sky' | 'blue';
+
 export interface Scenario {
   id: ScenarioId;
   num: string;
+  tone: Tone;        // badge colour, same everywhere: 1 mint, 2 sky, 3 blue, 4 mint, 5 sky
   title: string;      // "Quiero..." as in the strategy
   short: string;      // nav / select label
   promise: string;    // one-line business promise
@@ -18,6 +21,7 @@ export interface Scenario {
 export const scenarios: Scenario[] = [
   {
     id: 'vender',
+    tone: 'mint',
     num: '01',
     title: 'Quiero vender MIRADEX',
     short: 'Vender MIRADEX',
@@ -29,6 +33,7 @@ export const scenarios: Scenario[] = [
   },
   {
     id: 'instalar',
+    tone: 'sky',
     num: '02',
     title: 'Quiero vender e instalar',
     short: 'Vender e instalar',
@@ -40,6 +45,7 @@ export const scenarios: Scenario[] = [
   },
   {
     id: 'proyectos',
+    tone: 'blue',
     num: '03',
     title: 'Quiero comprar para proyectos',
     short: 'Comprar para proyectos',
@@ -51,6 +57,7 @@ export const scenarios: Scenario[] = [
   },
   {
     id: 'recomendar',
+    tone: 'mint',
     num: '04',
     title: 'Quiero recomendar clientes',
     short: 'Recomendar clientes',
@@ -62,6 +69,7 @@ export const scenarios: Scenario[] = [
   },
   {
     id: 'negocio',
+    tone: 'sky',
     num: '05',
     title: 'Quiero crear un negocio MIRADEX',
     short: 'Negocio MIRADEX',
@@ -93,3 +101,7 @@ export const businessTypes = [
   'Emprendedor o nuevo proyecto',
   'Otro',
 ];
+
+/** Badge colours: text on sky and blue is white, on mint it is ink (client rule). */
+export const toneStyle = (t: Tone) =>
+  t === 'mint' ? 'background:var(--c-mint);color:var(--c-ink)' : `background:var(--c-${t});color:var(--c-white)`;

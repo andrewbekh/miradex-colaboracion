@@ -6,7 +6,12 @@ import Icon from './Icon.astro';
 
 interface Props { title: string; lead: string; image: string }
 const { title, lead, image } = Astro.props;
-const facts = ['Fábrica en Rumanía', 'Acero KG Dongbu Steel', '1000+ proyectos en la UE', 'Entrega en España en 5-10 días'];
+const facts = [
+  { icon: 'factory', text: 'Fábrica en Rumanía' },
+  { icon: 'layers', text: 'Acero KG Dongbu Steel' },
+  { icon: 'badge-check', text: '1000+ proyectos en la UE' },
+  { icon: 'truck', text: 'Entrega en España en 5-10 días' },
+];
 ---
 <section class="hh">
   <img class="hh__bg" src={image} alt="" fetchpriority="high" />
@@ -21,7 +26,7 @@ const facts = ['Fábrica en Rumanía', 'Acero KG Dongbu Steel', '1000+ proyectos
       <button type="button" class="btn btn--mint btn--lg" data-open-form data-scenario="no-se"><span>Le ayudamos a elegir</span></button>
     </div>
     <ul class="hh__facts" role="list">
-      {facts.map((f) => <li>{f}</li>)}
+      {facts.map((f) => <li><Icon name={f.icon} size={18} />{f.text}</li>)}
     </ul>
   </div>
 </section>
@@ -38,7 +43,7 @@ const facts = ['Fábrica en Rumanía', 'Acero KG Dongbu Steel', '1000+ proyectos
   .hh__lead { max-width: 44ch; color: rgb(255 255 255 / 0.85); }
   .hh__actions { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin-top: var(--sp-2); }
   .hh__facts { display: flex; flex-wrap: wrap; gap: 6px 8px; margin-top: var(--sp-4); }
-  .hh__facts li { padding: 6px 10px; border-radius: var(--radius-xs); background: rgb(255 255 255 / 0.12); backdrop-filter: blur(6px); font-size: var(--fs-micro); }
+  .hh__facts li { display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px 8px 10px; border-radius: var(--radius-xs); background: rgb(255 255 255 / 0.12); backdrop-filter: blur(6px); font-size: var(--fs-micro); }
   @media (max-width: 767px) {
     .hh { min-height: 0; }
     .hh__shade { background: linear-gradient(0deg, rgb(53 53 53 / 0.92) 0%, rgb(53 53 53 / 0.7) 60%, rgb(53 53 53 / 0.45) 100%); }

@@ -3,7 +3,6 @@
 
 export const mainNav = [
   { label: 'Catálogo', href: '#', hasMenu: true },   // TODO: URLs del sitio principal ES
-  { label: 'Muestras', href: '#' },
   { label: 'Galería', href: '#' },
   { label: 'Calculadora', href: '#' },
   { label: 'Información útil', href: '#', hasMenu: true },

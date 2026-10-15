@@ -1,6 +1,7 @@
 ---
 import '../styles/base.css';
 import FormModal from '../components/FormModal.astro';
+import ToTop from '../components/ToTop.astro';
 import { site } from '../data/site';
 
 interface Props { title: string; description?: string; scenario?: string; noindex?: boolean }
@@ -27,6 +28,7 @@ const { title, description = '', scenario = '', noindex = false } = Astro.props;
     </main>
     <slot name="footer" />
     <FormModal scenario={scenario} />
+    <ToTop />
     <script>
       import '../scripts/lead-form.ts';
       import '../scripts/ui.ts';

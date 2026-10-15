@@ -1,27 +1,28 @@
 ---
-// Site header. Structure follows miradex.bg: top bar, main nav, call CTA, cart.
-// "Colaboración" is the last nav item, visually separated; link goes to the hub, chevron opens the 5 scenarios.
-// The right-hand CTA stays the main site's ("Solicitar llamada") so two accent CTAs do not compete.
+// Site header, taken from miradex.bg: blue top bar (phone, delivery, e-mail), main nav, call-back button, cart.
+// "Colaboración" is the last nav item, set apart: a full-height box, tinted when active, with a bar under the text.
+// The link opens the hub, the chevron opens the 5 scenarios + "Todas las opciones".
+// Menu hover = text gets darker and bolder (no backgrounds); active items use the tint.
 import Icon from './Icon.astro';
 import logo from '../assets/logo.svg?raw';
 import { mainNav } from '../data/nav';
-import { scenarios, scenarioById } from '../data/scenarios';
+import { scenarios, scenarioById, toneStyle } from '../data/scenarios';
 import { site } from '../data/site';
 
 interface Props { current?: string }
 const { current } = Astro.props;
-const inCollab = Astro.url.pathname.startsWith(site.hubPath);
+const path = Astro.url.pathname.replace(/\/$/, '');
+const inCollab = path.startsWith(site.hubPath);
+const onHub = path === site.hubPath;
 // On a scenario landing: the logo goes one level up (to the hub) and the breadcrumb docks into the header on scroll.
 const sc = scenarioById(current);
 const logoHref = sc ? site.hubPath : '/';
 ---
 <div class="topbar">
   <div class="container topbar__in">
-    <p>Entrega de vallas metálicas en toda España</p>
-    <ul class="topbar__contacts" role="list">
-      <li><Icon name="phone" size={16} /> {site.contacts.phone}</li>
-      <li><Icon name="mail" size={16} /> {site.contacts.email}</li>
-    </ul>
+    <p class="topbar__item"><span class="topbar__k">Tel:</span> {site.contacts.phone}</p>
+    <p class="topbar__item topbar__mid">Entrega de vallas metálicas a domicilio en toda España</p>
+    <p class="topbar__item"><span class="topbar__k">E-mail:</span> <a href={`mailto:${site.contacts.email}`}>{site.contacts.email}</a></p>
   </div>
 </div>
 
@@ -34,12 +35,14 @@ const logoHref = sc ? site.hubPath : '/';
         {mainNav.map((item) => (
           <li class="hd__item">
             <a class="hd__link" href={item.href}>
-              {item.label}{item.hasMenu && <Icon name="chevron-down" size={16} class="hd__chev" />}
+              <span class="hd__label" data-text={item.label}>{item.label}</span>{item.hasMenu && <Icon name="chevron-down" size={16} class="hd__chev" />}
             </a>
           </li>
         ))}
         <li class:list={['hd__item', 'hd__collab', { 'is-current': inCollab }]} data-dropdown>
-          <a class="hd__link hd__link--collab" href={site.hubPath} aria-current={inCollab ? 'page' : undefined}>{site.navLabel}</a>
+          <a class="hd__link hd__link--collab" href={site.hubPath} aria-current={onHub ? 'page' : undefined}>
+            <span class="hd__label" data-text={site.navLabel}>{site.navLabel}</span>
+          </a>
           <button class="hd__toggle" type="button" aria-expanded="false" aria-controls="collab-menu" aria-label={`Abrir menú ${site.navLabel}`} data-dropdown-toggle>
             <Icon name="chevron-down" size={16} />
           </button>
@@ -48,22 +51,26 @@ const logoHref = sc ? site.hubPath : '/';
               {scenarios.map((s) => (
                 <li>
                   <a href={s.href} class:list={['hd__drop-link', { 'is-current': current === s.id }]} aria-current={current === s.id ? 'page' : undefined}>
-                    <span class="hd__drop-num">{s.num}</span>
-                    <span>{s.title}</span>
+                    <span class="hd__drop-num" style={toneStyle(s.tone)}>{s.num}</span>
+                    <span class="hd__label" data-text={s.title}>{s.title}</span>
                   </a>
                 </li>
               ))}
-              <li class="hd__drop-all"><a href={site.hubPath} class="hd__drop-link"><span>Todas las opciones</span><Icon name="arrow-right" size={16} /></a></li>
+              <li class="hd__drop-all">
+                <a href={site.hubPath} class:list={['hd__drop-link', { 'is-current': onHub }]} aria-current={onHub ? 'page' : undefined}>
+                  <span class="hd__label" data-text="Todas las opciones">Todas las opciones</span><Icon name="arrow-right" size={16} />
+                </a>
+              </li>
             </ul>
           </div>
         </li>
-        <li class="hd__menu-cta"><a class="btn btn--mint btn--block" href="#">Solicitar llamada</a></li>
+        <li class="hd__menu-cta"><a class="hd-btn hd-btn--call" href="#"><Icon name="phone-call" size={18} />Solicitar llamada</a></li>
       </ul>
     </nav>
 
     <div class="hd__actions">
-      <a class="btn btn--mint btn--sm hd__call" href="#">Solicitar llamada</a>
-      <a class="hd__icon" href="#" aria-label="Carrito"><Icon name="shopping-cart" size={22} /></a>
+      <a class="hd-btn hd-btn--call hd__call" href="#"><Icon name="phone-call" size={18} /><span>Solicitar llamada</span></a>
+      <a class="hd-btn hd-btn--cart" href="#" aria-label="Carrito, 0 productos"><Icon name="shopping-cart" size={20} /><span>0</span></a>
       <button class="hd__icon hd__burger" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Abrir menú" data-burger>
         <span></span><span></span><span></span>
       </button>
@@ -74,21 +81,97 @@ const logoHref = sc ? site.hubPath : '/';
       <div class="container hd__crumb-in">
         <a href={site.hubPath} class="hd__crumb-back" tabindex="-1"><Icon name="arrow-left" size={16} />{site.navLabel}</a>
         <span class="hd__crumb-sep" aria-hidden="true">/</span>
-        <span class="hd__crumb-cur"><span class="hd__crumb-num">{sc.num}</span><span class="hd__crumb-long">{sc.title}</span><span class="hd__crumb-short">{sc.short}</span></span>
+        <span class="hd__crumb-cur"><span class="hd__crumb-num" style={toneStyle(sc.tone)}>{sc.num}</span><span class="hd__crumb-long">{sc.title}</span><span class="hd__crumb-short">{sc.short}</span></span>
       </div>
     </div>
   )}
 </header>
 
 <style>
-  .topbar { background: var(--bg-tint); font-size: var(--fs-micro); color: var(--text-muted); border-bottom: 1px solid var(--border); }
-  .topbar__in { display: flex; justify-content: space-between; align-items: center; min-height: 36px; gap: var(--sp-4); }
-  .topbar__contacts { display: flex; gap: var(--sp-5); }
-  .topbar__contacts li { display: inline-flex; align-items: center; gap: 6px; }
+  /* ---- top bar (miradex.bg) ---- */
+  .topbar { background: var(--c-blue); color: var(--c-white); font-size: var(--fs-micro); }
+  .topbar__in { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: var(--sp-4); min-height: 40px; }
+  .topbar__item { font-weight: var(--fw-medium); }
+  .topbar__item:last-child { justify-self: end; }
+  .topbar__k { opacity: 0.85; margin-right: 6px; font-weight: var(--fw-regular); }
+  .topbar a { color: var(--c-white); text-decoration: none; }
+  .topbar a:hover { text-decoration: underline; }
 
+  /* ---- main row ---- */
   /* no backdrop-filter: it would become the containing block of the fixed mobile menu */
   .hd { position: sticky; top: 0; z-index: 50; background: var(--c-white); border-bottom: 1px solid var(--border); }
-  /* breadcrumb docked under the header: absolutely positioned so the page does not jump */
+  .hd__in { display: flex; align-items: stretch; gap: var(--sp-5); min-height: var(--header-h); }
+  .hd__logo { display: block; align-self: center; width: 132px; flex: none; color: var(--c-ink); }
+  .hd__logo :global(svg) { width: 100%; height: auto; }
+
+  .hd__nav { margin-left: auto; display: flex; }
+  .hd__list { display: flex; align-items: stretch; gap: 4px; }
+  .hd__item { position: relative; display: flex; align-items: center; }
+  .hd__link { display: inline-flex; align-items: center; gap: 4px; padding: 10px; color: var(--c-ink-80); text-decoration: none; font-size: var(--fs-small); white-space: nowrap; }
+  .hd__link :global(.hd__chev) { color: var(--text-muted); transition: transform var(--dur) var(--ease); }
+
+  /* hover = darker + bolder text; the hidden bold copy reserves the width so nothing jumps */
+  .hd__label { display: inline-grid; }
+  .hd__label::after { content: attr(data-text); font-weight: var(--fw-medium); height: 0; overflow: hidden; visibility: hidden; }
+  .hd__link:hover, .hd__drop-link:hover { color: var(--c-ink); }
+  .hd__link:hover .hd__label, .hd__drop-link:hover .hd__label { font-weight: var(--fw-medium); }
+
+  /* Colaboración: full-height box from the divider to 12px before the call button */
+  .hd__collab { align-items: stretch; margin-left: var(--sp-3); margin-right: -12px; padding: 0 8px 0 14px; border-left: 1px solid var(--border); }
+  .hd__collab.is-current { background: var(--c-collab-active); }
+  .hd__link--collab { padding: 0; align-items: stretch; color: var(--c-ink); font-weight: var(--fw-medium); }
+  .hd__link--collab .hd__label { align-content: center; }
+  .hd__collab.is-current .hd__link--collab .hd__label { box-shadow: inset 0 -3px 0 var(--c-blue); }
+  .hd__toggle { display: grid; place-items: center; align-self: center; width: 28px; height: 36px; margin-left: 2px; border: 0; background: transparent; color: var(--c-ink); }
+  .hd__toggle :global(svg) { transition: transform var(--dur) var(--ease); }
+  .hd__collab.is-open .hd__toggle :global(svg) { transform: rotate(180deg); }
+
+  .hd__drop {
+    position: absolute; top: calc(100% + 8px); right: 0; width: 360px; padding: var(--sp-2);
+    background: var(--c-white); border: 1px solid var(--border); border-radius: var(--radius-md); box-shadow: var(--shadow-pop);
+    opacity: 0; visibility: hidden; transform: translateY(-4px);
+    transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease), visibility var(--dur);
+  }
+  .hd__drop::before { content: ''; position: absolute; left: 0; right: 0; top: -12px; height: 12px; }
+  .hd__collab.is-open .hd__drop { opacity: 1; visibility: visible; transform: none; }
+  @media (hover: hover) and (min-width: 1200px) {
+    .hd__collab:hover .hd__drop { opacity: 1; visibility: visible; transform: none; }
+    .hd__collab:hover .hd__toggle :global(svg) { transform: rotate(180deg); }
+  }
+  .hd__drop-link {
+    display: flex; align-items: center; gap: var(--sp-3); padding: 10px 12px; border-radius: var(--radius-sm);
+    color: var(--c-ink-80); text-decoration: none; font-size: var(--fs-small);
+  }
+  .hd__drop-link.is-current { background: var(--c-collab-active); color: var(--c-ink); }
+  .hd__drop-link.is-current .hd__label { font-weight: var(--fw-medium); }
+  .hd__drop-num { display: grid; place-items: center; width: 28px; height: 28px; border-radius: var(--radius-xs); font-size: 12px; font-weight: var(--fw-medium); flex: none; }
+  .hd__drop-all { margin-top: var(--sp-2); padding-top: var(--sp-2); border-top: 1px solid var(--border); }
+  .hd__drop-all .hd__drop-link { justify-content: space-between; color: var(--c-ink); }
+  .hd__drop-all .hd__label { font-weight: var(--fw-medium); }
+
+  /* ---- right side: call-back (outline, as on miradex.bg) and cart (secondary outline) ---- */
+  .hd__actions { display: flex; align-items: center; gap: var(--sp-3); flex: none; }
+  .hd-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 48px; padding: 0 18px; border-radius: var(--radius-sm);
+    font-size: var(--fs-small); font-weight: var(--fw-medium); text-decoration: none; white-space: nowrap;
+    transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+  }
+  .hd-btn--call { border: 1.5px solid var(--c-blue); color: var(--c-blue); background: var(--c-white); }
+  .hd-btn--call:hover { background: var(--c-blue); color: var(--c-white); }
+  .hd-btn--cart { border: 1.5px solid var(--border-strong); color: var(--c-ink); background: var(--c-white); padding: 0 14px; }
+  .hd-btn--cart:hover { border-color: var(--c-ink); }
+  .hd__icon { display: grid; place-items: center; width: 48px; height: 48px; border-radius: var(--radius-sm); color: var(--text); background: transparent; border: 0; }
+  .hd__menu-cta { display: none; }
+  .hd__burger { display: none; position: relative; }
+  .hd__burger span { position: absolute; left: 13px; right: 13px; height: 1.5px; background: var(--c-ink); transition: transform var(--dur) var(--ease), opacity var(--dur); }
+  .hd__burger span:nth-child(1) { top: 17px; }
+  .hd__burger span:nth-child(2) { top: 23px; }
+  .hd__burger span:nth-child(3) { top: 29px; }
+  .hd__burger[aria-expanded='true'] span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+  .hd__burger[aria-expanded='true'] span:nth-child(2) { opacity: 0; }
+  .hd__burger[aria-expanded='true'] span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+  /* ---- breadcrumb docked under the header (absolute, so the page does not jump) ---- */
   .hd__crumb {
     position: absolute; left: 0; right: 0; top: 100%; z-index: -1;
     background: var(--c-white); border-bottom: 1px solid var(--border); box-shadow: var(--shadow-soft);
@@ -98,73 +181,16 @@ const logoHref = sc ? site.hubPath : '/';
   .hd.is-docked .hd__crumb { transform: none; opacity: 1; visibility: visible; }
   .hd.is-menu-open .hd__crumb { visibility: hidden; opacity: 0; }
   .hd__crumb-in { display: flex; align-items: center; gap: 10px; min-height: 48px; font-size: var(--fs-small); color: var(--text-muted); }
-  .hd__crumb-back { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px 5px 8px; border-radius: var(--radius-sm); background: var(--bg-tint); color: var(--text); text-decoration: none; }
-  .hd__crumb-back:hover { background: var(--c-mint); color: var(--text); }
-  .hd__crumb-cur { display: inline-flex; align-items: center; gap: 8px; color: var(--text); font-weight: var(--fw-medium); min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .hd__crumb-num { display: grid; place-items: center; flex: none; width: 24px; height: 24px; border-radius: var(--radius-xs); background: var(--c-blue); color: var(--c-white); font-size: 12px; }
+  .hd__crumb-back { display: inline-flex; align-items: center; gap: 6px; color: var(--c-ink-80); text-decoration: none; }
+  .hd__crumb-back:hover { color: var(--c-ink); font-weight: var(--fw-medium); }
+  .hd__crumb-cur { display: inline-flex; align-items: center; gap: 8px; color: var(--text); font-weight: var(--fw-medium); min-width: 0; white-space: nowrap; }
+  .hd__crumb-num { display: grid; place-items: center; flex: none; width: 24px; height: 24px; border-radius: var(--radius-xs); font-size: 12px; }
   .hd__crumb-short { display: none; }
-  @media (max-width: 767px) { .hd__crumb-long { display: none; } .hd__crumb-short { display: inline; } }
-  .hd__in { display: flex; align-items: center; gap: var(--sp-5); min-height: var(--header-h); }
-  .hd__logo { display: block; width: 132px; flex: none; color: var(--c-ink); }
-  .hd__logo :global(svg) { width: 100%; height: auto; }
 
-  .hd__nav { margin-left: auto; }
-  .hd__list { display: flex; align-items: center; gap: 2px; }
-  .hd__item { position: relative; display: flex; align-items: center; }
-  .hd__link {
-    display: inline-flex; align-items: center; gap: 4px; padding: 10px 10px; border-radius: var(--radius-sm);
-    color: var(--text); text-decoration: none; font-size: var(--fs-small); white-space: nowrap;
-  }
-  .hd__link:hover { background: var(--bg-tint); color: var(--text); }
-  .hd__link :global(.hd__chev) { color: var(--text-muted); }
-
-  /* Colaboración: last item, separated by a rule, medium weight; not a button */
-  .hd__collab { margin-left: var(--sp-3); padding-left: var(--sp-3); border-left: 1px solid var(--border); }
-  .hd__link--collab { font-weight: var(--fw-medium); padding-right: 4px; }
-  .hd__collab.is-current .hd__link--collab { box-shadow: inset 0 -3px 0 var(--c-blue); border-radius: var(--radius-sm) var(--radius-sm) 0 0; }
-  .hd__toggle { display: grid; place-items: center; width: 28px; height: 36px; border: 0; background: transparent; border-radius: var(--radius-sm); color: var(--text); }
-  .hd__toggle:hover { background: var(--bg-tint); }
-  .hd__toggle :global(svg) { transition: transform var(--dur) var(--ease); }
-  .hd__collab.is-open .hd__toggle :global(svg) { transform: rotate(180deg); }
-
-  .hd__drop {
-    position: absolute; top: calc(100% + 10px); right: 0; width: 340px; padding: var(--sp-2);
-    background: var(--c-white); border: 1px solid var(--border); border-radius: var(--radius-md); box-shadow: var(--shadow-pop);
-    opacity: 0; visibility: hidden; transform: translateY(-4px);
-    transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease), visibility var(--dur);
-  }
-  .hd__drop::before { content: ''; position: absolute; left: 0; right: 0; top: -12px; height: 12px; }
-  .hd__collab.is-open .hd__drop { opacity: 1; visibility: visible; transform: none; }
-  @media (hover: hover) and (min-width: 1200px) {
-    .hd__collab:hover .hd__drop { opacity: 1; visibility: visible; transform: none; }
-  }
-  .hd__drop-link {
-    display: flex; align-items: center; gap: var(--sp-3); padding: 10px 12px; border-radius: var(--radius-sm);
-    color: var(--text); text-decoration: none; font-size: var(--fs-small);
-  }
-  .hd__drop-link:hover, .hd__drop-link.is-current { background: var(--bg-tint); color: var(--text); }
-  .hd__drop-num { display: grid; place-items: center; width: 28px; height: 28px; border-radius: var(--radius-xs); background: var(--c-mint); font-size: 12px; font-weight: var(--fw-medium); flex: none; }
-  .hd__drop li:nth-child(2) .hd__drop-num, .hd__drop li:nth-child(5) .hd__drop-num { background: var(--c-sky); color: var(--c-white); }
-  .hd__drop li:nth-child(3) .hd__drop-num { background: var(--c-blue); color: var(--c-white); }
-  .hd__drop-all { margin-top: var(--sp-2); padding-top: var(--sp-2); border-top: 1px solid var(--border); }
-  .hd__drop-all .hd__drop-link { justify-content: space-between; font-weight: var(--fw-medium); }
-
-  .hd__menu-cta { display: none; }
-  .hd__actions { display: flex; align-items: center; gap: var(--sp-2); flex: none; }
-  .hd__icon { display: grid; place-items: center; width: 44px; height: 44px; border-radius: var(--radius-sm); color: var(--text); background: transparent; border: 0; }
-  .hd__icon:hover { background: var(--bg-tint); color: var(--text); }
-  .hd__burger { display: none; position: relative; }
-  .hd__burger span { position: absolute; left: 12px; right: 12px; height: 1.5px; background: var(--c-ink); transition: transform var(--dur) var(--ease), opacity var(--dur); }
-  .hd__burger span:nth-child(1) { top: 15px; }
-  .hd__burger span:nth-child(2) { top: 21px; }
-  .hd__burger span:nth-child(3) { top: 27px; }
-  .hd__burger[aria-expanded='true'] span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
-  .hd__burger[aria-expanded='true'] span:nth-child(2) { opacity: 0; }
-  .hd__burger[aria-expanded='true'] span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
-
-  /* Tablet and mobile: burger; Colaboración stays on the first level of the menu */
+  /* ---- tablet and mobile: burger; Colaboración stays on the first level of the menu ---- */
   @media (max-width: 1199px) {
     .topbar { display: none; }
+    .hd__in { align-items: center; }
     .hd__burger { display: grid; }
     .hd__actions { margin-left: auto; }
     .hd__nav {
@@ -174,22 +200,26 @@ const logoHref = sc ? site.hubPath : '/';
     .hd.is-menu-open .hd__nav { display: block; }
     .hd__list { flex-direction: column; align-items: stretch; gap: 0; }
     .hd__item { flex-wrap: wrap; border-bottom: 1px solid var(--border); }
-    .hd__link { flex: 1; padding: 16px 0; font-size: 1.0625rem; border-radius: 0; }
-    .hd__link:hover { background: transparent; }
-    .hd__collab { order: -1; margin: 0; padding: 0; border-left: 0; }
-    .hd__link--collab { font-size: 1.125rem; }
-    .hd__collab.is-current .hd__link--collab { box-shadow: none; }
-    .hd__collab.is-current .hd__link--collab::after { content: ''; width: 8px; height: 8px; margin-left: 10px; border-radius: 2px; background: var(--c-blue); }
-    .hd__toggle { width: 44px; height: 44px; }
+    .hd__link { flex: 1; padding: 16px 0; font-size: 1.0625rem; }
+    .hd__collab { order: -1; margin: 0; padding: 0; border-left: 0; align-items: center; }
+    .hd__collab.is-current { background: transparent; }
+    .hd__link--collab { padding: 16px 0; font-size: 1.125rem; }
+    .hd__collab.is-current .hd__link--collab .hd__label { box-shadow: none; }
+    .hd__collab.is-current .hd__link--collab::after { content: ''; align-self: center; width: 8px; height: 8px; margin-left: 10px; border-radius: 50%; background: var(--c-blue); }
+    .hd__toggle { width: 48px; height: 48px; }
     .hd__drop { position: static; width: 100%; padding: 0 0 var(--sp-3); border: 0; box-shadow: none; display: none; opacity: 1; visibility: visible; transform: none; }
     .hd__collab.is-open .hd__drop { display: block; }
     .hd__drop::before { display: none; }
-    .hd__drop-link { padding: 12px 0; }
+    .hd__drop-link { padding: 12px 10px; }
   }
   @media (max-width: 767px) {
     .hd__call { display: none; }
-    .hd__menu-cta { display: block; padding-top: var(--sp-5); border: 0; }
     .hd__logo { width: 116px; }
+    .hd__menu-cta { display: block; padding-top: var(--sp-5); }
+    .hd__menu-cta .hd-btn { width: 100%; }
+    .hd-btn--cart { height: 44px; padding: 0 12px; }
+    .hd__crumb-long { display: none; }
+    .hd__crumb-short { display: inline; }
   }
 </style>
 

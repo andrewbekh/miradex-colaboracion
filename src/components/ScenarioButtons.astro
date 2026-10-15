@@ -1,7 +1,7 @@
 ---
 // Last chance to choose (after the form): the five formats as white buttons on a mint band.
 import Icon from './Icon.astro';
-import { scenarios } from '../data/scenarios';
+import { scenarios, toneStyle } from '../data/scenarios';
 interface Props { title?: string }
 const { title = '¿Prefiere ver primero los detalles? Elija su formato' } = Astro.props;
 ---
@@ -10,7 +10,7 @@ const { title = '¿Prefiere ver primero los detalles? Elija su formato' } = Astr
     <p class="sbn__title">{title}</p>
     <ul class="sbn__list" role="list">
       {scenarios.map((s) => (
-        <li><a class="sbn__btn" href={s.href}><span class="sbn__num">{s.num}</span><span>{s.short}</span><Icon name="arrow-right" size={18} /></a></li>
+        <li><a class="sbn__btn" href={s.href}><span class="sbn__num" style={toneStyle(s.tone)}>{s.num}</span><span>{s.short}</span><Icon name="arrow-right" size={18} /></a></li>
       ))}
     </ul>
   </div>
@@ -26,10 +26,9 @@ const { title = '¿Prefiere ver primero los detalles? Elija su formato' } = Astr
     background: var(--c-white); color: var(--c-ink); text-decoration: none; font-weight: var(--fw-medium); font-size: var(--fs-small);
     transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease), transform var(--dur) var(--ease);
   }
-  .sbn__num { display: grid; place-items: center; flex: none; width: 36px; height: 36px; border-radius: var(--radius-xs); background: var(--c-blue); color: var(--c-white); font-size: 12px; }
+  .sbn__num { display: grid; place-items: center; flex: none; width: 36px; height: 36px; border-radius: var(--radius-xs); font-size: 12px; font-weight: var(--fw-medium); }
   .sbn__btn :global(svg) { margin-left: auto; flex: none; transition: transform var(--dur) var(--ease); }
-  .sbn__btn:hover { background: var(--c-blue); color: var(--c-white); }
-  .sbn__btn:hover .sbn__num { background: var(--c-white); color: var(--c-ink); }
+  .sbn__btn:hover { box-shadow: var(--shadow-soft); }
   .sbn__btn:hover :global(svg) { transform: translateX(3px); }
   @media (max-width: 1199px) { .sbn__list { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 767px) { .sbn__list { grid-template-columns: 1fr; } }
