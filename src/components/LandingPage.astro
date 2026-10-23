@@ -1,0 +1,134 @@
+---
+// One template for all scenario landings (strategy section 6). Blocks render in `landing.order`;
+// content sections alternate light and tinted backgrounds automatically.
+import Page from '../layouts/Page.astro';
+import Hero from './Hero.astro';
+import Section from './Section.astro';
+import FeatureGrid from './FeatureGrid.astro';
+import BusinessTypes from './BusinessTypes.astro';
+import VideoRows from './VideoRows.astro';
+import WhyMiradex from './WhyMiradex.astro';
+import CtaBand from './CtaBand.astro';
+import ScenarioLinks from './ScenarioLinks.astro';
+import Economics from './Economics.astro';
+import SupportGroups from './SupportGroups.astro';
+import Responsibilities from './Responsibilities.astro';
+import Stats from './Stats.astro';
+import CategoryCards from './CategoryCards.astro';
+import FitList from './FitList.astro';
+import Steps from './Steps.astro';
+import Gallery from './Gallery.astro';
+import Faq from './Faq.astro';
+import FinalForm from './FinalForm.astro';
+import ScenarioButtons from './ScenarioButtons.astro';
+import Icon from './Icon.astro';
+import { defaultOrder, type Landing, type BlockKey } from '../data/landings/types';
+import { scenarioById } from '../data/scenarios';
+import { productStats, statsFootnote, finalPoints } from '../data/shared';
+import { ui } from '../data/ui';
+
+interface Props { landing: Landing }
+const { landing: L } = Astro.props;
+const s = scenarioById(L.id)!;
+const order: BlockKey[] = (L.order ?? defaultOrder).filter((k) => k !== 'drivers' || L.drivers);
+
+// background rhythm: every content section alternates; hero, dark blocks, CTA bands and the form do not count
+const sectionKeys: BlockKey[] = ['businesses', 'drivers', 'videos', 'ways', 'economics', 'support', 'resp', 'product', 'fit', 'steps', 'projects', 'faq'];
+const tone: Partial<Record<BlockKey, 'light' | 'tint'>> = {};
+let n = 0;
+for (const k of order) if (sectionKeys.includes(k)) tone[k] = n++ % 2 === 0 ? 'tint' : 'light';
+---
+<Page title={L.meta.title} description={L.meta.description} scenario={L.id} current={L.id}>
+  {order.map((k) => {
+    switch (k) {
+      case 'hero':
+        return <Hero crumb={{ num: s.num, label: s.short, tone: s.tone }} eyebrow={L.hero.eyebrow} title={L.hero.title} lead={L.hero.lead} scenario={L.id} image={L.hero.image} imageAlt={L.hero.imageAlt} note={L.hero.note} cta={L.hero.cta} />;
+      case 'businesses':
+        return <Section id="tipos" tone={tone.businesses} title={L.businesses.title} lead={L.businesses.lead}><BusinessTypes items={L.businesses.items} scenario={L.id} /></Section>;
+      case 'drivers':
+        return L.drivers && <Section id="por-que" tone={tone.drivers} title={L.drivers.title} lead={L.drivers.lead}><FeatureGrid items={L.drivers.items} /></Section>;
+      case 'videos':
+        return <Section id="video" tone={tone.videos} title={L.videos.title} lead={L.videos.lead}><VideoRows items={L.videos.items} scenario={L.id} /></Section>;
+      case 'why':
+        return <WhyMiradex title={L.why?.title} text={L.why?.text} />;
+      case 'ctaA':
+        return <CtaBand title={L.ctaA.title} text={L.ctaA.text} cta={L.ctaA.cta} scenario={L.id} />;
+      case 'ways':
+        return (
+          <Section id="como-funciona" tone={tone.ways} title={L.ways.title} lead={L.ways.lead}>
+            <FeatureGrid items={L.ways.items} cols={L.ways.cols} />
+            <div class="gap-top"><ScenarioLinks ids={L.ways.links} title={L.ways.linksTitle} /></div>
+          </Section>
+        );
+      case 'economics':
+        return (
+          <Section id="economia" tone={tone.economics} title={L.economics.title} lead={L.economics.lead}>
+            <Economics sources={L.economics.sources} factors={L.economics.factors} sourcesLabel={L.economics.sourcesLabel} factorsLabel={L.economics.factorsLabel} principle={L.economics.principle} model={L.economics.model} />
+          </Section>
+        );
+      case 'support':
+        return <Section id="apoyo" tone={tone.support} title={L.support.title} lead={L.support.lead}><SupportGroups groups={L.support.groups} /></Section>;
+      case 'resp':
+        return (
+          <Section id="funciones" tone={tone.resp} title={L.resp.title} lead={L.resp.lead}>
+            <Responsibilities miradex={L.resp.miradex} partner={L.resp.partner} partnerTitle={L.resp.partnerTitle} note={L.resp.note} />
+          </Section>
+        );
+      case 'ctaB':
+        return <CtaBand title={L.ctaB.title} text={L.ctaB.text} cta={L.ctaB.cta} tone="dark" scenario={L.id} />;
+      case 'product':
+        return (
+          <Section id="producto" tone={tone.product} title={L.product.title} lead={L.product.lead}>
+            <Stats stats={productStats} footnote={statsFootnote} />
+            <div class="gap-top"><CategoryCards /></div>
+          </Section>
+        );
+      case 'fit':
+        return <Section id="para-quien" tone={tone.fit} title={L.fit.title ?? 'Вам подходит?'}><FitList fit={L.fit.fit} notFit={L.fit.notFit} /></Section>;
+      case 'steps':
+        return <Section id="inicio" tone={tone.steps} title={L.steps.title ?? 'Как начинается сотрудничество'}><Steps steps={L.steps.items} /></Section>;
+      case 'projects':
+        return (
+          <Section id="proyectos" tone={tone.projects} title={L.projects.title} lead={L.projects.lead}>
+            {L.projects.items && <div class="gap-bottom"><FeatureGrid items={L.projects.items} cols={L.projects.cols} /></div>}
+            <Gallery items={L.projects.gallery}>
+              {L.projects.reference && (
+                <article class="ref">
+                  <p class="eyebrow ref__eyebrow">{L.projects.reference.eyebrow}</p>
+                  <h3 class="ref__title">{L.projects.reference.title}</h3>
+                  <p class="ref__text">{L.projects.reference.text}</p>
+                  <dl class="ref__stats">
+                    {L.projects.reference.stats.map((st) => <div><dt>{st.value}</dt><dd>{st.label}</dd></div>)}
+                  </dl>
+                  <a class="ref__link" href={L.projects.reference.link.href} target="_blank" rel="noopener">{L.projects.reference.link.label} <Icon name="arrow-up-right" size={16} /></a>
+                </article>
+              )}
+            </Gallery>
+          </Section>
+        );
+      case 'ctaC':
+        return <CtaBand title={L.ctaC.title} text={L.ctaC.text} cta={L.ctaC.cta} tone="mint" scenario={L.id} />;
+      case 'other':
+        return <ScenarioButtons id="otros-formatos" title={L.other?.title ?? ui.other.title} lead={L.other?.lead ?? ui.other.lead} exclude={L.id} showAll />;
+      case 'faq':
+        return <Section id="faq" tone={tone.faq} title="Частые вопросы"><Faq items={L.faq} /></Section>;
+      case 'final':
+        return <FinalForm title={L.final.title} text={L.final.text} scenario={L.id} points={finalPoints} />;
+    }
+  })}
+</Page>
+
+<style>
+  .gap-top { margin-top: var(--stack-gap); }
+  .gap-bottom { margin-bottom: var(--stack-gap); }
+  .ref { height: 100%; display: flex; flex-direction: column; gap: var(--sp-3); padding: var(--sp-6); border-radius: var(--radius-md); background: var(--bg-dark); color: var(--text-on-dark); }
+  .ref__eyebrow { color: var(--c-mint); }
+  .ref__title { font-size: var(--fs-h2); }
+  .ref__text { color: var(--text-on-dark-muted); max-width: 40ch; }
+  .ref__stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-3); margin-top: var(--sp-3); }
+  .ref__stats div { padding: var(--sp-4); border-radius: var(--radius-sm); background: var(--c-ink-soft); }
+  .ref__stats dt { font-size: var(--fs-stat); font-weight: var(--fw-medium); line-height: 1; }
+  .ref__stats dd { margin-top: 6px; font-size: var(--fs-micro); color: var(--text-on-dark-muted); }
+  .ref__link { margin-top: auto; display: inline-flex; align-items: center; gap: 6px; color: var(--c-white); font-weight: var(--fw-medium); }
+  .ref__link:hover { color: var(--c-mint); }
+</style>

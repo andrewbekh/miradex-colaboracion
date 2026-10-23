@@ -1,6 +1,7 @@
 ---
 // First screen of the hub and landings: audience, promise, CTA + WhatsApp, proof strip.
 // Visual = brand pattern grid where the wide column is a photo and the narrow one is colour bands.
+import { ui } from '../data/ui';
 import Button from './Button.astro';
 import Pattern from './Pattern.astro';
 import FactsStrip from './FactsStrip.astro';
@@ -22,14 +23,14 @@ interface Props {
   /** breadcrumb back to the hub, shown on scenario landings */
   crumb?: { num: string; label: string; tone?: string };
 }
-const { eyebrow, title, lead, scenario, image, imageAlt = '', note, cta = 'Enviar solicitud', secondary, facts = true, crumb } = Astro.props;
+const { eyebrow, title, lead, scenario, image, imageAlt = '', note, cta = ui.cta.apply, secondary, facts = true, crumb } = Astro.props;
 ---
 <section class="hero">
   <div class="container">
     <div class="hero__grid">
       <div class="hero__copy">
         {crumb && (
-          <nav class="hero__crumb" aria-label="Ruta">
+          <nav class="hero__crumb" aria-label={ui.crumbs.label}>
             <a href={site.hubPath}><Icon name="arrow-left" size={16} />{site.navLabel}</a>
             <span aria-hidden="true">/</span>
             <span class="hero__crumb-cur"><span class="hero__crumb-num" style={crumb.tone ? toneStyle(crumb.tone as Tone) : undefined}>{crumb.num}</span>{crumb.label}</span>
@@ -42,7 +43,7 @@ const { eyebrow, title, lead, scenario, image, imageAlt = '', note, cta = 'Envia
           <Button openForm scenario={scenario} size="lg" icon="arrow-right">{cta}</Button>
           {secondary
             ? <Button href={secondary.href} variant="mint" size="lg">{secondary.label}</Button>
-            : <Button href={whatsappHref()} variant="mint" size="lg" iconStart="whatsapp">WhatsApp</Button>}
+            : <Button href={whatsappHref()} variant="mint" size="lg" iconStart="whatsapp">{ui.cta.whatsapp}</Button>}
         </div>
         {note && <p class="hero__note">{note}</p>}
       </div>

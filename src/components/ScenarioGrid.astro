@@ -1,5 +1,6 @@
 ---
 // 5 equal scenario cards + 1 "not sure" tile: 3×2 desktop, 2×3 tablet, 1 column mobile.
+import { ui } from '../data/ui';
 import Pattern from './Pattern.astro';
 import Icon from './Icon.astro';
 import { scenarios } from '../data/scenarios';
@@ -22,7 +23,7 @@ const H = headingLevel;
               {s.audience.map((a) => <li>{a}</li>)}
             </ul>
           )}
-          <span class="sc__more">Ver formato <Icon name="arrow-right" size={18} /></span>
+          <span class="sc__more">{ui.cta.seeFormat} <Icon name="arrow-right" size={18} /></span>
         </div>
       </a>
     </li>
@@ -32,9 +33,9 @@ const H = headingLevel;
       <Pattern seed="card-ask" cols={2} units={compact ? 3 : 5} class="sc__pattern" narrowFirst />
       <div class="sc__body">
         <span class="sc__num eyebrow">?</span>
-        <H class="sc__title">¿No sabe qué formato elegir?</H>
-        <p class="sc__text">Cuéntenos sobre su negocio y sus planes: le propondremos el formato y las condiciones según su potencial.</p>
-        <button type="button" class="btn btn--primary sc__cta" data-open-form data-scenario="no-se">Contar sobre mi negocio</button>
+        <H class="sc__title">{ui.ask.title}</H>
+        <p class="sc__text">{ui.ask.textShort}</p>
+        <button type="button" class="btn btn--primary sc__cta" data-open-form data-scenario="no-se">{ui.cta.tellAboutBusiness}</button>
       </div>
     </div>
   </li>

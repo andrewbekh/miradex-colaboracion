@@ -1,0 +1,52 @@
+---
+// Films next to their text, alternating sides (video left, then right). 1 to 5 rows from page data.
+// Mobile: the video sits above the text.
+import VideoPlaceholder from './VideoPlaceholder.astro';
+import Icon from './Icon.astro';
+import type { VideoRow } from '../data/landings/types';
+import { videos } from '../data/videos';
+import { ui } from '../data/ui';
+
+interface Props { items: VideoRow[]; scenario?: string }
+const { items, scenario } = Astro.props;
+---
+<ol class="vr" role="list">
+  {items.map((row, i) => {
+    const v = videos[row.num];
+    return (
+      <li class:list={['vr__row', { 'vr__row--flip': i % 2 === 1 }]}>
+        <div class="vr__media"><VideoPlaceholder num={v.num} title={v.title} duration={v.duration} poster={v.poster} bare /></div>
+        <div class="vr__text">
+          <p class="vr__for"><span class="eyebrow">{ui.videosRow.forWhom}</span><span>{row.audience}</span></p>
+          <h3 class="vr__title">{v.title}</h3>
+          <p class="vr__lead">{row.lead}</p>
+          <ul class="vr__points" role="list">
+            {row.points.map((p) => <li><span class="vr__dot" aria-hidden="true"></span><span>{p}</span></li>)}
+          </ul>
+          <button type="button" class="btn btn--mint vr__cta" data-open-form data-scenario={scenario}><span>{ui.cta.apply}</span><Icon name="arrow-right" size={18} /></button>
+        </div>
+      </li>
+    );
+  })}
+</ol>
+
+<style>
+  .vr { display: grid; gap: clamp(40px, 1.5rem + 3vw, 80px); }
+  .vr__row { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(24px, 1rem + 3vw, 64px); align-items: center; }
+  .vr__row--flip { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
+  .vr__row--flip .vr__media { order: 2; }
+  .vr__text { display: grid; gap: var(--sp-4); justify-items: start; }
+  .vr__for { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; font-size: var(--fs-small); color: var(--text-muted); }
+  .vr__for .eyebrow { padding: 4px 10px; border-radius: 999px; background: var(--c-mint); color: var(--c-ink); }
+  .vr__title { font-size: var(--fs-h3); line-height: 1.25; }
+  .vr__lead { color: var(--text-muted); }
+  .vr__points { display: grid; gap: 10px; }
+  .vr__points li { display: grid; grid-template-columns: 8px 1fr; gap: 12px; align-items: start; }
+  .vr__dot { width: 8px; height: 8px; margin-top: 0.55em; border-radius: 50%; background: var(--c-blue); }
+  .vr__cta { margin-top: var(--sp-2); }
+  @media (max-width: 1023px) {
+    .vr__row, .vr__row--flip { grid-template-columns: minmax(0, 1fr); }
+    .vr__row--flip .vr__media { order: 0; }
+  }
+  @media (max-width: 767px) { .vr__cta { width: 100%; } }
+</style>

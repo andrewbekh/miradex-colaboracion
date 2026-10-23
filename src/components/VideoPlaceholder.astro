@@ -1,20 +1,22 @@
 ---
 // Video slot for the B2B films (scripts: docs/Miradex_Spain_b2b.docx). Placeholder poster until the films are edited.
+import { ui } from '../data/ui';
 import Pattern from './Pattern.astro';
 import Icon from './Icon.astro';
 
-interface Props { num: number; title: string; duration: string; poster?: string; id?: string }
-const { num, title, duration, poster = '/img/photos/atlas-villas.jpg', id = `video-${num}` } = Astro.props;
+interface Props { num: number; title: string; duration: string; poster?: string; id?: string; bare?: boolean }
+// bare: only the meta line on the poster, for rows where the title is set next to the video
+const { num, title, duration, poster = '/img/photos/atlas-villas.jpg', id = `video-${num}`, bare = false } = Astro.props;
 ---
 <figure class="video" id={id}>
-  <button type="button" class="video__frame" data-video={num} aria-label={`Reproducir vídeo nº ${num}: ${title}`}>
+  <button type="button" class="video__frame" data-video={num} aria-label={ui.video.play(num, title)}>
     <img src={poster} alt="" loading="lazy" />
     <span class="video__shade" />
     <span class="video__side"><Pattern seed={`video-${num}`} cols={2} units={30} fill narrowFirst /></span>
     <span class="video__play"><Icon name="play" size={34} /></span>
     <span class="video__meta">
-      <span class="eyebrow">Vídeo nº {num} · {duration} min</span>
-      <span class="video__title">{title}</span>
+      <span class="eyebrow">{ui.video.meta(num, duration)}</span>
+      {!bare && <span class="video__title">{title}</span>}
     </span>
   </button>
 </figure>

@@ -1,4 +1,5 @@
 ---
+import { ui } from '../data/ui';
 // Product lines (miradex.bg directions). Photos are provisional until Spanish projects exist.
 import Icon from './Icon.astro';
 import { productLines } from '../data/nav';
@@ -13,7 +14,7 @@ const { linked = true } = Astro.props;
         <div class="cc__body">
           <h3 class="cc__title">{p.title}</h3>
           <p class="cc__text">{p.text}</p>
-          {linked && <span class="cc__more">Ver catálogo <Icon name="arrow-up-right" size={16} /></span>}
+          {linked && <span class="cc__more">{ui.cta.seeCatalog} <Icon name="arrow-up-right" size={16} /></span>}
         </div>
       </a>
     </li>

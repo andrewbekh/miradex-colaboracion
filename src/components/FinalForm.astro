@@ -1,5 +1,6 @@
 ---
 // Final screen of every page: promise + contacts on the left, the shared lead form on the right.
+import { ui } from '../data/ui';
 import SectionHeading from './SectionHeading.astro';
 import LeadForm from './LeadForm.astro';
 import Icon from './Icon.astro';
@@ -18,7 +19,7 @@ const { title, text, scenario = '', lockScenario = false, points = [] } = Astro.
         </ul>
       )}
       <div class="ff__contacts">
-        <a class="btn btn--mint" href={whatsappHref()}><Icon name="whatsapp" size={18} /><span>WhatsApp</span></a>
+        <a class="btn btn--mint" href={whatsappHref()}><Icon name="whatsapp" size={18} /><span>{ui.cta.whatsapp}</span></a>
         <p class="ff__mail">
           <a href={`mailto:${site.contacts.email}`}>{site.contacts.email}</a><br />
           <span>{site.contacts.phone}</span>

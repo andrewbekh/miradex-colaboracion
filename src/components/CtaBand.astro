@@ -1,12 +1,13 @@
 ---
 // Repeated CTA (every 2 to 3 blocks): open the form popup or write on WhatsApp.
 // Inset rounded box inside the container; brand pattern runs down the right edge.
+import { ui } from '../data/ui';
 import Button from './Button.astro';
 import Pattern from './Pattern.astro';
 import { whatsappHref } from '../data/site';
 
 interface Props { title: string; text?: string; scenario?: string; tone?: 'blue' | 'dark' | 'mint'; cta?: string; flush?: boolean }
-const { title, text, scenario, tone = 'blue', cta = 'Enviar solicitud', flush = false } = Astro.props;
+const { title, text, scenario, tone = 'blue', cta = ui.cta.apply, flush = false } = Astro.props;
 ---
 <aside class:list={['cta', { 'cta--flush': flush }]}>
   <div class="container">
@@ -17,7 +18,7 @@ const { title, text, scenario, tone = 'blue', cta = 'Enviar solicitud', flush = 
       </div>
       <div class="cta__actions">
         <Button openForm scenario={scenario} variant="primary" size="lg" icon="arrow-right">{cta}</Button>
-        <Button href={whatsappHref()} variant={tone === 'blue' ? 'white' : 'mint'} size="lg" iconStart="whatsapp">WhatsApp</Button>
+        <Button href={whatsappHref()} variant={tone === 'blue' ? 'white' : 'mint'} size="lg" iconStart="whatsapp">{ui.cta.whatsapp}</Button>
       </div>
       <div class="cta__pattern"><Pattern seed={`cta-${title}`} cols={2} units={12} fill /></div>
     </div>

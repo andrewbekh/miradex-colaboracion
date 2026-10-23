@@ -1,8 +1,9 @@
 ---
+import { ui } from '../data/ui';
 // Floating "back to top" button, bottom-right on every page; appears after the first screen.
 import Icon from './Icon.astro';
 ---
-<button type="button" class="totop" data-totop aria-label="Volver arriba"><Icon name="arrow-up" size={22} /></button>
+<button type="button" class="totop" data-totop aria-label={ui.toTop}><Icon name="arrow-up" size={22} /></button>
 
 <style>
   .totop {

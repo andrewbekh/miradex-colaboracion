@@ -1,6 +1,7 @@
 ---
 // Popup with the shared lead form. Opened by any [data-open-form] element; [data-scenario] preselects the format.
 // Also opens on load with ?form=1 (useful for ad links).
+import { ui } from '../data/ui';
 import LeadForm from './LeadForm.astro';
 import Pattern from './Pattern.astro';
 import Icon from './Icon.astro';
@@ -14,10 +15,10 @@ const { scenario = '' } = Astro.props;
       <Pattern seed="modal" cols={3} units={3} gaps={false} />
       <div class="fm__head-row">
         <div>
-          <p class="fm__title" id="lead-modal-title">Solicitud de colaboración</p>
-          <p class="fm__sub">Cuéntenos sobre su negocio y le propondremos el formato y las condiciones.</p>
+          <p class="fm__title" id="lead-modal-title">{ui.modal.title}</p>
+          <p class="fm__sub">{ui.modal.sub}</p>
         </div>
-        <button type="button" class="fm__close" data-close-form aria-label="Cerrar"><Icon name="x" size={22} /></button>
+        <button type="button" class="fm__close" data-close-form aria-label={ui.modal.close}><Icon name="x" size={22} /></button>
       </div>
     </div>
     <div class="fm__body">

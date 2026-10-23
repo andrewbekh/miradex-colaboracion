@@ -1,6 +1,7 @@
 ---
 // "Economía de la colaboración": income sources, what defines the conditions, pricing principle.
 // No coefficients or discount levels: strategy section 17 is internal.
+import { ui } from '../data/ui';
 import Icon from './Icon.astro';
 
 interface Source { title: string; text: string }
@@ -12,7 +13,7 @@ interface Props {
   sourcesLabel?: string;
   factorsLabel?: string;
 }
-const { sources, factors = [], principle, model, sourcesLabel = 'De qué se compone su ingreso', factorsLabel = 'Qué tenemos en cuenta' } = Astro.props;
+const { sources, factors = [], principle, model, sourcesLabel = ui.eco.sources, factorsLabel = ui.eco.factors } = Astro.props;
 const swatches = ['blue', 'sky', 'mint', 'blue'];
 ---
 <div class="eco">

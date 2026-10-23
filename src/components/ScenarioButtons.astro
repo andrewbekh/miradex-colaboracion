@@ -1,24 +1,37 @@
 ---
-// Last chance to choose (after the form): the five formats as white buttons on a mint band.
+// The formats as white buttons on a mint band. Hub: all five after the form.
+// Landings: «Не узнали себя?» with the other four plus a link to all options (exclude = current landing).
+import { ui } from '../data/ui';
 import Icon from './Icon.astro';
 import { scenarios, toneStyle } from '../data/scenarios';
-interface Props { title?: string }
-const { title = '¿Prefiere ver primero los detalles? Elija su formato' } = Astro.props;
+import { site } from '../data/site';
+interface Props { title?: string; lead?: string; exclude?: string; showAll?: boolean; id?: string }
+const { title = ui.formatsEndTitle, lead, exclude, showAll = false, id } = Astro.props;
+const list = scenarios.filter((s) => s.id !== exclude);
 ---
-<nav class="sbn" aria-label="Formatos de colaboración">
+<nav class:list={['sbn', { 'sbn--four': list.length === 4 }]} aria-label={ui.formatsNav} id={id}>
   <div class="container sbn__in">
-    <p class="sbn__title">{title}</p>
+    <div class="sbn__head">
+      <p class="sbn__title">{title}</p>
+      {lead && <p class="sbn__lead">{lead}</p>}
+    </div>
     <ul class="sbn__list" role="list">
-      {scenarios.map((s) => (
+      {list.map((s) => (
         <li><a class="sbn__btn" href={s.href}><span class="sbn__num" style={toneStyle(s.tone)}>{s.num}</span><span>{s.short}</span><Icon name="arrow-right" size={18} /></a></li>
       ))}
     </ul>
+    {showAll && <a class="sbn__all" href={site.hubPath}>{ui.other.all}<Icon name="arrow-right" size={16} /></a>}
   </div>
 </nav>
 
 <style>
   .sbn { padding-block: clamp(40px, 1rem + 3vw, 72px); background: var(--c-mint); }
   .sbn__in { display: grid; gap: var(--sp-5); }
+  .sbn__head { display: grid; gap: 6px; }
+  .sbn__lead { color: var(--c-ink-80); }
+  .sbn--four .sbn__list { grid-template-columns: repeat(4, 1fr); }
+  .sbn__all { justify-self: start; display: inline-flex; align-items: center; gap: 8px; color: var(--c-ink); font-weight: var(--fw-medium); text-decoration: none; }
+  .sbn__all:hover { text-decoration: underline; }
   .sbn__title { font-size: var(--fs-h3); font-weight: var(--fw-medium); text-transform: uppercase; letter-spacing: var(--tracking-caps); }
   .sbn__list { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
   .sbn__btn {
@@ -30,6 +43,6 @@ const { title = '¿Prefiere ver primero los detalles? Elija su formato' } = Astr
   .sbn__btn :global(svg) { margin-left: auto; flex: none; transition: transform var(--dur) var(--ease); }
   .sbn__btn:hover { box-shadow: var(--shadow-soft); }
   .sbn__btn:hover :global(svg) { transform: translateX(3px); }
-  @media (max-width: 1199px) { .sbn__list { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 767px) { .sbn__list { grid-template-columns: 1fr; } }
+  @media (max-width: 1199px) { .sbn__list, .sbn--four .sbn__list { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 767px) { .sbn__list, .sbn--four .sbn__list { grid-template-columns: 1fr; } }
 </style>

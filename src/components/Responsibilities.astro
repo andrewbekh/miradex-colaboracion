@@ -1,8 +1,9 @@
 ---
 // "Sin riesgos" adapted to B2B: who takes care of what (strategy, section 2 roles).
+import { ui } from '../data/ui';
 import Icon from './Icon.astro';
 interface Props { miradex: string[]; partner: string[]; miradexTitle?: string; partnerTitle?: string; note?: string }
-const { miradex, partner, miradexTitle = 'MIRADEX se encarga de', partnerTitle = 'Usted se encarga de', note } = Astro.props;
+const { miradex, partner, miradexTitle = ui.resp.miradex, partnerTitle = ui.resp.partner, note } = Astro.props;
 ---
 <div class="resp">
   <section class="resp__col resp__col--mx">

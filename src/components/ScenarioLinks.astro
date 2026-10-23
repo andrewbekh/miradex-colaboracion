@@ -1,9 +1,10 @@
 ---
+import { ui } from '../data/ui';
 // Compact links to other scenarios (landing pages must be self-sufficient but not dead ends).
 import Icon from './Icon.astro';
 import { scenarios } from '../data/scenarios';
 interface Props { ids: string[]; title?: string }
-const { ids, title = '¿Busca otro formato?' } = Astro.props;
+const { ids, title = ui.otherFormat } = Astro.props;
 const list = scenarios.filter((s) => ids.includes(s.id));
 ---
 <div class="sl">

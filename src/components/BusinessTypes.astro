@@ -1,0 +1,194 @@
+---
+// «Узнайте свой бизнес»: business types of this landing. The visitor picks their business and sees
+// its logic, advantages, ways to work (with links to other landings) and its film; the CTA preselects the type in the form.
+// Desktop ≥1200: list on the left, panel on the right. Tablet: chips above the panel. Mobile: accordion.
+// Deep link: ?type=<id> or #type-<id> opens that business (used by the hub).
+import Icon from './Icon.astro';
+import type { Business } from '../data/landings/types';
+import { scenarioById, toneStyle, type ScenarioId } from '../data/scenarios';
+import { videos } from '../data/videos';
+import { ui } from '../data/ui';
+
+interface Props { items: Business[]; scenario: ScenarioId }
+const { items, scenario } = Astro.props;
+const swatches = ['mint', 'sky', 'blue'];
+---
+<div class="bt" data-bt>
+  <div class="bt__tabs" role="tablist" aria-label={ui.biz.tabs}>
+    {items.map((b, i) => (
+      <button type="button" class:list={['bt__tab', { 'is-active': i === 0 }]} role="tab" id={`tab-${b.id}`} aria-controls={`type-${b.id}`} aria-selected={i === 0 ? 'true' : 'false'} data-bt-tab={b.id}>
+        <span class={`bt__ic bt__ic--${swatches[i % 3]}`}><Icon name={b.icon} size={20} /></span>
+        <span class="bt__tab-name">{b.name}</span>
+        <Icon name="chevron-right" size={18} class="bt__tab-chev" />
+      </button>
+    ))}
+  </div>
+
+  <div class="bt__panels">
+    {items.map((b, i) => {
+      const v = b.video ? videos[b.video] : null;
+      return (
+        <section class:list={['bt__panel', { 'is-active': i === 0, 'is-open': i === 0 }]} id={`type-${b.id}`} role="tabpanel" aria-labelledby={`tab-${b.id}`} data-bt-panel={b.id}>
+          <button type="button" class="bt__acc" aria-expanded={i === 0 ? 'true' : 'false'} data-bt-acc={b.id}>
+            <span class={`bt__ic bt__ic--${swatches[i % 3]}`}><Icon name={b.icon} size={20} /></span>
+            <span class="bt__tab-name">{b.name}</span>
+            <Icon name="chevron-down" size={18} class="bt__acc-chev" />
+          </button>
+          <div class="bt__body">
+            <p class="eyebrow bt__eyebrow">{ui.biz.forYou}</p>
+            <h3 class="bt__title">{b.name}</h3>
+            <p class="bt__logic">{b.logic}</p>
+
+            <div class="bt__cols">
+              <div class="bt__gains">
+                <p class="bt__label">{ui.biz.gains}</p>
+                <ul role="list">
+                  {b.gains.map((g) => <li><span class="bt__check"><Icon name="check" size={14} /></span><span>{g}</span></li>)}
+                </ul>
+              </div>
+              <div class="bt__ways">
+                <p class="bt__label">{ui.biz.ways}</p>
+                <ul role="list">
+                  {b.ways.map((w) => {
+                    const target = w.to && w.to !== scenario ? scenarioById(w.to) : null;
+                    return (
+                      <li class="bt__way">
+                        <p class="bt__way-title">{w.title}</p>
+                        <p class="bt__way-text">{w.text}</p>
+                        {target && (
+                          <a class="bt__way-link" href={`${target.href}?type=${b.id}`}>
+                            <span class="bt__way-num" style={toneStyle(target.tone)}>{target.num}</span>
+                            <span>{target.short}</span>
+                            <Icon name="arrow-right" size={16} />
+                          </a>
+                        )}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            </div>
+
+            <div class="bt__foot">
+              {v && (
+                <a class="bt__video" href={`#video-${v.num}`} data-video={v.num}>
+                  <span class="bt__video-thumb"><img src={v.poster} alt="" loading="lazy" /><span class="bt__video-play"><Icon name="play" size={14} /></span></span>
+                  <span class="bt__video-text"><span class="bt__video-meta">{ui.video.meta(v.num, v.duration)}</span><span class="bt__video-title">{v.title}</span></span>
+                </a>
+              )}
+              <button type="button" class="btn btn--primary bt__cta" data-open-form data-scenario={scenario} data-business={b.formType}>
+                <span>{ui.cta.apply}</span><Icon name="arrow-right" size={18} />
+              </button>
+            </div>
+          </div>
+        </section>
+      );
+    })}
+  </div>
+</div>
+
+<style>
+  .bt { display: grid; grid-template-columns: 360px minmax(0, 1fr); gap: var(--grid-gap); align-items: start; }
+  .bt__tabs { display: grid; gap: 6px; position: sticky; top: calc(var(--header-h) + 72px); }
+  .bt__tab, .bt__acc {
+    display: grid; grid-template-columns: 40px 1fr 18px; align-items: center; gap: 12px; width: 100%; padding: 10px 12px 10px 10px;
+    border: 1px solid transparent; border-radius: var(--radius-md); background: transparent; text-align: left; color: var(--c-ink-80);
+    font-size: var(--fs-small); line-height: 1.3; transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease);
+  }
+  .bt__tab:hover { color: var(--c-ink); }
+  .bt__tab.is-active { background: var(--c-white); border-color: var(--border); color: var(--c-ink); font-weight: var(--fw-medium); box-shadow: var(--shadow-soft); }
+  .bt__tab :global(.bt__tab-chev) { color: var(--text-muted); opacity: 0; transition: opacity var(--dur) var(--ease); }
+  .bt__tab.is-active :global(.bt__tab-chev) { opacity: 1; }
+  .bt__ic { display: grid; place-items: center; width: 40px; height: 40px; border-radius: var(--radius-sm); }
+  .bt__ic--mint { background: var(--c-mint); color: var(--c-ink); }
+  .bt__ic--sky { background: var(--c-sky); color: var(--c-white); }
+  .bt__ic--blue { background: var(--c-blue); color: var(--c-white); }
+
+  .bt__panel { display: none; }
+  .bt__panel.is-active { display: block; }
+  .bt__acc { display: none; }
+  .bt__body { padding: clamp(24px, 1rem + 2vw, 40px); border-radius: var(--radius-lg); background: var(--c-white); border: 1px solid var(--border); }
+  .bt__eyebrow { color: var(--text-muted); }
+  .bt__title { margin-top: var(--sp-2); font-size: var(--fs-h2); }
+  .bt__logic { margin-top: var(--sp-4); font-size: var(--fs-lead); font-weight: var(--fw-light); line-height: 1.45; max-width: 48ch; }
+  .bt__cols { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-7); margin-top: var(--sp-7); }
+  .bt__label { margin-bottom: var(--sp-4); font-size: var(--fs-micro); font-weight: var(--fw-medium); letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--text-muted); }
+  .bt__gains ul { display: grid; gap: var(--sp-3); }
+  .bt__gains li { display: grid; grid-template-columns: 24px 1fr; gap: 12px; align-items: start; }
+  .bt__check { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--c-mint); color: var(--c-ink); margin-top: 1px; }
+  .bt__ways ul { display: grid; gap: var(--sp-3); }
+  .bt__way { padding: var(--sp-4); border-radius: var(--radius-md); background: var(--bg-tint); }
+  .bt__way-title { font-weight: var(--fw-medium); }
+  .bt__way-text { margin-top: 2px; color: var(--text-muted); font-size: var(--fs-small); }
+  .bt__way-link { display: inline-flex; align-items: center; gap: 8px; margin-top: var(--sp-3); color: var(--c-ink); text-decoration: none; font-size: var(--fs-small); font-weight: var(--fw-medium); }
+  .bt__way-link:hover { text-decoration: underline; }
+  .bt__way-num { display: grid; place-items: center; width: 22px; height: 22px; border-radius: var(--radius-xs); font-size: 11px; }
+
+  .bt__foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--sp-4); margin-top: var(--sp-7); padding-top: var(--sp-5); border-top: 1px solid var(--border); }
+  .bt__video { display: inline-flex; align-items: center; gap: 12px; color: var(--c-ink); text-decoration: none; max-width: 420px; }
+  .bt__video-thumb { position: relative; flex: none; width: 88px; height: 56px; border-radius: var(--radius-sm); overflow: hidden; }
+  .bt__video-thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .bt__video-play { position: absolute; inset: 0; margin: auto; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--c-blue); color: var(--c-white); }
+  .bt__video-play :global(svg) { fill: currentColor; margin-left: 2px; }
+  .bt__video-text { display: grid; gap: 2px; }
+  .bt__video-meta { font-size: var(--fs-micro); color: var(--text-muted); }
+  .bt__video-title { font-size: var(--fs-small); font-weight: var(--fw-medium); line-height: 1.3; }
+  .bt__video:hover .bt__video-title { text-decoration: underline; }
+
+  /* tablet: chips above the panel */
+  @media (max-width: 1199px) {
+    .bt { grid-template-columns: minmax(0, 1fr); }
+    .bt__tabs { position: static; display: flex; flex-wrap: wrap; gap: 8px; }
+    .bt__tab { width: auto; grid-template-columns: 28px auto; padding: 6px 14px 6px 6px; border-color: var(--border); background: var(--c-white); border-radius: 999px; }
+    .bt__tab .bt__ic { width: 28px; height: 28px; border-radius: 50%; }
+    .bt__tab .bt__ic :global(svg) { width: 16px; height: 16px; }
+    .bt__tab :global(.bt__tab-chev) { display: none; }
+    .bt__tab.is-active { background: var(--c-ink); border-color: var(--c-ink); color: var(--c-white); box-shadow: none; }
+  }
+  /* mobile: accordion */
+  @media (max-width: 767px) {
+    .bt__tabs { display: none; }
+    .bt__panels { display: grid; gap: 8px; }
+    .bt__panel, .bt__panel.is-active { display: block; border-radius: var(--radius-md); background: var(--c-white); border: 1px solid var(--border); overflow: hidden; }
+    .bt__acc { display: grid; grid-template-columns: 40px 1fr 18px; padding: 12px; color: var(--c-ink); font-weight: var(--fw-medium); }
+    .bt__acc :global(.bt__acc-chev) { transition: transform var(--dur) var(--ease); }
+    .bt__panel.is-open .bt__acc :global(.bt__acc-chev) { transform: rotate(180deg); }
+    .bt__body { display: none; border: 0; border-radius: 0; padding: 0 16px 20px; }
+    .bt__panel.is-open .bt__body { display: block; }
+    .bt__eyebrow, .bt__title { display: none; }
+    .bt__logic { margin-top: 0; font-size: var(--fs-body); font-weight: var(--fw-regular); }
+    .bt__cols { grid-template-columns: 1fr; gap: var(--sp-5); margin-top: var(--sp-5); }
+    .bt__foot { margin-top: var(--sp-5); }
+    .bt__cta { width: 100%; }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-bt]').forEach((root) => {
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[data-bt-tab]')];
+    const panels = [...root.querySelectorAll<HTMLElement>('[data-bt-panel]')];
+    const activate = (id: string, focus = false) => {
+      tabs.forEach((t) => { const on = t.dataset.btTab === id; t.classList.toggle('is-active', on); t.setAttribute('aria-selected', String(on)); if (on && focus) t.focus(); });
+      panels.forEach((p) => { const on = p.dataset.btPanel === id; p.classList.toggle('is-active', on); p.classList.toggle('is-open', on); p.querySelector('[data-bt-acc]')?.setAttribute('aria-expanded', String(on)); });
+    };
+    tabs.forEach((t, i) => {
+      t.addEventListener('click', () => activate(t.dataset.btTab!));
+      t.addEventListener('keydown', (e) => {
+        const d = e.key === 'ArrowDown' || e.key === 'ArrowRight' ? 1 : e.key === 'ArrowUp' || e.key === 'ArrowLeft' ? -1 : 0;
+        if (!d) return; e.preventDefault();
+        activate(tabs[(i + d + tabs.length) % tabs.length].dataset.btTab!, true);
+      });
+    });
+    root.querySelectorAll<HTMLButtonElement>('[data-bt-acc]').forEach((b) => b.addEventListener('click', () => {
+      const p = b.closest<HTMLElement>('[data-bt-panel]')!;
+      const open = !p.classList.contains('is-open');
+      p.classList.toggle('is-open', open); b.setAttribute('aria-expanded', String(open));
+    }));
+    // deep link from the hub or another landing
+    const want = new URLSearchParams(location.search).get('type') || (location.hash.startsWith('#type-') ? location.hash.slice(6) : '');
+    if (want && panels.some((p) => p.dataset.btPanel === want)) {
+      activate(want);
+      requestAnimationFrame(() => root.scrollIntoView({ block: 'start' }));
+    }
+  });
+</script>

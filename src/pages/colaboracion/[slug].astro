@@ -1,0 +1,11 @@
+---
+// Scenario landings, generated from src/data/landings.
+import LandingPage from '../../components/LandingPage.astro';
+import { landings, slugOf } from '../../data/landings';
+
+export function getStaticPaths() {
+  return landings.map((landing) => ({ params: { slug: slugOf(landing) }, props: { landing } }));
+}
+const { landing } = Astro.props;
+---
+<LandingPage landing={landing} />

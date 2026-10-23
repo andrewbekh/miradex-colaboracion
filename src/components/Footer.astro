@@ -1,4 +1,5 @@
 ---
+import { ui } from '../data/ui';
 // Footer with the full B2B map (strategy 9.2): formats, every sector, product lines, contacts.
 import { scenarios } from '../data/scenarios';
 import { sectorLinks, productLines } from '../data/nav';
@@ -31,38 +32,38 @@ const half = Math.ceil(sectorLinks.length / 2);
     <div class="ft__grid">
       <div class="ft__brand">
         <a href="/" class="ft__logo" aria-label="MIRADEX" set:html={logo} />
-        <p class="ft__desc">Marca europea de vallas metálicas modernas. Fábrica en Rumanía, acero KG Dongbu Steel, más de 1000 proyectos en la UE.</p>
+        <p class="ft__desc">{ui.footer.desc}</p>
         <ul class="ft__contacts" role="list">
           <li>{site.contacts.phone}</li>
           <li><a href={`mailto:${site.contacts.email}`}>{site.contacts.email}</a></li>
         </ul>
       </div>
-      <nav class="ft__col" aria-label="Formatos de colaboración">
-        <p class="ft__title">Formatos de colaboración</p>
+      <nav class="ft__col" aria-label={ui.footer.formats}>
+        <p class="ft__title">{ui.footer.formats}</p>
         <ul role="list">
           {scenarios.map((s) => <li><a href={s.href}>{s.title}</a></li>)}
-          <li><a href="/colaboracion/recomendar">Programa de referidos MIRADEX</a></li>
-          <li><a href="#">Stands de demostración</a></li>
-          <li><a href={site.hubPath} class="ft__all">Todas las opciones de colaboración</a></li>
+          <li><a href="/colaboracion/recomendar">{ui.referral}</a></li>
+          <li><a href="#">{ui.stand}</a></li>
+          <li><a href={site.hubPath} class="ft__all">{ui.header.allOptions}</a></li>
         </ul>
       </nav>
-      <nav class="ft__col ft__col--sectors" aria-label="Colaboración por sector">
-        <p class="ft__title">Por sector</p>
+      <nav class="ft__col ft__col--sectors" aria-label={ui.footer.sectors}>
+        <p class="ft__title">{ui.footer.sectors}</p>
         <div class="ft__split">
           <ul role="list">{sectorLinks.slice(0, half).map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul>
           <ul role="list">{sectorLinks.slice(half).map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul>
         </div>
       </nav>
-      <nav class="ft__col" aria-label="Productos">
-        <p class="ft__title">Productos</p>
+      <nav class="ft__col" aria-label={ui.footer.products}>
+        <p class="ft__title">{ui.footer.products}</p>
         <ul role="list">{productLines.map((p) => <li><a href="#">{p.title}</a></li>)}</ul>
       </nav>
     </div>
   </div>
   <div class="ft__bar">
     <div class="container ft__bar-in">
-      <p class="ft__copy">© {new Date().getFullYear()} MIRADEX. Todos los derechos reservados. <a href={site.privacyUrl}>Política de privacidad</a></p>
-      <ul class="ft__pay" role="list" aria-label="Formas de pago">
+      <p class="ft__copy">© {new Date().getFullYear()} MIRADEX. {ui.footer.rights} <a href={site.privacyUrl}>{ui.footer.privacy}</a></p>
+      <ul class="ft__pay" role="list" aria-label={ui.footer.payments}>
         {payments.map((p) => <li title={p.label}><Icon name={p.icon} size={26} label={p.label} /></li>)}
       </ul>
       <ul class="ft__social" role="list">

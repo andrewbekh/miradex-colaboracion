@@ -1,0 +1,51 @@
+---
+// Hub entry by business type (strategy 5.2): each business shows the formats that fit it;
+// a format chip opens that landing with the business already selected in «Узнайте свой бизнес».
+import Icon from './Icon.astro';
+import type { HubRoute } from '../data/hub';
+import { scenarioById, toneStyle } from '../data/scenarios';
+
+interface Props { routes: HubRoute[]; fits: string }
+const { routes, fits } = Astro.props;
+const swatches = ['mint', 'sky', 'blue'];
+---
+<ul class="br" role="list">
+  {routes.map((r, i) => {
+    const seen = new Set<string>();
+    const targets = r.to.filter(([sid]) => !seen.has(sid) && seen.add(sid));
+    return (
+      <li class="br__card">
+        <div class="br__head">
+          <span class={`br__ic br__ic--${swatches[i % 3]}`}><Icon name={r.icon} size={22} /></span>
+          <p class="br__name">{r.name}</p>
+        </div>
+        <p class="br__fits">{fits}</p>
+        <div class="br__links">
+          {targets.map(([sid, type]) => {
+            const s = scenarioById(sid)!;
+            return <a class="br__link" href={`${s.href}?type=${type}`}><span class="br__num" style={toneStyle(s.tone)}>{s.num}</span><span>{s.short}</span><Icon name="arrow-right" size={16} /></a>;
+          })}
+        </div>
+      </li>
+    );
+  })}
+</ul>
+
+<style>
+  .br { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--grid-gap); }
+  .br__card { display: grid; align-content: start; gap: var(--sp-3); padding: var(--sp-5); border-radius: var(--radius-md); background: var(--c-white); border: 1px solid var(--border); }
+  .br__head { display: grid; grid-template-columns: 44px 1fr; gap: 12px; align-items: center; min-height: 48px; }
+  .br__ic { display: grid; place-items: center; width: 44px; height: 44px; border-radius: var(--radius-sm); }
+  .br__ic--mint { background: var(--c-mint); color: var(--c-ink); }
+  .br__ic--sky { background: var(--c-sky); color: var(--c-white); }
+  .br__ic--blue { background: var(--c-blue); color: var(--c-white); }
+  .br__name { font-weight: var(--fw-medium); line-height: 1.3; }
+  .br__fits { font-size: var(--fs-micro); font-weight: var(--fw-medium); letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--text-muted); }
+  .br__links { display: grid; gap: 6px; }
+  .br__link { display: grid; grid-template-columns: 26px 1fr 16px; align-items: center; gap: 10px; padding: 8px 10px 8px 8px; border-radius: var(--radius-sm); background: var(--bg-tint); color: var(--c-ink); text-decoration: none; font-size: var(--fs-small); }
+  .br__link:hover { background: var(--c-mint); }
+  .br__link :global(svg) { color: var(--text-muted); }
+  .br__num { display: grid; place-items: center; width: 26px; height: 26px; border-radius: var(--radius-xs); font-size: 11px; font-weight: var(--fw-medium); }
+  @media (max-width: 1199px) { .br { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 767px) { .br { grid-template-columns: 1fr; } }
+</style>

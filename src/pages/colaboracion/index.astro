@@ -1,15 +1,15 @@
 ---
-// Hub "Colaboración": explains the whole B2B system and routes to the 5 scenario landings.
-// Sources: strategy 1, 3, 4, 5.1, 6.1; video script nº1 (Spanish), nº3 and nº4 for production and logistics facts.
+// Hub «Сотрудничество»: explains the whole B2B system and routes to the 5 landings, by format and by business type.
+// Content: src/data/hub.ts.
 import Page from '../../layouts/Page.astro';
 import HubHero from '../../components/HubHero.astro';
 import Section from '../../components/Section.astro';
 import ScenarioGrid from '../../components/ScenarioGrid.astro';
 import ScenarioBanners from '../../components/ScenarioBanners.astro';
+import BusinessRouter from '../../components/BusinessRouter.astro';
 import VideoPlaceholder from '../../components/VideoPlaceholder.astro';
 import WhyMiradex from '../../components/WhyMiradex.astro';
 import ScenarioButtons from '../../components/ScenarioButtons.astro';
-import { productStats, statsFootnote, faq as commonFaq, finalPoints } from '../../data/shared';
 import ModelPillars from '../../components/ModelPillars.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import SplitFeature from '../../components/SplitFeature.astro';
@@ -20,148 +20,87 @@ import LogisticsTrack from '../../components/LogisticsTrack.astro';
 import Gallery from '../../components/Gallery.astro';
 import Faq from '../../components/Faq.astro';
 import FinalForm from '../../components/FinalForm.astro';
+import { hub } from '../../data/hub';
+import { videos } from '../../data/videos';
+import { productStats, statsFootnote, finalPoints } from '../../data/shared';
+import { ui } from '../../data/ui';
 
-const pillars = [
-  { icon: 'map', kicker: 'Ventas', title: 'Nacionales', text: 'Puede estar en cualquier punto de España y vender MIRADEX en todo el país. MIRADEX también vende y desarrolla sus propios canales.' },
-  { icon: 'map-pin', kicker: 'Instalación', title: 'Local', text: 'El montaje y el servicio se organizan en cada zona con una red de instaladores verificados.' },
-  { icon: 'shield-check', kicker: 'Protección', title: 'Su cliente, no un territorio', text: 'No damos exclusividad por provincia o región. Protegemos los clientes y proyectos que usted registra.' },
-];
-
-const production = [
-  { title: 'Fábrica en Rumanía', text: 'Ciclo completo y producción automatizada: calidad estable y precisión en cada pieza.' },
-  { title: 'Acero KG Dongbu Steel', text: 'Acero premium de Corea del Sur, conforme a las normas europeas.' },
-  { title: 'Fabricación a medida', text: 'Cada pedido se fabrica según las medidas del proyecto: no necesita stock de medidas y colores.' },
-  { title: 'Más de 15 años de experiencia', text: 'Vallas, cerramientos y soluciones de fachada para viviendas, obras comerciales y grandes proyectos.' },
-];
-
-const support = [
-  { icon: 'handshake', title: 'Comercial', items: ['Precios y condiciones según el tipo de colaboración y el volumen', 'Fotos, catálogos y materiales de venta', 'Ayuda con los cálculos y presupuestos'] },
-  { icon: 'file-text', title: 'Técnica', items: ['Documentación técnica', 'Instrucciones y vídeos de montaje', 'Apoyo técnico en los primeros proyectos'] },
-  { icon: 'qr-code', title: 'Muestras y expositores', items: ['Muestras de modelos, colores y acabados', 'Expositores para tienda, showroom u oficina', 'Código QR personal para sus clientes'] },
-  { icon: 'users', title: 'Acompañamiento', items: ['Acompañamiento durante el inicio y los primeros proyectos', 'Registro de sus clientes y proyectos en el CRM', 'Pedidos locales de instalación para socios formados'] },
-];
-
-const training = [
-  { title: 'Equipo comercial', text: 'Modelos, colores, acabados y cálculos para presentar y vender MIRADEX con seguridad.' },
-  { title: 'Instaladores', text: 'Sistema de montaje con instrucciones y vídeos. Con la base preparada, dos instaladores montan una sección en unos 20 minutos.' },
-  { title: 'Primeros proyectos', text: 'Le acompañamos durante el inicio y en las primeras ventas e instalaciones.' },
-];
-
-const stages = [
-  { title: 'Pedido', time: 'Día 0', text: 'Medidas, modelo y acabado confirmados.', weight: 2, tone: 'ink' as const },
-  { title: 'Producción a medida', time: '3-5 días', text: 'Fabricación en la UE según el proyecto.', weight: 4, tone: 'blue' as const },
-  { title: 'Entrega en España', time: '5-10 días', text: 'A cualquier punto del país.', weight: 7.5, tone: 'sky' as const },
-  { title: 'Obra', time: 'Montaje', text: 'Instalación local por un socio verificado.', weight: 2.2, tone: 'mint' as const },
-];
-
-const gallery = [
-  { src: '/img/photos/atlas-villas.jpg', caption: 'Atlas · Gris grafito RAL 7024' },
-  { src: '/img/photos/sigma-red-house.jpg', caption: 'Sigma · Rojo óxido RAL 3009' },
-  { src: '/img/photos/jupiter-facade-house.jpg', caption: 'Fachada Jupiter · RAL 7024' },
-  { src: '/img/photos/gate-wood.jpg', caption: 'Puerta Romb Grande · Nogal' },
-];
-
-const faq = [
-  { q: '¿Qué formato de colaboración me conviene?', a: '<p>Depende de su negocio: si quiere vender, vender e instalar, comprar para sus obras, recomendar clientes o crear un negocio MIRADEX propio. Cuéntenos sobre su empresa y le propondremos el formato y las condiciones según su potencial.</p>' },
-  { q: '¿Puedo combinar varios formatos?', a: '<p>Sí. Una misma empresa puede, por ejemplo, vender e instalar y además recomendar clientes en otras zonas.</p>' },
-  commonFaq.territory,
-  { q: '¿Cómo se definen las condiciones comerciales?', a: '<p>Según su función, su volumen real y su aportación al desarrollo de las ventas, no según el territorio ni el nombre de la empresa. Antes de empezar evaluamos su potencial y le proponemos directamente las condiciones que tienen sentido económico.</p>' },
-  { q: '¿Quién realiza la instalación?', a: '<p>El montaje se organiza localmente con una red de instaladores verificados. Si su empresa instala, puede vender e instalar MIRADEX y recibir pedidos de instalación en su zona.</p>' },
-  commonFaq.stock,
-  commonFaq.leadTimes,
-  commonFaq.warranty,
-  commonFaq.protection,
-];
+const v1 = videos[1];
 ---
-<Page
-  title="Colaboración con MIRADEX · Vallas metálicas para empresas en España"
-  description="Elija su formato de colaboración con MIRADEX, marca europea de vallas metálicas: vender, instalar, comprar para proyectos, recomendar clientes o crear su propio negocio."
->
+<Page title={hub.meta.title} description={hub.meta.description}>
   <!-- 1 · First screen: full-bleed photo, unlike the landings -->
-  <HubHero
-    title="Desarrolle su negocio con MIRADEX"
-    lead="Marca europea de vallas metálicas modernas. Elija su formato de colaboración y trabaje con clientes en toda España."
-    image="/img/photos/tisa-landscape.jpg"
-  />
+  <HubHero title={hub.hero.title} lead={hub.hero.lead} image={hub.hero.image} />
 
   <!-- 2 · The choice: five formats as banners -->
-  <Section id="formatos" title="Elija su formato de colaboración" lead="Cada formato tiene su propia página: cómo funciona, economía, apoyo y preguntas frecuentes.">
+  <Section id="formatos" title={hub.formats.title} lead={hub.formats.lead}>
     <ScenarioBanners />
   </Section>
 
-  <!-- 3 · Video nº1 + how the model works -->
-  <Section id="video" tone="tint" title="Toda la colaboración en 3 minutos" lead="Producto, formatos de colaboración, condiciones y apoyo de MIRADEX en España.">
-    <VideoPlaceholder num={1} title="Miradex para empresas: oportunidades de colaboración" duration="3:10-3:30" poster="/img/photos/atlas-mountain.jpg" />
-    <div class="gap-top"><ModelPillars items={pillars} /></div>
+  <!-- 2b · Second entry: by business type (strategy 5.2) -->
+  <Section id="negocios" tone="tint" title={hub.router.title} lead={hub.router.lead}>
+    <BusinessRouter routes={hub.router.routes} fits={hub.router.fits} />
+  </Section>
+
+  <!-- 3 · Video №1 + how the model works -->
+  <Section id="video" title={hub.video.title} lead={hub.video.lead}>
+    <VideoPlaceholder num={v1.num} title={v1.title} duration={v1.duration} poster={v1.poster} />
+    <div class="gap-top"><ModelPillars items={hub.pillars} /></div>
   </Section>
 
   <!-- 4 · Why MIRADEX -->
-  <WhyMiradex id="por-que" title="Por qué MIRADEX" />
+  <WhyMiradex id="por-que" title={hub.why.title} />
 
   <!-- Choice again, compact -->
-  <Section id="elegir" tone="tint" title="Elija su formato" lead="Una misma empresa puede combinar varios formatos. Las condiciones dependen de su potencial, no del territorio.">
+  <Section id="elegir" tone="tint" title={hub.choose.title} lead={hub.choose.lead}>
     <ScenarioGrid compact />
   </Section>
 
   <!-- 5 · Production -->
-  <Section id="produccion" tone="tint" title="Producción" lead="Producción europea a medida, con plazos claros para usted y para sus clientes.">
-    <SplitFeature items={production} media={{ src: '/img/photos/texture-graphite.jpg', alt: 'Lamas de acero MIRADEX', placeholder: 'Fábrica en Rumanía' }} aside={{ value: '3-5 días', label: 'de producción a medida' }} />
+  <Section id="produccion" title={hub.production.title} lead={hub.production.lead}>
+    <SplitFeature items={hub.production.items} media={{ src: '/img/photos/texture-graphite.jpg', alt: 'Стальные ламели MIRADEX', placeholder: ui.photoFactory }} aside={hub.production.aside} />
   </Section>
 
   <!-- 6 · Range -->
-  <Section id="gama" title="Gama de productos" lead="Soluciones para viviendas, obras comerciales y grandes proyectos: colores RAL clásicos, acabados ultra texturizados y con efecto madera o piedra natural. Vallas, puertas y fachada en un mismo concepto.">
+  <Section id="gama" tone="tint" title={hub.range.title} lead={hub.range.lead}>
     <Stats stats={productStats} footnote={statsFootnote} />
     <div class="gap-top"><CategoryCards /></div>
   </Section>
 
   <!-- 7 · Support -->
-  <Section id="apoyo" tone="tint" title="Apoyo a socios" lead="Apoyo comercial y técnico en cada formato de colaboración, desde el primer proyecto.">
-    <SupportGroups groups={support} />
+  <Section id="apoyo" title={hub.support.title} lead={hub.support.lead}>
+    <SupportGroups groups={hub.support.groups} />
   </Section>
 
   <!-- 8 · Training -->
-  <Section id="formacion" title="Formación" lead="Formamos a su equipo comercial y a sus instaladores para que trabajen con MIRADEX con seguridad.">
-    <SplitFeature items={training} media={{ src: '/img/photos/tisa-wood-stone.jpg', alt: 'Valla Tisa instalada' }} reverse />
+  <Section id="formacion" tone="tint" title={hub.training.title} lead={hub.training.lead}>
+    <SplitFeature items={hub.training.items} media={{ src: '/img/photos/tisa-wood-stone.jpg', alt: 'Установленный забор Tisa' }} reverse />
   </Section>
 
   <!-- 9 · Logistics -->
-  <Section id="logistica" tone="tint" title="Logística" lead="Del pedido a la obra en un máximo de 15 días laborables, en cualquier punto de España.">
-    <LogisticsTrack
-      stages={stages}
-      total="Máximo 15 días laborables desde el pedido"
-      notes={[
-        { icon: 'package', text: 'Fabricado a medida: sin stock de medidas y colores en su almacén.' },
-        { icon: 'map-pin', text: 'Instalación local con socios verificados en cada zona.' },
-        { icon: 'calendar-check', text: 'Plazos claros de producción y entrega para sus clientes.' },
-        { icon: 'truck', text: 'Entrega organizada a cualquier punto de España.' },
-      ]}
-    />
+  <Section id="logistica" title={hub.logistics.title} lead={hub.logistics.lead}>
+    <LogisticsTrack stages={hub.logistics.stages} total={hub.logistics.total} notes={hub.logistics.notes} />
   </Section>
 
   <!-- 10 · Projects -->
-  <Section id="proyectos" title="Proyectos realizados" lead="Más de 1000 proyectos en la UE: viviendas, obras comerciales y grandes proyectos.">
-    <Gallery items={gallery}>
+  <Section id="proyectos" tone="tint" title={hub.projects.title} lead={hub.projects.lead}>
+    <Gallery items={hub.projects.gallery}>
       <article class="ref">
-        <p class="eyebrow ref__eyebrow">1000+ proyectos en la UE</p>
-        <h3 class="ref__title">Viviendas, obras y grandes proyectos</h3>
-        <p class="ref__text">Vallas, puertas y fachadas en un mismo concepto, para clientes particulares, constructoras y promotoras.</p>
+        <p class="eyebrow ref__eyebrow">{hub.projects.ref.eyebrow}</p>
+        <h3 class="ref__title">{hub.projects.ref.title}</h3>
+        <p class="ref__text">{hub.projects.ref.text}</p>
       </article>
     </Gallery>
   </Section>
 
-  <CtaBand title="¿No sabe qué formato elegir?" text="Cuéntenos sobre su negocio. Le respondemos en 24 horas." tone="mint" scenario="no-se" cta="Le ayudamos a elegir" />
+  <CtaBand title={hub.cta.title} text={hub.cta.text} tone="mint" scenario="no-se" cta={hub.cta.cta} />
 
   <!-- 11 · FAQ -->
-  <Section id="faq" title="Preguntas frecuentes">
-    <Faq items={faq} />
+  <Section id="faq" title="Частые вопросы">
+    <Faq items={hub.faq} />
   </Section>
 
   <!-- 12 · Form -->
-  <FinalForm
-    title="Cuéntenos sobre su negocio"
-    text="Le propondremos el formato de colaboración y las condiciones comerciales según su potencial."
-    points={finalPoints}
-  />
+  <FinalForm title={hub.final.title} text={hub.final.text} points={finalPoints} />
 
   <!-- Choice once more, as buttons -->
   <ScenarioButtons />

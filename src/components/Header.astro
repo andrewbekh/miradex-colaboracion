@@ -1,4 +1,5 @@
 ---
+import { ui } from '../data/ui';
 // Site header, taken from miradex.bg: blue top bar (phone, delivery, e-mail), main nav, call-back button, cart.
 // "Colaboración" is the last nav item, set apart: a full-height box, tinted when active, with a bar under the text.
 // The link opens the hub, the chevron opens the 5 scenarios + "Todas las opciones".
@@ -20,17 +21,17 @@ const logoHref = sc ? site.hubPath : '/';
 ---
 <div class="topbar">
   <div class="container topbar__in">
-    <p class="topbar__item"><span class="topbar__k">Tel:</span> {site.contacts.phone}</p>
-    <p class="topbar__item topbar__mid">Entrega de vallas metálicas a domicilio en toda España</p>
-    <p class="topbar__item"><span class="topbar__k">E-mail:</span> <a href={`mailto:${site.contacts.email}`}>{site.contacts.email}</a></p>
+    <p class="topbar__item"><span class="topbar__k">{ui.header.tel}</span> {site.contacts.phone}</p>
+    <p class="topbar__item topbar__mid">{ui.header.delivery}</p>
+    <p class="topbar__item"><span class="topbar__k">{ui.header.email}</span> <a href={`mailto:${site.contacts.email}`}>{site.contacts.email}</a></p>
   </div>
 </div>
 
 <header class="hd" data-header>
   <div class="container hd__in">
-    <a class="hd__logo" href={logoHref} aria-label={sc ? `MIRADEX, volver a ${site.navLabel}` : 'MIRADEX, inicio'} set:html={logo} />
+    <a class="hd__logo" href={logoHref} aria-label={sc ? ui.header.backTo(site.navLabel) : ui.header.home} set:html={logo} />
 
-    <nav class="hd__nav" aria-label="Principal" id="site-nav">
+    <nav class="hd__nav" aria-label={ui.header.mainNav} id="site-nav">
       <ul class="hd__list" role="list">
         {mainNav.map((item) => (
           <li class="hd__item">
@@ -43,7 +44,7 @@ const logoHref = sc ? site.hubPath : '/';
           <a class="hd__link hd__link--collab" href={site.hubPath} aria-current={onHub ? 'page' : undefined}>
             <span class="hd__label" data-text={site.navLabel}>{site.navLabel}</span>
           </a>
-          <button class="hd__toggle" type="button" aria-expanded="false" aria-controls="collab-menu" aria-label={`Abrir menú ${site.navLabel}`} data-dropdown-toggle>
+          <button class="hd__toggle" type="button" aria-expanded="false" aria-controls="collab-menu" aria-label={ui.header.openSubmenu(site.navLabel)} data-dropdown-toggle>
             <Icon name="chevron-down" size={16} />
           </button>
           <div class="hd__drop" id="collab-menu">
@@ -58,20 +59,20 @@ const logoHref = sc ? site.hubPath : '/';
               ))}
               <li class="hd__drop-all">
                 <a href={site.hubPath} class:list={['hd__drop-link', { 'is-current': onHub }]} aria-current={onHub ? 'page' : undefined}>
-                  <span class="hd__label" data-text="Todas las opciones">Todas las opciones</span><Icon name="arrow-right" size={16} />
+                  <span class="hd__label" data-text={ui.header.allOptions}>{ui.header.allOptions}</span><Icon name="arrow-right" size={16} />
                 </a>
               </li>
             </ul>
           </div>
         </li>
-        <li class="hd__menu-cta"><a class="hd-btn hd-btn--call" href="#"><Icon name="phone-call" size={18} />Solicitar llamada</a></li>
+        <li class="hd__menu-cta"><a class="hd-btn hd-btn--call" href="#"><Icon name="phone-call" size={18} />{ui.header.callback}</a></li>
       </ul>
     </nav>
 
     <div class="hd__actions">
-      <a class="hd-btn hd-btn--call hd__call" href="#"><Icon name="phone-call" size={18} /><span>Solicitar llamada</span></a>
-      <a class="hd-btn hd-btn--cart" href="#" aria-label="Carrito, 0 productos"><Icon name="shopping-cart" size={20} /><span>0</span></a>
-      <button class="hd__icon hd__burger" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Abrir menú" data-burger>
+      <a class="hd-btn hd-btn--call hd__call" href="#"><Icon name="phone-call" size={18} /><span>{ui.header.callback}</span></a>
+      <a class="hd-btn hd-btn--cart" href="#" aria-label={ui.header.cart}><Icon name="shopping-cart" size={20} /><span>0</span></a>
+      <button class="hd__icon hd__burger" type="button" aria-expanded="false" aria-controls="site-nav" aria-label={ui.header.openMenu} data-burger>
         <span></span><span></span><span></span>
       </button>
     </div>
@@ -183,7 +184,8 @@ const logoHref = sc ? site.hubPath : '/';
   .hd__crumb-in { display: flex; align-items: center; gap: 10px; min-height: 48px; font-size: var(--fs-small); color: var(--text-muted); }
   .hd__crumb-back { display: inline-flex; align-items: center; gap: 6px; color: var(--c-ink-80); text-decoration: none; }
   .hd__crumb-back:hover { color: var(--c-ink); font-weight: var(--fw-medium); }
-  .hd__crumb-cur { display: inline-flex; align-items: center; gap: 8px; color: var(--text); font-weight: var(--fw-medium); min-width: 0; white-space: nowrap; }
+  .hd__crumb-cur { display: inline-flex; align-items: center; gap: 8px; color: var(--text); font-weight: var(--fw-medium); min-width: 0; white-space: nowrap; overflow: hidden; }
+  .hd__crumb-long, .hd__crumb-short { overflow: hidden; text-overflow: ellipsis; }
   .hd__crumb-num { display: grid; place-items: center; flex: none; width: 24px; height: 24px; border-radius: var(--radius-xs); font-size: 12px; }
   .hd__crumb-short { display: none; }
 

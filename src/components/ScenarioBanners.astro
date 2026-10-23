@@ -1,6 +1,7 @@
 ---
 // The choice of format as big photo banners, two per row (5 formats + "not sure" = 3 rows).
 // Every banner opens a full landing, so the whole surface is the link.
+import { ui } from '../data/ui';
 import Pattern from './Pattern.astro';
 import Icon from './Icon.astro';
 import { scenarios, toneStyle } from '../data/scenarios';
@@ -25,9 +26,9 @@ import { scenarios, toneStyle } from '../data/scenarios';
   <li>
     <div class="bn bn--ask">
       <span class="bn__body">
-        <span class="bn__title">¿No sabe qué formato elegir?</span>
-        <span class="bn__text">Cuéntenos sobre su negocio y sus planes: le propondremos el formato y las condiciones según su potencial. Una empresa puede combinar varios formatos.</span>
-        <button type="button" class="btn btn--primary bn__cta" data-open-form data-scenario="no-se"><span>Le ayudamos a elegir</span><Icon name="arrow-right" size={18} /></button>
+        <span class="bn__title">{ui.ask.title}</span>
+        <span class="bn__text">{ui.ask.text}</span>
+        <button type="button" class="btn btn--primary bn__cta" data-open-form data-scenario="no-se"><span>{ui.cta.helpChoose}</span><Icon name="arrow-right" size={18} /></button>
       </span>
     </div>
   </li>

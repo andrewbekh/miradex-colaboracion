@@ -1,4 +1,5 @@
-// Lead form behaviour: popup, scenario preselect, ES phone mask, validation, tracking fields, submit.
+// Lead form behaviour: popup, scenario and business-type preselect, ES phone mask, validation, tracking fields, submit.
+import { ui } from '../data/ui';
 
 const modal = document.getElementById('lead-modal') as HTMLDialogElement | null;
 let lastTrigger: HTMLElement | null = null;
@@ -25,10 +26,17 @@ function setScenario(form: HTMLFormElement, value: string | undefined) {
   applyRole(form);
 }
 
-function openModal(scenario?: string) {
+// Business type comes from the "Узнайте свой бизнес" block: preselect it if the option exists.
+function setBusiness(form: HTMLFormElement, value: string | undefined) {
+  if (!value) return;
+  const select = form.querySelector<HTMLSelectElement>('[data-business-select]');
+  if (select && [...select.options].some((o) => o.value === value || o.text === value)) select.value = value;
+}
+
+function openModal(scenario?: string, business?: string) {
   if (!modal) return;
   const form = modal.querySelector<HTMLFormElement>('[data-lead-form]');
-  if (form) setScenario(form, scenario);
+  if (form) { setScenario(form, scenario); setBusiness(form, business); }
   modal.showModal();
   document.documentElement.style.overflow = 'hidden';
 }
@@ -50,7 +58,7 @@ document.addEventListener('click', (e) => {
   if (t) {
     e.preventDefault();
     lastTrigger = t;
-    openModal(t.dataset.scenario);
+    openModal(t.dataset.scenario, t.dataset.business);
     return;
   }
   if ((e.target as HTMLElement).closest('[data-close-form]')) closeModal();
@@ -76,12 +84,7 @@ document.querySelectorAll<HTMLInputElement>('[data-phone-es]').forEach((input) =
 });
 
 // ---- Validation ----
-const messages = {
-  required: 'Campo obligatorio',
-  email: 'Introduzca un email válido',
-  phone: 'Introduzca un teléfono español de 9 cifras',
-  consent: 'Necesitamos su consentimiento para responderle',
-};
+const messages = ui.errors;
 
 function fieldError(el: HTMLInputElement | HTMLSelectElement): string {
   if (el.type === 'checkbox') return (el as HTMLInputElement).checked ? '' : messages.consent;
@@ -151,7 +154,7 @@ document.querySelectorAll<HTMLFormElement>('[data-lead-form]').forEach((form) =>
       const done = form.querySelector<HTMLElement>('.lf__done');
       if (done) { done.hidden = false; done.focus(); }
     } catch {
-      alert('No se ha podido enviar. Inténtelo de nuevo o escríbanos por WhatsApp.');
+      alert(ui.errors.send);
     } finally {
       btn?.removeAttribute('disabled');
     }

@@ -3,27 +3,23 @@
 // so the visitor can tell the hub from a scenario page. The choice itself is the next block (ScenarioBanners).
 import Pattern from './Pattern.astro';
 import Icon from './Icon.astro';
+import { ui } from '../data/ui';
 
 interface Props { title: string; lead: string; image: string }
 const { title, lead, image } = Astro.props;
-const facts = [
-  { icon: 'factory', text: 'Fábrica en Rumanía' },
-  { icon: 'layers', text: 'Acero KG Dongbu Steel' },
-  { icon: 'badge-check', text: '1000+ proyectos en la UE' },
-  { icon: 'truck', text: 'Entrega en España en 5-10 días' },
-];
+const facts = ui.hubFacts;
 ---
 <section class="hh">
   <img class="hh__bg" src={image} alt="" fetchpriority="high" />
   <span class="hh__shade" aria-hidden="true"></span>
   <span class="hh__bands" aria-hidden="true"><Pattern seed="hub-hero" cols={2} units={40} fill narrowFirst /></span>
   <div class="container hh__in">
-    <p class="eyebrow hh__eyebrow"><span class="hh__dot" aria-hidden="true"></span>Colaboración MIRADEX · España</p>
+    <p class="eyebrow hh__eyebrow"><span class="hh__dot" aria-hidden="true"></span>{ui.hubEyebrow}</p>
     <h1 class="h-display hh__title" set:html={title} />
     <p class="lead hh__lead">{lead}</p>
     <div class="hh__actions">
-      <a class="btn btn--primary btn--lg" href="#formatos"><span>Elegir formato</span><Icon name="arrow-down" size={18} /></a>
-      <button type="button" class="btn btn--mint btn--lg" data-open-form data-scenario="no-se"><span>Le ayudamos a elegir</span></button>
+      <a class="btn btn--primary btn--lg" href="#formatos"><span>{ui.cta.chooseFormat}</span><Icon name="arrow-down" size={18} /></a>
+      <button type="button" class="btn btn--mint btn--lg" data-open-form data-scenario="no-se"><span>{ui.cta.helpChoose}</span></button>
     </div>
     <ul class="hh__facts" role="list">
       {facts.map((f) => <li><Icon name={f.icon} size={18} />{f.text}</li>)}

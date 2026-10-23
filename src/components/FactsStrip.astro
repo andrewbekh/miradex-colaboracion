@@ -1,14 +1,10 @@
 ---
+import { ui } from '../data/ui';
 // Proof strip (reference: "Работаем по всей Европе. Производство в Румынии, сталь из Южной Кореи. 1000+ проектов в ЕС").
 interface Fact { value: string; label: string }
 interface Props { facts?: Fact[]; tone?: 'light' | 'dark' }
 const {
-  facts = [
-    { value: 'Europa', label: 'Trabajamos en toda Europa' },
-    { value: 'Rumanía', label: 'Fábrica con ciclo completo y automatización' },
-    { value: 'Corea', label: 'Acero KG Dongbu Steel (Corea del Sur)' },
-    { value: '1000+', label: 'Proyectos realizados en la UE' },
-  ],
+  facts = ui.facts,
   tone = 'light',
 } = Astro.props;
 const swatches = ['blue', 'sky', 'mint', 'blue'];

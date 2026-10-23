@@ -1,33 +1,33 @@
 // Content shared by the hub and landings. Facts come from the strategy (6.1), miradex.partners and video scripts.
 
-/** Reference advantages grid (miradex.partners). */
+/** Advantages grid (miradex.partners, original Russian copy). */
 export const advantages = [
-  { icon: 'ruler', title: 'Individualización', text: 'Medidas para cada obra, paleta RAL y diferentes texturas.' },
-  { icon: 'globe', title: 'Escalabilidad', text: 'Trabajamos en los países balcánicos de la UE y ahora crecemos en España.' },
-  { icon: 'badge-check', title: 'Resultados', text: 'Más de 1000 proyectos realizados en países de la UE.' },
-  { icon: 'hourglass', title: 'Durabilidad', text: 'Sin repintar, barnizar ni tratar: dura décadas.' },
-  { icon: 'layers', title: 'Materiales', text: 'Acero premium KG Dongbu Steel (Corea del Sur), conforme a normas europeas.' },
-  { icon: 'factory', title: 'Producción en la UE', text: 'Fábrica en Rumanía, ciclo completo y automatización: calidad estable.' },
+  { icon: 'ruler', title: 'Индивидуализация', text: 'Размеры под объект, палитра RAL, разные фактуры.' },
+  { icon: 'globe', title: 'Масштабирование', text: 'Успешно работаем в балканских странах ЕС и запускаем направление в Испании.' },
+  { icon: 'badge-check', title: 'Результаты', text: 'Более 1000 реализованных проектов в странах ЕС.' },
+  { icon: 'hourglass', title: 'Долговечность', text: 'Без перекраски, лакировки и биозащиты: служит десятилетиями.' },
+  { icon: 'layers', title: 'Материалы', text: 'Премиальная сталь KG Dongbu Steel (Южная Корея), соответствует европейским стандартам.' },
+  { icon: 'factory', title: 'Производство в ЕС', text: 'Завод в Румынии, полный цикл и автоматизация: стабильное качество.' },
 ];
 
 /** Product facts (strategy 6.1). */
 export const productStats = [
-  { value: '10+', label: 'modelos de vallas' },
-  { value: '25+', label: 'colores y acabados' },
-  { value: '30 años', label: 'garantía técnica máxima*' },
-  { value: '15 años', label: 'garantía estética máxima*' },
-  { value: '3-5 días', label: 'de producción (laborables)' },
-  { value: '5-10 días', label: 'de entrega en España (laborables)' },
+  { value: '10+', label: 'моделей ограждений' },
+  { value: '25+', label: 'цветов и покрытий' },
+  { value: '30 лет', label: 'техническая гарантия, до*' },
+  { value: '15 лет', label: 'эстетическая гарантия, до*' },
+  { value: '3-5 дней', label: 'производство (рабочих)' },
+  { value: '5-10 дней', label: 'доставка по Испании (рабочих)' },
 ];
-export const statsFootnote = '* Según el acabado elegido.';
+export const statsFootnote = '* В зависимости от выбранного покрытия.';
 
 /** FAQ entries repeated on several pages. */
 export const faq = {
-  territory: { q: '¿Ofrecen exclusividad territorial?', a: '<p>No. Puede vender MIRADEX en toda España. En lugar de un territorio, protegemos los clientes y proyectos que usted registra.</p>' },
-  protection: { q: '¿Cómo se protegen mis clientes y proyectos?', a: '<p>Los clientes y proyectos que usted registra quedan protegidos frente a la venta directa. Antes de empezar le explicamos las reglas de registro y protección.</p>' },
-  leadTimes: { q: '¿Cuáles son los plazos de producción y entrega?', a: '<p>Producción a medida en 3-5 días laborables y entrega en España en 5-10 días laborables: como máximo 15 días laborables desde el pedido.</p>' },
-  warranty: { q: '¿Qué garantía tiene el producto?', a: '<p>Según el acabado elegido, hasta 30 años de garantía técnica y hasta 15 años de garantía estética.</p>' },
-  stock: { q: '¿Necesito tener stock?', a: '<p>No. Los productos se fabrican a medida para cada proyecto, así que no necesita un gran stock de medidas y colores.</p>' },
+  territory: { q: 'Даёте ли вы территориальный эксклюзив?', a: '<p>Нет. Продавать MIRADEX можно по всей Испании. Вместо территории мы защищаем клиентов и проекты, которые вы зарегистрировали.</p>' },
+  protection: { q: 'Как защищаются мои клиенты и проекты?', a: '<p>Зарегистрированные вами клиенты и проекты защищаются от прямой продажи в обход вас. Правила регистрации и защиты мы объясняем до начала работы.</p>' },
+  leadTimes: { q: 'Какие сроки производства и доставки?', a: '<p>Производство под размеры за 3-5 рабочих дней, доставка по Испании за 5-10 рабочих дней: не больше 15 рабочих дней от заказа.</p>' },
+  warranty: { q: 'Какая гарантия на продукцию?', a: '<p>В зависимости от покрытия: до 30 лет технической гарантии и до 15 лет эстетической.</p>' },
+  stock: { q: 'Нужен ли склад?', a: '<p>Нет. Продукция изготавливается под размеры каждого проекта, поэтому держать запас размеров и цветов не нужно.</p>' },
 };
 
-export const finalPoints = ['Le respondemos en 24 horas', 'Sus datos son confidenciales', 'Sin exclusividad territorial: protegemos a su cliente'];
+export const finalPoints = ['Ответим в течение 24 часов', 'Данные конфиденциальны', 'Без территориального эксклюзива: защищаем вашего клиента'];

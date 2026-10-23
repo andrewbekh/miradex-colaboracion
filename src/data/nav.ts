@@ -1,49 +1,48 @@
-// Main site navigation (structure follows miradex.bg; Spanish labels are drafts).
-// Catalog URLs point to the future Spanish main site.
+// Main site navigation (structure follows miradex.bg). Catalog URLs point to the future Spanish main site.
 
 export const mainNav = [
-  { label: 'Catálogo', href: '#', hasMenu: true },   // TODO: URLs del sitio principal ES
-  { label: 'Galería', href: '#' },
-  { label: 'Calculadora', href: '#' },
-  { label: 'Información útil', href: '#', hasMenu: true },
-  { label: 'Sobre nosotros', href: '#', hasMenu: true },
+  { label: 'Каталог', href: '#', hasMenu: true },
+  { label: 'Галерея', href: '#' },
+  { label: 'Калькулятор', href: '#' },
+  { label: 'Полезная информация', href: '#', hasMenu: true },
+  { label: 'О нас', href: '#', hasMenu: true },
 ];
 
 /** Product directions (miradex.bg: Метални огради, Метални облицовки, Системи за огради). */
 export const productLines = [
   {
     id: 'vallas',
-    title: 'Vallas metálicas',
-    text: 'Lamas, rombo, rancho y listones: Atlas, Sigma, Piramida, Gamma, Romb, Terra, Tisa, Simetrica.',
+    title: 'Металлические заборы',
+    text: 'Жалюзи, ромб, ранчо и штакетник: Atlas, Sigma, Piramida, Gamma, Romb, Terra, Tisa, Simetrica.',
     img: '/img/photos/atlas-wood-house.jpg',
   },
   {
     id: 'revestimientos',
-    title: 'Revestimientos metálicos',
-    text: 'Revestimiento de fachada Saturn, Jupiter y Venus, en los mismos colores que la valla.',
+    title: 'Металлическая облицовка',
+    text: 'Фасадный сайдинг Saturn, Jupiter и Venus в тех же цветах, что и забор.',
     img: '/img/photos/jupiter-facade-house.jpg',
   },
   {
     id: 'sistemas',
-    title: 'Sistemas de vallado',
-    text: 'Bloques de hormigón, columnas y estructuras para un cerramiento completo.',
+    title: 'Системы для заборов',
+    text: 'Бетонные блоки, столбы и конструкции для готового ограждения.',
     img: '/img/photos/atlas-wood-street.jpg',
   },
 ];
 
 /** Footer B2B map (strategy 9.2): every audience gets its own link. Sector pages are not built yet. */
 export const sectorLinks = [
-  'Empresas de vallas y cerramientos',
-  'Empresas de instalación e instaladores',
-  'Puertas y automatismos',
-  'Ventanas, pérgolas, fachadas y outdoor',
-  'Metalistería y carpintería metálica',
-  'Constructoras y contratistas',
-  'Promotoras y grandes proyectos',
-  'Arquitectos, diseñadores e ingenieros',
-  'Inmobiliarias y agentes',
-  'Paisajismo, piscinas y exteriores',
-  'Almacenes de materiales y showrooms',
-  'Distribuidores y mayoristas',
-  'Tiendas online y distribución digital',
-].map((label) => ({ label, href: '#' })); // TODO: páginas sectoriales
+  'Компании по заборам и ограждениям',
+  'Монтажные компании и установщики',
+  'Компании по воротам и автоматике',
+  'Окна, перголы, фасады и outdoor',
+  'Металлообрабатывающие компании',
+  'Строительные компании и подрядчики',
+  'Девелоперы и крупные проекты',
+  'Архитекторы, дизайнеры и проектировщики',
+  'Риелторы и агентства недвижимости',
+  'Ландшафт, бассейны и благоустройство',
+  'Строительные магазины и шоурумы',
+  'Дистрибьюторы и оптовые компании',
+  'Интернет-магазины и онлайн-дистрибьюторы',
+].map((label) => ({ label, href: '#' }));

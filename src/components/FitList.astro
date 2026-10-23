@@ -1,8 +1,9 @@
 ---
+import { ui } from '../data/ui';
 // "Le encaja / No le encaja" (reference: "Кому подходит / Кому не подходит").
 import Icon from './Icon.astro';
 interface Props { fit: string[]; notFit: string[]; fitTitle?: string; notFitTitle?: string }
-const { fit, notFit, fitTitle = 'Le encaja si…', notFitTitle = 'No le encaja si…' } = Astro.props;
+const { fit, notFit, fitTitle = ui.fit.yes, notFitTitle = ui.fit.no } = Astro.props;
 ---
 <div class="fit">
   <section class="fit__col fit__col--yes">
