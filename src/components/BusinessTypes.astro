@@ -73,7 +73,7 @@ const swatches = ['mint', 'sky', 'blue'];
               {v && (
                 <a class="bt__video" href={`#video-${v.num}`} data-video={v.num}>
                   <span class="bt__video-thumb"><img src={v.poster} alt="" loading="lazy" /><span class="bt__video-play"><Icon name="play" size={14} /></span></span>
-                  <span class="bt__video-text"><span class="bt__video-meta">{ui.video.meta(v.num, v.duration)}</span><span class="bt__video-title">{v.title}</span></span>
+                  <span class="bt__video-text"><span class="bt__video-meta">{ui.video.watch}</span><span class="bt__video-title">{v.title}</span></span>
                 </a>
               )}
               <button type="button" class="btn btn--primary bt__cta" data-open-form data-scenario={scenario} data-business={b.formType}>
@@ -143,7 +143,7 @@ const swatches = ['mint', 'sky', 'blue'];
     .bt__tab .bt__ic { width: 28px; height: 28px; border-radius: 50%; }
     .bt__tab .bt__ic :global(svg) { width: 16px; height: 16px; }
     .bt__tab :global(.bt__tab-chev) { display: none; }
-    .bt__tab.is-active { background: var(--c-ink); border-color: var(--c-ink); color: var(--c-white); box-shadow: none; }
+    .bt__tab.is-active { background: var(--c-blue); border-color: var(--c-blue); color: var(--c-white); box-shadow: none; }
   }
   /* mobile: accordion */
   @media (max-width: 767px) {

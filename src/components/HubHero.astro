@@ -1,49 +1,97 @@
 ---
-// Hub first screen: full-bleed photo with the offer on top. Deliberately unlike the landings' split hero,
-// so the visitor can tell the hub from a scenario page. The choice itself is the next block (ScenarioBanners).
+// Hub first screen. Left: the offer and the two ways forward, both visible at once:
+// pick one of the 5 formats, or leave a short application and we help choose.
+// Right: the brand pattern on the brandbook grid (narrow + wide column, the photo takes one square of 5 bands),
+// flush with the header and bleeding to the right edge, cropped by the hero height.
+// Under 1200px the pattern becomes a thin 3-column strip on top, without the photo.
 import Pattern from './Pattern.astro';
+import QuickForm from './QuickForm.astro';
 import Icon from './Icon.astro';
 import { ui } from '../data/ui';
+import { scenarios, toneStyle } from '../data/scenarios';
 
 interface Props { title: string; lead: string; image: string }
 const { title, lead, image } = Astro.props;
-const facts = ui.hubFacts;
 ---
-<section class="hh">
-  <img class="hh__bg" src={image} alt="" fetchpriority="high" />
-  <span class="hh__shade" aria-hidden="true"></span>
-  <span class="hh__bands" aria-hidden="true"><Pattern seed="hub-hero" cols={2} units={40} fill narrowFirst /></span>
-  <div class="container hh__in">
-    <p class="eyebrow hh__eyebrow"><span class="hh__dot" aria-hidden="true"></span>{ui.hubEyebrow}</p>
-    <h1 class="h-display hh__title" set:html={title} />
-    <p class="lead hh__lead">{lead}</p>
-    <div class="hh__actions">
-      <a class="btn btn--primary btn--lg" href="#formatos"><span>{ui.cta.chooseFormat}</span><Icon name="arrow-down" size={18} /></a>
-      <button type="button" class="btn btn--mint btn--lg" data-open-form data-scenario="no-se"><span>{ui.cta.helpChoose}</span></button>
+<section class="hx">
+  <div class="hx__strip" aria-hidden="true"><Pattern seed="hub-strip" layout="wnw" height={4} /></div>
+  <div class="container hx__grid">
+    <div class="hx__copy">
+      <h1 class="h-display hx__title" set:html={title} />
+      <p class="lead hx__lead">{lead}</p>
+
+      <nav class="hx__formats" aria-labelledby="hx-formats">
+        <p class="hx__label" id="hx-formats">{ui.hubHero.formats}</p>
+        <ul class="hx__list" role="list">
+          {scenarios.map((s) => (
+            <li>
+              <a class="hx__fmt" href={s.href}>
+                <span class="hx__num" style={toneStyle(s.tone)}>{s.num}</span>
+                <span class="hx__name">{s.short}</span>
+                <Icon name="arrow-right" size={18} class="hx__arrow" />
+              </a>
+            </li>
+          ))}
+          <li>
+            <a class="hx__fmt hx__fmt--all" href="#formatos">
+              <span class="hx__name">{ui.hubHero.all}</span>
+              <Icon name="arrow-down" size={18} class="hx__arrow" />
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="hx__quick" data-sbar-after>
+        <QuickForm uid="hub-quick" title={ui.hubHero.quick} />
+      </div>
     </div>
-    <ul class="hh__facts" role="list">
-      {facts.map((f) => <li><Icon name={f.icon} size={18} />{f.text}</li>)}
-    </ul>
+
+    <div class="hx__visual" aria-hidden="true">
+      <Pattern seed="hub-hero" layout="nw" height={14} photo={{ col: 1, from: 2, size: 5, src: image, eager: true }} />
+    </div>
   </div>
 </section>
 
 <style>
-  .hh { position: relative; isolation: isolate; overflow: hidden; display: flex; align-items: flex-end; min-height: min(760px, calc(100svh - 110px)); color: var(--c-white); background: var(--c-ink); }
-  .hh__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
-  .hh__shade { position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgb(53 53 53 / 0.88) 0%, rgb(53 53 53 / 0.6) 45%, rgb(53 53 53 / 0.1) 80%), linear-gradient(0deg, rgb(53 53 53 / 0.55) 0%, transparent 45%); }
-  .hh__bands { position: absolute; top: 0; right: 0; bottom: 0; width: clamp(40px, 6vw, 112px); z-index: -1; }
-  .hh__in { padding-block: clamp(48px, 2rem + 5vw, 112px) clamp(40px, 1.5rem + 4vw, 88px); display: grid; gap: var(--sp-5); justify-items: start; }
-  .hh__eyebrow { display: inline-flex; align-items: center; gap: 10px; color: rgb(255 255 255 / 0.8); }
-  .hh__dot { width: 22px; height: 8px; border-radius: 2px; background: var(--c-mint); }
-  .hh__title { max-width: 13ch; }
-  .hh__lead { max-width: 44ch; color: rgb(255 255 255 / 0.85); }
-  .hh__actions { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin-top: var(--sp-2); }
-  .hh__facts { display: flex; flex-wrap: wrap; gap: 6px 8px; margin-top: var(--sp-4); }
-  .hh__facts li { display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px 8px 10px; border-radius: var(--radius-xs); background: rgb(255 255 255 / 0.12); backdrop-filter: blur(6px); font-size: var(--fs-micro); }
+  .hx { position: relative; overflow: clip; }
+  .hx__strip { display: none; }
+  .hx__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 0.78fr); gap: clamp(32px, 4vw, 72px); }
+  .hx__copy { display: grid; gap: var(--sp-5); align-content: start; padding-block: clamp(32px, 1rem + 2.5vw, 56px) clamp(48px, 1rem + 4vw, 80px); }
+  .hx__title { max-width: 15ch; }
+  .hx__lead { max-width: 48ch; color: var(--text-muted); }
+
+  .hx__formats { display: grid; gap: var(--sp-3); margin-top: var(--sp-2); }
+  .hx__label { font-size: var(--fs-small); font-weight: var(--fw-medium); }
+  .hx__list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .hx__fmt {
+    display: flex; align-items: center; gap: var(--sp-3); height: 52px; padding: 0 14px 0 12px; border-radius: var(--radius-sm);
+    background: var(--c-grey); color: var(--c-ink); text-decoration: none; font-size: var(--fs-small); font-weight: var(--fw-medium);
+    transition: background-color var(--dur) var(--ease);
+  }
+  .hx__fmt:hover { background: var(--c-line); }
+  .hx__num { display: grid; place-items: center; flex: none; width: 32px; height: 32px; border-radius: var(--radius-xs); font-size: 12px; }
+  .hx__name { min-width: 0; line-height: 1.2; }
+  .hx__fmt :global(.hx__arrow) { margin-left: auto; flex: none; color: var(--c-ink-muted); transition: transform var(--dur) var(--ease), color var(--dur) var(--ease); }
+  .hx__fmt:hover :global(.hx__arrow) { transform: translateX(3px); color: var(--c-ink); }
+  .hx__fmt--all { background: var(--c-white); border: 1px solid var(--border); }
+  .hx__fmt--all:hover { background: var(--c-grey); }
+  .hx__fmt--all:hover :global(.hx__arrow) { transform: translateY(2px); }
+
+  .hx__quick { margin-top: var(--sp-2); }
+
+  /* pattern panel: from the header down, to the right edge of the window; cropped by the hero height */
+  .hx__visual { position: relative; overflow: hidden; margin-right: calc(-1 * max(var(--gutter), (100vw - var(--container)) / 2)); }
+  .hx__visual > :global(.pattern) { position: absolute; top: 0; left: 0; right: 0; }
+
+  @media (max-width: 1199px) {
+    .hx__strip { display: block; height: clamp(56px, 9vw, 96px); overflow: hidden; }
+    .hx__grid { grid-template-columns: 1fr; }
+    .hx__visual { display: none; }
+    .hx__copy { padding-top: clamp(28px, 5vw, 48px); }
+    .hx__title { max-width: 18ch; }
+  }
   @media (max-width: 767px) {
-    .hh { min-height: 0; }
-    .hh__shade { background: linear-gradient(0deg, rgb(53 53 53 / 0.92) 0%, rgb(53 53 53 / 0.7) 60%, rgb(53 53 53 / 0.45) 100%); }
-    .hh__actions { display: grid; grid-template-columns: 1fr; width: calc(100% - 24px); }
-    .hh__in { padding-right: calc(var(--gutter) + 28px); }
+    .hx__list { grid-template-columns: 1fr; gap: 6px; }
+    .hx__fmt { height: 52px; }
   }
 </style>

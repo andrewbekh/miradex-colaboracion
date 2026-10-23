@@ -6,7 +6,7 @@ import HubHero from '../../components/HubHero.astro';
 import Section from '../../components/Section.astro';
 import ScenarioGrid from '../../components/ScenarioGrid.astro';
 import ScenarioBanners from '../../components/ScenarioBanners.astro';
-import BusinessRouter from '../../components/BusinessRouter.astro';
+import BusinessQuiz from '../../components/BusinessQuiz.astro';
 import VideoPlaceholder from '../../components/VideoPlaceholder.astro';
 import WhyMiradex from '../../components/WhyMiradex.astro';
 import ScenarioButtons from '../../components/ScenarioButtons.astro';
@@ -36,9 +36,9 @@ const v1 = videos[1];
     <ScenarioBanners />
   </Section>
 
-  <!-- 2b · Second entry: by business type (strategy 5.2) -->
-  <Section id="negocios" tone="tint" title={hub.router.title} lead={hub.router.lead}>
-    <BusinessRouter routes={hub.router.routes} fits={hub.router.fits} />
+  <!-- 2b · Second entry: two questions about the business (strategy 5.2) -->
+  <Section id="negocios" tone="tint" title={hub.quiz.title} lead={hub.quiz.lead}>
+    <BusinessQuiz />
   </Section>
 
   <!-- 3 · Video №1 + how the model works -->
@@ -108,8 +108,8 @@ const v1 = videos[1];
 
 <style>
   .gap-top { margin-top: var(--stack-gap); }
-  .ref { height: 100%; display: flex; flex-direction: column; gap: var(--sp-3); padding: var(--sp-6); border-radius: var(--radius-md); background: var(--bg-dark); color: var(--text-on-dark); }
+  .ref { height: 100%; display: flex; flex-direction: column; gap: var(--sp-3); padding: var(--sp-6); border-radius: var(--radius-md); background: var(--bg-accent); color: var(--text-on-accent); }
   .ref__eyebrow { color: var(--c-mint); }
   .ref__title { font-size: var(--fs-h2); }
-  .ref__text { color: var(--text-on-dark-muted); max-width: 40ch; }
+  .ref__text { color: var(--text-on-accent-muted); max-width: 40ch; }
 </style>

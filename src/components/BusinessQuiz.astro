@@ -1,0 +1,201 @@
+---
+// Hub, second entry (strategy 5.2): two questions instead of a list of cards.
+// 1) what the company does, 2) how it wants to work with MIRADEX; both allow several answers.
+// The result updates live: matching formats, best first, each opening its landing with the business preselected
+// (?type=), and one button that opens the form with the answers filled in (scenario, business type, quiz_answers).
+import Icon from './Icon.astro';
+import { hub } from '../data/hub';
+import { scenarios, toneStyle } from '../data/scenarios';
+
+const q = hub.quiz;
+---
+<div class="qz" data-quiz>
+  <div class="qz__questions">
+    <fieldset class="qz__q">
+      <legend class="qz__legend"><span class="qz__n">1</span><span>{q.q1}</span><span class="qz__hint">{q.several}</span></legend>
+      <div class="qz__chips">
+        {q.routes.map((r) => (
+          <label class="qchip">
+            <input type="checkbox" name="quiz_business" value={r.name} data-to={r.to.map(([s, t]) => `${s}:${t}`).join(' ')} data-form={r.form} />
+            <span class="qchip__box"><Icon name={r.icon} size={18} /><span>{r.name}</span><Icon name="check" size={16} class="qchip__check" /></span>
+          </label>
+        ))}
+      </div>
+    </fieldset>
+
+    <fieldset class="qz__q">
+      <legend class="qz__legend"><span class="qz__n">2</span><span>{q.q2}</span><span class="qz__hint">{q.several}</span></legend>
+      <div class="qz__how">
+        {q.how.map((h) => (
+          <label class="qhow">
+            <input type="checkbox" name="quiz_how" value={h.id} data-title={h.title} />
+            <span class="qhow__box">
+              <span class="qhow__tick" aria-hidden="true"><Icon name="check" size={16} /></span>
+              <span class="qhow__title">{h.title}</span>
+              <span class="qhow__text">{h.text}</span>
+            </span>
+          </label>
+        ))}
+      </div>
+    </fieldset>
+  </div>
+
+  <aside class="qz__result" aria-live="polite">
+    <p class="qz__title">{q.result.title}</p>
+    <p class="qz__empty" data-quiz-empty>{q.result.empty}</p>
+    <ol class="qz__list" role="list">
+      {scenarios.map((s) => (
+        <li class="qz__item" data-res={s.id} data-href={s.href} hidden>
+          <span class="qz__best" data-res-best hidden>{q.result.best}</span>
+          <a class="qz__link" href={s.href} data-res-link>
+            <span class="qz__num" style={toneStyle(s.tone)}>{s.num}</span>
+            <span class="qz__name"><span>{s.title}</span><small data-res-why></small></span>
+            <Icon name="arrow-right" size={18} class="qz__arrow" />
+          </a>
+        </li>
+      ))}
+    </ol>
+    <button type="button" class="btn btn--primary btn--block qz__cta" data-open-form data-scenario="no-se" data-quiz-cta>
+      <span>{q.result.cta}</span><Icon name="arrow-right" size={18} />
+    </button>
+    <p class="qz__note">{q.result.note}</p>
+    <button type="button" class="qz__reset" data-quiz-reset hidden>{q.result.reset}</button>
+  </aside>
+</div>
+
+<script define:vars={{ texts: q.result, titles: Object.fromEntries(scenarios.map((s) => [s.id, s.short])) }}>
+  document.querySelectorAll('[data-quiz]').forEach((root) => {
+    const biz = [...root.querySelectorAll('input[name="quiz_business"]')];
+    const how = [...root.querySelectorAll('input[name="quiz_how"]')];
+    const items = [...root.querySelectorAll('[data-res]')];
+    const empty = root.querySelector('[data-quiz-empty]');
+    const cta = root.querySelector('[data-quiz-cta]');
+    const reset = root.querySelector('[data-quiz-reset]');
+
+    function update() {
+      const pickedBiz = biz.filter((i) => i.checked);
+      const pickedHow = how.filter((i) => i.checked);
+      // score: chosen way of working counts most, then every business that fits the format
+      const res = new Map();
+      const at = (id) => res.get(id) ?? res.set(id, { score: 0, names: [], type: '', chosen: false }).get(id);
+      pickedHow.forEach((i) => { const r = at(i.value); r.score += 3; r.chosen = true; });
+      pickedBiz.forEach((i) => {
+        const seen = new Set();
+        i.dataset.to.split(' ').forEach((pair) => {
+          const [sid, type] = pair.split(':');
+          if (seen.has(sid)) return;
+          seen.add(sid);
+          const r = at(sid);
+          r.score += 1;
+          r.names.push(i.value);
+          if (!r.type) r.type = type;
+        });
+      });
+      const ranked = [...res.entries()].sort((a, b) => b[1].score - a[1].score);
+      items.forEach((li) => {
+        const pos = ranked.findIndex(([id]) => id === li.dataset.res);
+        li.hidden = pos < 0;
+        if (pos < 0) return;
+        const r = ranked[pos][1];
+        li.style.order = String(pos);
+        li.querySelector('[data-res-best]').hidden = pos !== 0 || ranked.length < 2;
+        li.querySelector('[data-res-link]').href = li.dataset.href + (r.type ? `?type=${r.type}` : '');
+        li.querySelector('[data-res-why]').textContent = [r.chosen ? texts.byChoice : '', r.names.length ? `${texts.byBusiness} ${r.names.join(', ')}` : ''].filter(Boolean).join(' · ');
+      });
+      empty.hidden = ranked.length > 0;
+      reset.hidden = !pickedBiz.length && !pickedHow.length;
+      cta.dataset.scenario = ranked[0]?.[0] ?? 'no-se';
+      cta.dataset.business = pickedBiz[0]?.dataset.form ?? '';
+      cta.dataset.quiz = [
+        pickedBiz.length ? `Бизнес: ${pickedBiz.map((i) => i.value).join(', ')}` : '',
+        pickedHow.length ? `Как работать: ${pickedHow.map((i) => i.dataset.title).join(', ')}` : '',
+        ranked.length ? `Подходит: ${ranked.map(([id]) => titles[id]).join(', ')}` : '',
+      ].filter(Boolean).join('; ');
+    }
+    root.addEventListener('change', update);
+    reset.addEventListener('click', () => { [...biz, ...how].forEach((i) => (i.checked = false)); update(); });
+    update();
+  });
+</script>
+
+<style>
+  .qz { display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, 400px); gap: var(--grid-gap) clamp(24px, 3vw, 48px); align-items: start; }
+  .qz__questions { display: grid; gap: var(--sp-7); }
+  .qz__q { display: grid; gap: var(--sp-4); }
+  .qz__legend { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; padding: 0; margin-bottom: var(--sp-4); font-size: var(--fs-h3); font-weight: var(--fw-medium); line-height: 1.25; }
+  .qz__n { display: grid; place-items: center; width: 32px; height: 32px; border-radius: var(--radius-xs); background: var(--c-mint); font-size: var(--fs-small); }
+  .qz__hint { font-size: var(--fs-small); font-weight: var(--fw-regular); color: var(--text-muted); }
+
+  /* answer 1: chips */
+  .qz__chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .qchip { position: relative; cursor: pointer; }
+  .qchip input, .qhow input { position: absolute; inset: 0; opacity: 0; cursor: pointer; margin: 0; }
+  .qchip__box {
+    display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px 0 12px; border-radius: var(--radius-sm);
+    background: var(--c-white); border: 1px solid var(--border); font-size: var(--fs-small); line-height: 1.2;
+    transition: background-color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+  }
+  .qchip__box :global(svg) { flex: none; color: var(--c-ink-muted); }
+  .qchip__box :global(.qchip__check) { display: none; color: var(--c-ink); }
+  .qchip:hover .qchip__box { border-color: var(--c-blue); }
+  .qchip input:checked + .qchip__box { background: var(--c-mint); border-color: var(--c-mint); font-weight: var(--fw-medium); }
+  .qchip input:checked + .qchip__box :global(svg) { color: var(--c-ink); }
+  .qchip input:checked + .qchip__box :global(.qchip__check) { display: block; }
+  .qchip input:focus-visible + .qchip__box, .qhow input:focus-visible + .qhow__box { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+  /* answer 2: cards */
+  .qz__how { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .qhow { position: relative; cursor: pointer; display: flex; }
+  .qhow__box {
+    display: grid; grid-template-columns: 24px 1fr; gap: 4px 10px; align-content: start; width: 100%; padding: var(--sp-4); border-radius: var(--radius-sm);
+    background: var(--c-white); border: 1px solid var(--border); transition: background-color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+  }
+  .qhow__tick { grid-row: span 2; display: grid; place-items: center; width: 22px; height: 22px; margin-top: 1px; border-radius: var(--radius-xs); border: 1.5px solid var(--border-strong); background: var(--c-white); color: transparent; }
+  .qhow__title { font-size: var(--fs-small); font-weight: var(--fw-medium); line-height: 1.3; }
+  .qhow__text { font-size: var(--fs-micro); color: var(--text-muted); line-height: 1.4; }
+  .qhow:hover .qhow__box { border-color: var(--c-blue); }
+  .qhow input:checked + .qhow__box { background: var(--c-mint); border-color: var(--c-mint); }
+  .qhow input:checked + .qhow__box .qhow__tick { background: var(--c-blue); border-color: var(--c-blue); color: var(--c-white); }
+  .qhow input:checked + .qhow__box .qhow__text { color: var(--c-ink); }
+
+  /* result */
+  .qz__result { position: sticky; top: calc(var(--header-h) + 64px + 24px); display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--sp-4); padding: var(--sp-6); border-radius: var(--radius-lg); background: var(--c-white); box-shadow: var(--shadow-soft); }
+  .qz__title { font-size: var(--fs-h3); font-weight: var(--fw-medium); text-transform: uppercase; letter-spacing: var(--tracking-caps); }
+  .qz__reset { justify-self: start; padding: 0; border: 0; background: none; color: var(--link); font-size: var(--fs-micro); text-decoration: underline; cursor: pointer; }
+  .qz__reset[hidden] { display: none; }
+  .qz__empty { color: var(--text-muted); font-size: var(--fs-small); padding: var(--sp-5); border-radius: var(--radius-md); background: var(--c-grey); }
+  .qz__empty[hidden] { display: none; }
+  .qz__list { display: flex; flex-direction: column; gap: 8px; }
+  .qz__item { display: grid; gap: 6px; }
+  .qz__item[hidden] { display: none; }
+  .qz__best { justify-self: start; padding: 3px 8px; border-radius: var(--radius-xs); background: var(--c-mint); font-size: 12px; font-weight: var(--fw-medium); }
+  .qz__best[hidden] { display: none; }
+  .qz__link {
+    display: grid; grid-template-columns: 32px 1fr 18px; gap: 12px; align-items: center; padding: 12px; border-radius: var(--radius-sm);
+    background: var(--c-grey); color: var(--c-ink); text-decoration: none; transition: background-color var(--dur) var(--ease);
+  }
+  .qz__link:hover { background: var(--c-line); }
+  .qz__num { display: grid; place-items: center; width: 32px; height: 32px; border-radius: var(--radius-xs); font-size: 12px; font-weight: var(--fw-medium); }
+  .qz__name { display: grid; gap: 2px; font-size: var(--fs-small); font-weight: var(--fw-medium); line-height: 1.25; }
+  .qz__name small { font-size: 12px; font-weight: var(--fw-regular); color: var(--text-muted); }
+  .qz__link :global(.qz__arrow) { transition: transform var(--dur) var(--ease); }
+  .qz__link:hover :global(.qz__arrow) { transform: translateX(3px); }
+  .qz__cta { margin-top: var(--sp-2); white-space: normal; text-align: center; }
+  .qz__note { font-size: var(--fs-micro); color: var(--text-muted); }
+
+  @media (max-width: 1199px) {
+    .qz { grid-template-columns: 1fr; }
+    .qz__result { position: static; }
+    .qz__how { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 767px) {
+    .qz__how { grid-template-columns: 1fr; }
+    .qz__result { padding: var(--sp-5); }
+    /* two answers per row, text wraps instead of a long single column */
+    .qz__chips { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+    .qchip { display: flex; }
+    .qchip__box { width: 100%; min-height: 52px; padding: 8px 10px; gap: 8px; font-size: var(--fs-micro); }
+    .qchip__box :global(svg:first-child) { width: 16px; height: 16px; }
+    .qchip input:checked + .qchip__box :global(.qchip__check) { display: none; }
+  }
+</style>

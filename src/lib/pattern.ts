@@ -1,15 +1,26 @@
-// Brand pattern generator (brandbook, "Фирменные элементы / Паттерн"):
-// - rectangles in brand colors, 1 to 3 columns, one column always half as wide as the others;
-// - grid built from squares split into 5 horizontal bands, merged vertically at random;
-// - avoid equal colors side by side at the same height;
-// - avoid repeating a color every other band in one column.
+// Brand pattern generator, built strictly on the brandbook grid ("Фирменные элементы / Паттерн", test task p. 9-10):
+// - 1 to 3 columns; the narrow column is always half as wide as a wide one;
+// - a wide column is a square split into 5 horizontal bands: x = wide column width / 5;
+// - wide columns merge bands in whole x (x, 2x, 3x), the narrow column steps in ½x;
+// - white gaps are allowed, more often in the narrow column;
+// - no equal colours side by side at the same height, no colour repeated every other band in a column;
+// - the pattern is cropped by height to fit the format (the parent sets overflow: hidden).
 // Deterministic: the same seed always gives the same pattern, so pages are stable between builds.
+// All heights below are counted in ½x.
 
-export type Swatch = 'blue' | 'sky' | 'mint' | 'none';
+export type Swatch = 'blue' | 'sky' | 'mint' | 'none' | 'photo';
 export interface Band { h: number; c: Swatch }
-export interface Column { w: number; bands: Band[] }
+export interface Column { kind: 'wide' | 'narrow'; bands: Band[] }
+/** w = wide, n = narrow, read left to right */
+export type Layout = 'w' | 'n' | 'wn' | 'nw' | 'wnw';
+/** Photo merged into the grid in place of colour bands; from and size in x (½ steps allowed in a narrow column). */
+export interface PhotoSlot { col: number; from: number; size: number }
 
 const COLORS: Swatch[] = ['blue', 'sky', 'mint'];
+/** blue is the base colour of the brand, sky and mint are additional */
+const WEIGHT: Record<string, number> = { blue: 3, sky: 2, mint: 2 };
+const SIZES = { wide: [2, 2, 4, 4, 6], narrow: [1, 1, 1, 1, 2, 2, 3, 4] };
+const GAP_CHANCE = { wide: 0.16, narrow: 0.28 };
 
 function hash(s: string): number {
   let h = 2166136261;
@@ -27,62 +38,95 @@ function rng(seed: string) {
   };
 }
 
-/** Column width ratios for 1, 2 or 3 columns (narrow = half of wide). */
-export function widthsFor(cols: 1 | 2 | 3, narrowFirst = false): number[] {
-  if (cols === 1) return [1];
-  if (cols === 2) return narrowFirst ? [1, 2] : [2, 1];
-  return [2, 1, 2];
+function pick(pool: Swatch[], t: number): Swatch {
+  const sum = pool.reduce((s, c) => s + WEIGHT[c], 0);
+  let acc = 0;
+  for (const c of pool) { acc += WEIGHT[c] / sum; if (t < acc) return c; }
+  return pool[pool.length - 1];
 }
 
-function colorAt(col: Column | undefined, y: number): Swatch | undefined {
-  if (!col) return undefined;
+export const kindsOf = (layout: Layout) => [...layout].map((k) => (k === 'w' ? 'wide' : 'narrow') as Column['kind']);
+/** Width of the whole pattern in x: wide = 5x, narrow = 2.5x. */
+export const widthX = (layout: Layout) => kindsOf(layout).reduce((s, k) => s + (k === 'wide' ? 5 : 2.5), 0);
+
+/** Colours of a column that overlap the range [y, y + h). */
+function colorsIn(col: Column | undefined, y: number, h: number): Swatch[] {
+  if (!col) return [];
+  const out: Swatch[] = [];
   let acc = 0;
   for (const b of col.bands) {
-    if (y >= acc && y < acc + b.h) return b.c;
+    if (acc < y + h && acc + b.h > y) out.push(b.c);
     acc += b.h;
   }
-  return undefined;
+  return out;
+}
+
+/** Band edges of a column, in ½x. */
+function edgesOf(col: Column | undefined): number[] {
+  if (!col) return [];
+  let acc = 0;
+  return col.bands.map((b) => (acc += b.h));
 }
 
 /**
- * @param seed   any string; same seed, same pattern
- * @param cols   1 to 3 columns
- * @param units  total height in ½x units
- * @param gaps   allow white gaps in narrow columns (as in brandbook samples)
+ * @param seed    any string; same seed, same pattern
+ * @param layout  columns, e.g. 'wn' = wide + narrow
+ * @param heightX total height in x (the parent may crop it)
  */
-export function makePattern(seed: string, cols: 1 | 2 | 3, units: number, opts: { gaps?: boolean; narrowFirst?: boolean } = {}): Column[] {
-  const r = rng(`${seed}:${cols}:${units}`);
-  const widths = widthsFor(cols, opts.narrowFirst);
-  const columns: Column[] = [];
-  const sizes = units <= 2 ? [1, 2] : [1, 2, 2, 3, 4];
+export function brandGrid(seed: string, layout: Layout, heightX: number, opts: { photo?: PhotoSlot; gaps?: boolean } = {}): Column[] {
+  const r = rng(`${seed}:${layout}:${heightX}`);
+  const total = Math.round(heightX * 2);
+  const { photo, gaps = true } = opts;
+  const kinds = kindsOf(layout);
+  const columns: (Column | undefined)[] = kinds.map(() => undefined);
+  // wide columns first: their big blocks fix the rhythm, the narrow column's ½x bands then avoid both neighbours
+  const order = kinds.map((k, i) => [k, i] as const).sort((a, b) => (a[0] === b[0] ? a[1] - b[1] : a[0] === 'wide' ? -1 : 1));
 
-  widths.forEach((w, i) => {
+  order.forEach(([kind, i]) => {
     const bands: Band[] = [];
+    const slot = photo && photo.col === i ? { from: Math.round(photo.from * 2), size: Math.round(photo.size * 2) } : undefined;
     let y = 0;
-    while (y < units) {
+    while (y < total) {
+      if (slot && y === slot.from) {
+        bands.push({ h: slot.size, c: 'photo' });
+        y += slot.size;
+        continue;
+      }
+      const sizes = SIZES[kind];
       let h = sizes[Math.floor(r() * sizes.length)];
-      if (y + h > units) h = units - y;
+      if (slot && y < slot.from && y + h > slot.from) h = slot.from - y;
+      if (y + h > total) h = total - y;
+      // a narrow band ends where a neighbour's band ends, so it never straddles two neighbour colours
+      if (kind === 'narrow') {
+        const next = [columns[i - 1], columns[i + 1]].flatMap((c) => edgesOf(c)).filter((e) => e > y).sort((m, n) => m - n)[0];
+        if (next !== undefined && y + h > next) h = next - y;
+      }
+
       const prev = bands.at(-1)?.c;
       const prev2 = bands.at(-2)?.c;
-      const left = colorAt(columns[i - 1], y);
-      let pool: Swatch[] = COLORS.filter((c) => c !== prev && c !== left);
-      const strict = pool.filter((c) => c !== prev2);
-      if (strict.length) pool = strict;
-      if (!pool.length) pool = COLORS.filter((c) => c !== prev);
-      const narrow = w === 1 && widths.length > 1;
-      const useGap = opts.gaps && narrow && prev !== 'none' && y > 0 && r() < 0.18;
-      bands.push({ h, c: useGap ? 'none' : pool[Math.floor(r() * pool.length)] });
+      const canGap = gaps && y > 0 && prev !== 'none' && prev !== 'photo' && r() < GAP_CHANCE[kind];
+      if (canGap) {
+        bands.push({ h, c: 'none' });
+        y += h;
+        continue;
+      }
+      const side = [...colorsIn(columns[i - 1], y, h), ...colorsIn(columns[i + 1], y, h)];
+      const tries: Swatch[][] = [
+        COLORS.filter((c) => c !== prev && c !== prev2 && !side.includes(c)),
+        COLORS.filter((c) => c !== prev && !side.includes(c)),
+        COLORS.filter((c) => c !== prev),
+      ];
+      // no colour fits: leave a white gap rather than break the rules
+      if (!tries[0].length && gaps && prev !== 'none' && y > 0) {
+        bands.push({ h, c: 'none' });
+        y += h;
+        continue;
+      }
+      const pool = tries.find((t) => t.length)!;
+      bands.push({ h, c: pick(pool, r()) });
       y += h;
     }
-    columns.push({ w, bands });
+    columns[i] = { kind, bands };
   });
-  return columns;
-}
-
-/** Pick 1 to 3 columns from heading length, as the brandbook asks. */
-export function colsForText(text: string): 1 | 2 | 3 {
-  const n = text.length;
-  if (n <= 14) return 1;
-  if (n <= 34) return 2;
-  return 3;
+  return columns as Column[];
 }

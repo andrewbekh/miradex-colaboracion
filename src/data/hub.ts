@@ -3,8 +3,11 @@
 import type { ScenarioId } from './scenarios';
 import { faq as common } from './shared';
 
-/** «Найдите свой бизнес»: each business type routes to the landings that fit it (opens that business there). */
-export interface HubRoute { icon: string; name: string; to: [ScenarioId, string][] }
+/** Quiz «Подберите формат», answer 1: a business type routes to the formats that fit it (scenario, business id on that landing);
+ *  form = the matching option of the lead form select (businessTypes). */
+export interface HubRoute { icon: string; name: string; form: string; to: [ScenarioId, string][] }
+/** Quiz, answer 2: how the company wants to work, one option per format. */
+export interface HubHow { id: ScenarioId; title: string; text: string }
 
 export const hub = {
   meta: {
@@ -13,31 +16,51 @@ export const hub = {
   },
   hero: {
     title: 'Развивайте свой бизнес вместе с MIRADEX',
-    lead: 'Европейский бренд современных металлических ограждений. Выберите формат сотрудничества и работайте с клиентами по всей Испании.',
+    lead: 'Европейский производитель металлических ограждений. Пять форматов сотрудничества для компаний по всей Испании.',
     image: '/img/photos/tisa-landscape.jpg',
   },
   formats: { title: 'Выберите формат сотрудничества', lead: 'У каждого формата своя страница: как он устроен, экономика, поддержка и частые вопросы.' },
-  router: {
-    title: 'Или найдите свой бизнес',
-    lead: 'Выберите, чем занимается ваша компания: покажем подходящие форматы и откроем страницу сразу с вашим бизнесом.',
-    fits: 'Подходит',
+  quiz: {
+    title: 'Подберите формат под ваш бизнес',
+    lead: 'Ответьте на два вопроса: покажем подходящие форматы. Откройте страницу формата или сразу отправьте заявку с ответами.',
+    q1: 'Чем занимается ваша компания?',
+    q2: 'Как вы хотите работать с MIRADEX?',
+    several: 'можно выбрать несколько',
     routes: [
-      { icon: 'fence', name: 'Компании по заборам и ограждениям', to: [['vender', 'fences'], ['instalar', 'fences']] },
-      { icon: 'wrench', name: 'Монтажные компании и бригады', to: [['instalar', 'installers'], ['recomendar', 'installers']] },
-      { icon: 'door-open', name: 'Ворота и автоматика', to: [['vender', 'gates'], ['instalar', 'gates'], ['recomendar', 'related']] },
-      { icon: 'layers', name: 'Окна, перголы, фасады и outdoor', to: [['vender', 'windows'], ['instalar', 'outdoor'], ['recomendar', 'related']] },
-      { icon: 'hammer', name: 'Металлообрабатывающие компании', to: [['vender', 'metal'], ['instalar', 'metal']] },
-      { icon: 'hard-hat', name: 'Строительные компании и подрядчики', to: [['proyectos', 'builders'], ['instalar', 'contractors']] },
-      { icon: 'building', name: 'Девелоперы и крупные проекты', to: [['proyectos', 'developers']] },
-      { icon: 'hotel', name: 'Отели и коммерческие объекты', to: [['proyectos', 'hotels']] },
-      { icon: 'pencil-ruler', name: 'Архитекторы, дизайнеры и проектировщики', to: [['recomendar', 'architects']] },
-      { icon: 'key-round', name: 'Риелторы и агентства недвижимости', to: [['recomendar', 'realtors']] },
-      { icon: 'trees', name: 'Ландшафт, бассейны и благоустройство', to: [['vender', 'landscape'], ['instalar', 'landscape'], ['recomendar', 'landscape']] },
-      { icon: 'store', name: 'Строительные магазины и шоурумы', to: [['vender', 'stores'], ['recomendar', 'stores']] },
-      { icon: 'warehouse', name: 'Дистрибьюторы и оптовые компании', to: [['vender', 'distributors'], ['negocio', 'dealers']] },
-      { icon: 'globe', name: 'Интернет-магазины и онлайн-дистрибьюторы', to: [['vender', 'online']] },
-      { icon: 'rocket', name: 'Предприниматели и новые компании', to: [['negocio', 'entrepreneurs'], ['negocio', 'unit']] },
+      { icon: 'fence', name: 'Заборы и ограждения', form: 'Заборы и ограждения', to: [['vender', 'fences'], ['instalar', 'fences']] },
+      { icon: 'wrench', name: 'Монтаж и бригады', form: 'Монтаж и установка', to: [['instalar', 'installers'], ['recomendar', 'installers']] },
+      { icon: 'door-open', name: 'Ворота и автоматика', form: 'Ворота и автоматика', to: [['vender', 'gates'], ['instalar', 'gates'], ['recomendar', 'related']] },
+      { icon: 'layers', name: 'Окна, перголы, фасады', form: 'Окна, перголы, фасады, outdoor', to: [['vender', 'windows'], ['instalar', 'outdoor'], ['recomendar', 'related']] },
+      { icon: 'hammer', name: 'Металлообработка', form: 'Металлообработка', to: [['vender', 'metal'], ['instalar', 'metal']] },
+      { icon: 'hard-hat', name: 'Строительство и подряд', form: 'Строительная компания или подрядчик', to: [['proyectos', 'builders'], ['instalar', 'contractors']] },
+      { icon: 'building', name: 'Девелопмент', form: 'Девелопер или крупные проекты', to: [['proyectos', 'developers']] },
+      { icon: 'hotel', name: 'Отели и коммерческие объекты', form: 'Отели и коммерческие объекты', to: [['proyectos', 'hotels']] },
+      { icon: 'briefcase', name: 'Корпоративные закупки', form: 'Корпоративный заказчик', to: [['proyectos', 'corporate']] },
+      { icon: 'pencil-ruler', name: 'Архитектура и дизайн', form: 'Архитектура, дизайн, проектирование', to: [['recomendar', 'architects']] },
+      { icon: 'key-round', name: 'Недвижимость', form: 'Недвижимость', to: [['recomendar', 'realtors']] },
+      { icon: 'trees', name: 'Ландшафт и бассейны', form: 'Ландшафт, бассейны, благоустройство', to: [['vender', 'landscape'], ['instalar', 'landscape'], ['recomendar', 'landscape']] },
+      { icon: 'store', name: 'Строительный магазин или шоурум', form: 'Строительный магазин или шоурум', to: [['vender', 'stores'], ['recomendar', 'stores']] },
+      { icon: 'warehouse', name: 'Дистрибуция и опт', form: 'Дистрибьютор или опт', to: [['vender', 'distributors'], ['negocio', 'dealers']] },
+      { icon: 'globe', name: 'Интернет-магазин', form: 'Интернет-магазин', to: [['vender', 'online']] },
+      { icon: 'rocket', name: 'Новый бизнес или стартап', form: 'Предприниматель или новый проект', to: [['negocio', 'entrepreneurs'], ['negocio', 'unit']] },
     ] as HubRoute[],
+    how: [
+      { id: 'vender', title: 'Перепродавать продукцию', text: 'Продаёте клиентам, монтаж делают другие' },
+      { id: 'instalar', title: 'Продавать и монтировать', text: 'Есть своя бригада или опыт монтажа' },
+      { id: 'proyectos', title: 'Покупать для своих объектов', text: 'Строите, девелопируете, оснащаете объекты' },
+      { id: 'recomendar', title: 'Рекомендовать клиентов', text: 'Передаёте контакты и получаете вознаграждение' },
+      { id: 'negocio', title: 'Открыть бизнес MIRADEX', text: 'Новое направление или отдельная компания' },
+    ] as HubHow[],
+    result: {
+      title: 'Подходящие форматы',
+      empty: 'Отметьте ответы, и здесь появятся форматы, которые вам подходят.',
+      best: 'Лучше всего подходит',
+      byBusiness: 'Подходит для:',
+      byChoice: 'Ваш выбор',
+      cta: 'Оставить заявку',
+      note: 'Ответы подставятся в форму, останется оставить контакты.',
+      reset: 'Сбросить ответы',
+    },
   },
   video: { title: 'Всё сотрудничество за 3 минуты', lead: 'Продукция, форматы сотрудничества, условия и поддержка MIRADEX в Испании.' },
   pillars: [
@@ -85,7 +108,7 @@ export const hub = {
     title: 'Логистика',
     lead: 'От заказа до объекта не больше 15 рабочих дней, в любую точку Испании.',
     stages: [
-      { title: 'Заказ', time: 'День 0', text: 'Размеры, модель и покрытие подтверждены.', weight: 2, tone: 'ink' as const },
+      { title: 'Заказ', time: 'День 0', text: 'Размеры, модель и покрытие подтверждены.', weight: 2, tone: 'grey' as const },
       { title: 'Производство под размер', time: '3-5 дней', text: 'Изготовление в ЕС под проект.', weight: 4, tone: 'blue' as const },
       { title: 'Доставка по Испании', time: '5-10 дней', text: 'В любую точку страны.', weight: 7.5, tone: 'sky' as const },
       { title: 'Объект', time: 'Монтаж', text: 'Местный монтаж проверенным партнёром.', weight: 2.2, tone: 'mint' as const },

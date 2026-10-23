@@ -1,7 +1,6 @@
 ---
 // 5 equal scenario cards + 1 "not sure" tile: 3×2 desktop, 2×3 tablet, 1 column mobile.
 import { ui } from '../data/ui';
-import Pattern from './Pattern.astro';
 import Icon from './Icon.astro';
 import { scenarios } from '../data/scenarios';
 
@@ -13,7 +12,6 @@ const H = headingLevel;
   {scenarios.map((s) => (
     <li>
       <a class:list={['sc', { 'sc--current': s.id === current }]} href={s.href} aria-current={s.id === current ? 'page' : undefined}>
-        <Pattern seed={`card-${s.id}`} cols={2} units={compact ? 3 : 5} class="sc__pattern" />
         <div class="sc__body">
           <span class="sc__num eyebrow">{s.num}</span>
           <H class="sc__title">{s.title}</H>
@@ -30,7 +28,6 @@ const H = headingLevel;
   ))}
   <li>
     <div class="sc sc--ask">
-      <Pattern seed="card-ask" cols={2} units={compact ? 3 : 5} class="sc__pattern" narrowFirst />
       <div class="sc__body">
         <span class="sc__num eyebrow">?</span>
         <H class="sc__title">{ui.ask.title}</H>
@@ -51,8 +48,6 @@ const H = headingLevel;
     transition: border-color var(--dur) var(--ease), transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
   }
   a.sc:hover { border-color: var(--border); box-shadow: var(--shadow-soft); transform: translateY(-2px); }
-  .sc :global(.sc__pattern) { transition: height var(--dur) var(--ease); }
-  a.sc:hover :global(.sc__pattern) { --band: 14px; }
   .sc__body { display: flex; flex-direction: column; gap: var(--sp-3); padding: var(--sp-6) var(--sp-6) var(--sp-6); flex: 1; }
   .sc__num { color: var(--text-muted); }
   .sc__title { font-size: var(--fs-h3); max-width: 20ch; }
@@ -68,8 +63,8 @@ const H = headingLevel;
   .sc--current { border-color: var(--c-blue); }
   .sg--compact .sc__body { padding: var(--sp-5); gap: var(--sp-2); }
   .sg--compact .sc__more { padding-top: var(--sp-3); }
-  .sc--ask { background: var(--bg-dark); border: 0; color: var(--text-on-dark); }
-  .sc--ask .sc__num, .sc--ask .sc__text { color: var(--text-on-dark-muted); }
+  .sc--ask { background: var(--c-mint); border: 0; }
+  .sc--ask .sc__num, .sc--ask .sc__text { color: var(--c-ink); }
   .sc__cta { margin-top: auto; align-self: flex-start; }
 
   @media (max-width: 1199px) { .sg { grid-template-columns: repeat(2, 1fr); } }

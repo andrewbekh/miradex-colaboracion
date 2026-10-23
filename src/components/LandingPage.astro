@@ -75,7 +75,7 @@ for (const k of order) if (sectionKeys.includes(k)) tone[k] = n++ % 2 === 0 ? 't
           </Section>
         );
       case 'ctaB':
-        return <CtaBand title={L.ctaB.title} text={L.ctaB.text} cta={L.ctaB.cta} tone="dark" scenario={L.id} />;
+        return <CtaBand title={L.ctaB.title} text={L.ctaB.text} cta={L.ctaB.cta} tone="grey" scenario={L.id} />;
       case 'product':
         return (
           <Section id="producto" tone={tone.product} title={L.product.title} lead={L.product.lead}>
@@ -121,14 +121,14 @@ for (const k of order) if (sectionKeys.includes(k)) tone[k] = n++ % 2 === 0 ? 't
 <style>
   .gap-top { margin-top: var(--stack-gap); }
   .gap-bottom { margin-bottom: var(--stack-gap); }
-  .ref { height: 100%; display: flex; flex-direction: column; gap: var(--sp-3); padding: var(--sp-6); border-radius: var(--radius-md); background: var(--bg-dark); color: var(--text-on-dark); }
+  .ref { height: 100%; display: flex; flex-direction: column; gap: var(--sp-3); padding: var(--sp-6); border-radius: var(--radius-md); background: var(--bg-accent); color: var(--text-on-accent); }
   .ref__eyebrow { color: var(--c-mint); }
   .ref__title { font-size: var(--fs-h2); }
-  .ref__text { color: var(--text-on-dark-muted); max-width: 40ch; }
+  .ref__text { color: var(--text-on-accent-muted); max-width: 40ch; }
   .ref__stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-3); margin-top: var(--sp-3); }
-  .ref__stats div { padding: var(--sp-4); border-radius: var(--radius-sm); background: var(--c-ink-soft); }
+  .ref__stats div { padding: var(--sp-4); border-radius: var(--radius-sm); background: rgb(255 255 255 / 0.18); }
   .ref__stats dt { font-size: var(--fs-stat); font-weight: var(--fw-medium); line-height: 1; }
-  .ref__stats dd { margin-top: 6px; font-size: var(--fs-micro); color: var(--text-on-dark-muted); }
+  .ref__stats dd { margin-top: 6px; font-size: var(--fs-micro); color: var(--text-on-accent-muted); }
   .ref__link { margin-top: auto; display: inline-flex; align-items: center; gap: 6px; color: var(--c-white); font-weight: var(--fw-medium); }
   .ref__link:hover { color: var(--c-mint); }
 </style>

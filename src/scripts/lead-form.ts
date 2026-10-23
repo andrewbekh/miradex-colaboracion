@@ -33,10 +33,16 @@ function setBusiness(form: HTMLFormElement, value: string | undefined) {
   if (select && [...select.options].some((o) => o.value === value || o.text === value)) select.value = value;
 }
 
-function openModal(scenario?: string, business?: string) {
+function openModal(scenario?: string, business?: string, quiz?: string) {
   if (!modal) return;
   const form = modal.querySelector<HTMLFormElement>('[data-lead-form]');
-  if (form) { setScenario(form, scenario); setBusiness(form, business); }
+  if (form) {
+    setScenario(form, scenario);
+    setBusiness(form, business);
+    // answers from the hub quiz travel with the lead
+    const q = form.querySelector<HTMLInputElement>('[data-quiz-answers]');
+    if (q) q.value = quiz ?? '';
+  }
   modal.showModal();
   document.documentElement.style.overflow = 'hidden';
 }
@@ -58,7 +64,7 @@ document.addEventListener('click', (e) => {
   if (t) {
     e.preventDefault();
     lastTrigger = t;
-    openModal(t.dataset.scenario, t.dataset.business);
+    openModal(t.dataset.scenario, t.dataset.business, t.dataset.quiz);
     return;
   }
   if ((e.target as HTMLElement).closest('[data-close-form]')) closeModal();

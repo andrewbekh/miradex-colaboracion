@@ -1,5 +1,5 @@
 ---
-// Dark positioning block from the reference: "not a startup" + advantages grid. Used on every landing.
+// Positioning block (grey plate: the brandbook has no black) from the reference: "not a startup" + advantages grid. Used on every landing.
 import Section from './Section.astro';
 import FeatureGrid from './FeatureGrid.astro';
 import { advantages } from '../data/shared';
@@ -11,9 +11,9 @@ const {
   text = 'MIRADEX: европейский производитель с более чем 15-летним опытом. Мы успешно работаем в балканских странах ЕС и теперь расширяемся в Испанию. Ищем партнёров, которые вместе с нами построят сильное направление на испанском рынке.',
 } = Astro.props;
 ---
-<Section id={id} tone="dark" title={title}>
+<Section id={id} tone="grey" title={title}>
   <p class="why__lead">{text}</p>
-  <div class="why__grid"><FeatureGrid items={advantages} tone="dark" /></div>
+  <div class="why__grid"><FeatureGrid items={advantages} /></div>
 </Section>
 
 <style>

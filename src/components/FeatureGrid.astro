@@ -3,7 +3,7 @@
 import Icon from './Icon.astro';
 
 interface Item { icon: string; title: string; text: string }
-interface Props { items: Item[]; cols?: 2 | 3 | 4; tone?: 'light' | 'dark' }
+interface Props { items: Item[]; cols?: 2 | 3 | 4; tone?: 'light' }
 const { items, cols = 3, tone = 'light' } = Astro.props;
 const swatches = ['mint', 'sky', 'blue'];
 ---
@@ -31,7 +31,7 @@ const swatches = ['mint', 'sky', 'blue'];
   .fg__text { color: var(--text-muted); max-width: 34ch; }
   .fg--dark { border-color: rgb(255 255 255 / 0.16); }
   .fg--dark .fg__item { border-color: rgb(255 255 255 / 0.16); }
-  .fg--dark .fg__text { color: var(--text-on-dark-muted); }
+  .fg--dark .fg__text { color: var(--text-on-accent-muted); }
 
   @media (max-width: 1199px) {
     .fg--3, .fg--4 { grid-template-columns: repeat(2, 1fr); }

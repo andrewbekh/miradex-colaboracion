@@ -1,5 +1,5 @@
 ---
-// FAQ accordion on native <details>. Answers may contain HTML (links, TODO markers).
+// FAQ accordion on native <details>. Answers may contain HTML (links).
 interface QA { q: string; a: string }
 interface Props { items: QA[]; openFirst?: boolean }
 const { items, openFirst = true } = Astro.props;
@@ -24,11 +24,10 @@ const { items, openFirst = true } = Astro.props;
   .faq__ic { position: relative; width: 32px; height: 32px; border-radius: var(--radius-sm); background: var(--c-mint); transition: background-color var(--dur) var(--ease); }
   .faq__ic::before, .faq__ic::after { content: ''; position: absolute; left: 50%; top: 50%; width: 14px; height: 1.5px; background: var(--c-ink); transform: translate(-50%, -50%); transition: transform var(--dur) var(--ease); }
   .faq__ic::after { transform: translate(-50%, -50%) rotate(90deg); }
-  .faq__item[open] .faq__ic { background: var(--c-blue); }
+  /* one colour: mint plus, a darker mint on hover, the same mint when open (client feedback) */
+  .faq__q:hover .faq__ic { background: var(--c-mint-hover); }
+  .faq__item[open] .faq__ic { background: var(--c-mint); }
   .faq__item[open] .faq__ic::after { transform: translate(-50%, -50%) rotate(0deg); }
-  .faq__q:hover .faq__ic { background: var(--c-sky); }
-  .faq__item[open] .faq__ic::before, .faq__item[open] .faq__ic::after,
-  .faq__q:hover .faq__ic::before, .faq__q:hover .faq__ic::after { background: var(--c-white); }
   .faq__a { padding: 0 var(--sp-9) var(--sp-6) 0; color: var(--text-muted); max-width: 72ch; }
   .faq__a :global(p + p) { margin-top: var(--sp-3); }
   @media (max-width: 767px) { .faq__a { padding-right: 0; } }

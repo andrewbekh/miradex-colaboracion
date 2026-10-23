@@ -14,6 +14,7 @@ await p.type(`${f} input[name=name]`, 'Test');
 await p.type(`${f} input[name=email]`, 'test@empresa.es');
 await p.type(`${f} input[name=phone]`, '+34612345678');
 console.log('phone masked:', await p.$eval(`${f} input[name=phone]`, (e) => e.value));
+await p.click(`${f} .lf__more-sum`); // optional details are folded
 await p.click(`${f} .chip input[value="Отдел продаж"]`);
 await p.click(`${f} input[name=consent]`);
 await p.click(`${f} button[type=submit]`);
@@ -24,9 +25,9 @@ console.log('payload:', logs.find((l) => l.includes('MIRADEX lead')));
 await p.evaluate(() => document.querySelector('[data-open-form][data-scenario="no-se"]').click());
 console.log('modal open:', await p.$eval('#lead-modal', (d) => d.open), 'scenario:', await p.$eval('#lead-modal [data-scenario-radio]:checked', (s) => s.value));
 // role switch: installer shows zone and crew, hides business profile
-await p.click('#lead-modal .role input[value="instalar"]');
+await p.evaluate(() => document.querySelector('#lead-modal .role input[value="instalar"]').click());
 const vis = await p.$$eval('#lead-modal [data-for]', (els) => els.filter((e) => !e.hidden).map((e) => e.querySelector('input,select')?.name));
 console.log('instalar fields:', vis.join(','));
-await p.click('#lead-modal .role input[value="proyectos"]');
+await p.evaluate(() => document.querySelector('#lead-modal .role input[value="proyectos"]').click());
 console.log('proyectos fields:', (await p.$$eval('#lead-modal [data-for]', (els) => els.filter((e) => !e.hidden).map((e) => e.querySelector('input,select')?.name))).join(','));
 await b.close();

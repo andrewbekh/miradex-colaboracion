@@ -9,11 +9,13 @@ import Icon from './Icon.astro';
   .totop {
     position: fixed; right: clamp(16px, 2vw, 32px); bottom: clamp(16px, 2vw, 32px); z-index: 40;
     display: grid; place-items: center; width: 52px; height: 52px; border: 0; border-radius: var(--radius-md);
-    background: var(--c-blue); color: var(--c-white); box-shadow: 0 0 0 2px var(--c-white), 0 10px 28px rgb(53 53 53 / 0.22);
+    background: var(--c-blue); color: var(--c-white); box-shadow: 0 10px 28px rgb(53 53 53 / 0.18);
     opacity: 0; visibility: hidden; transform: translateY(12px);
-    transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease), visibility var(--dur), background-color var(--dur) var(--ease);
+    transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease), visibility var(--dur), background-color var(--dur) var(--ease), bottom var(--dur) var(--ease);
   }
   .totop.is-visible { opacity: 1; visibility: visible; transform: none; }
+  /* mobile: lift above the page bar at the bottom */
+  @media (max-width: 767px) { :global(html.has-sbar) .totop { bottom: calc(64px + 16px + env(safe-area-inset-bottom)); } }
   .totop:hover { background: var(--c-blue-hover); }
   .totop:hover :global(svg) { transform: translateY(-2px); }
   .totop :global(svg) { transition: transform var(--dur) var(--ease); }

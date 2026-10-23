@@ -9,7 +9,7 @@ import { scenarios, toneStyle } from '../data/scenarios';
 import { site } from '../data/site';
 
 const pages = [
-  { num: 'Хаб', title: site.navLabel, text: 'Общая страница раздела: все форматы сотрудничества, производство, ассортимент, поддержка, логистика, FAQ и заявка.', href: site.hubPath, style: 'background:var(--c-ink);color:var(--c-white)' },
+  { num: 'Хаб', title: site.navLabel, text: 'Общая страница раздела: все форматы сотрудничества, производство, ассортимент, поддержка, логистика, FAQ и заявка.', href: site.hubPath, style: 'background:var(--c-blue);color:var(--c-white)' },
   ...scenarios.map((s) => ({ num: s.num, title: s.title, text: s.promise, href: s.href, style: toneStyle(s.tone) })),
 ];
 const notes = [
@@ -24,7 +24,7 @@ const notes = [
     <div class="container ix__in">
       <header class="ix__head">
         <span class="ix__logo" set:html={logo} />
-        <div class="ix__pattern"><Pattern seed="index" cols={3} units={6} /></div>
+        <div class="ix__pattern"><Pattern seed="index" layout="wnw" height={3} gaps={false} /></div>
         <h1 class="h2">Раздел «Сотрудничество» для MIRADEX España</h1>
         <p class="lead muted">Черновик для согласования: хаб и пять лендингов. Выберите страницу.</p>
       </header>

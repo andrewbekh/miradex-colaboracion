@@ -20,7 +20,7 @@ const { src, alt = '', ratio = '4/3', placeholder, caption, class: cls = '', eag
       <img src={src} alt={alt} loading={eager ? 'eager' : 'lazy'} decoding="async" />
     ) : (
       <div class="media__empty">
-        <Pattern seed={placeholder ?? 'media'} cols={3} units={10} fill />
+        <Pattern seed={placeholder ?? 'media'} layout="wnw" height={12} />
       </div>
     )}
     {placeholder && <span class="media__label">{placeholder}</span>}

@@ -12,7 +12,7 @@ const { title, text, scenario = '', lockScenario = false, points = [] } = Astro.
 <section class="ff" id="solicitud">
   <div class="container ff__inner">
     <div class="ff__aside">
-      <SectionHeading title={title} lead={text} tone="dark" seed="final-form" />
+      <SectionHeading title={title} lead={text} tone="inverse" />
       {points.length > 0 && (
         <ul class="ff__points" role="list">
           {points.map((p) => <li><Icon name="check" size={20} /><span>{p}</span></li>)}
@@ -33,14 +33,14 @@ const { title, text, scenario = '', lockScenario = false, points = [] } = Astro.
 </section>
 
 <style>
-  .ff { background: var(--bg-dark); color: var(--text-on-dark); padding-block: var(--section-y); }
+  .ff { background: var(--bg-accent); color: var(--text-on-accent); padding-block: var(--section-y); }
   .ff__inner { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 5vw, 96px); align-items: start; }
   .ff__aside { display: grid; gap: var(--sp-7); position: sticky; top: calc(var(--header-h) + 24px); }
   .ff__points { display: grid; gap: var(--sp-3); }
-  .ff__points li { display: grid; grid-template-columns: 24px 1fr; gap: var(--sp-3); color: var(--text-on-dark-muted); }
-  .ff__points :global(svg) { color: var(--c-blue); }
+  .ff__points li { display: grid; grid-template-columns: 24px 1fr; gap: var(--sp-3); color: var(--text-on-accent-muted); }
+  .ff__points :global(svg) { color: var(--c-mint); }
   .ff__contacts { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-4); }
-  .ff__mail { color: var(--text-on-dark-muted); font-size: var(--fs-small); line-height: 1.6; }
+  .ff__mail { color: var(--text-on-accent-muted); font-size: var(--fs-small); line-height: 1.6; }
   .ff__mail a { color: var(--c-white); }
   .ff__panel { background: var(--c-white); color: var(--text); padding: clamp(20px, 3vw, 48px); border-radius: var(--radius-lg); }
   @media (max-width: 1199px) {

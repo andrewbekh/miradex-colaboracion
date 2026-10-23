@@ -1,49 +1,32 @@
 ---
 // Video slot for the B2B films (scripts: docs/Miradex_Spain_b2b.docx). Placeholder poster until the films are edited.
+// Clean poster: play button in the centre, no film number, duration or pattern on top (client feedback).
 import { ui } from '../data/ui';
-import Pattern from './Pattern.astro';
 import Icon from './Icon.astro';
 
-interface Props { num: number; title: string; duration: string; poster?: string; id?: string; bare?: boolean }
-// bare: only the meta line on the poster, for rows where the title is set next to the video
-const { num, title, duration, poster = '/img/photos/atlas-villas.jpg', id = `video-${num}`, bare = false } = Astro.props;
+interface Props { num: number; title: string; duration?: string; poster?: string; id?: string; bare?: boolean }
+const { num, title, poster = '/img/photos/atlas-villas.jpg', id = `video-${num}` } = Astro.props;
 ---
 <figure class="video" id={id}>
-  <button type="button" class="video__frame" data-video={num} aria-label={ui.video.play(num, title)}>
+  <button type="button" class="video__frame" data-video={num} aria-label={ui.video.play(title)}>
     <img src={poster} alt="" loading="lazy" />
-    <span class="video__shade" />
-    <span class="video__side"><Pattern seed={`video-${num}`} cols={2} units={30} fill narrowFirst /></span>
     <span class="video__play"><Icon name="play" size={34} /></span>
-    <span class="video__meta">
-      <span class="eyebrow">{ui.video.meta(num, duration)}</span>
-      {!bare && <span class="video__title">{title}</span>}
-    </span>
   </button>
 </figure>
 
 <style>
   .video__frame {
     position: relative; display: block; width: 100%; aspect-ratio: 16/9; padding: 0; border: 0; overflow: hidden; border-radius: var(--radius-lg);
-    container-type: inline-size;
-    background: var(--c-ink); color: var(--c-white); text-align: left;
+    container-type: inline-size; background: var(--c-grey);
   }
   .video__frame img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 600ms var(--ease); }
   .video__frame:hover img { transform: scale(1.03); }
-  .video__shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgb(53 53 53 / 0.85) 0%, rgb(53 53 53 / 0.35) 60%, rgb(53 53 53 / 0.1) 100%); }
-  .video__side { position: absolute; top: 0; right: 0; bottom: 0; width: clamp(48px, 9%, 120px); }
   .video__play {
     position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
-    display: grid; place-items: center; width: clamp(56px, 9cqw, 104px); aspect-ratio: 1; border-radius: var(--radius-lg); background: var(--c-blue); color: var(--c-white);
+    display: grid; place-items: center; width: clamp(56px, 11cqw, 112px); aspect-ratio: 1; border-radius: var(--radius-lg); background: var(--c-blue); color: var(--c-white);
+    box-shadow: 0 12px 32px rgb(53 53 53 / 0.18);
     transition: background-color var(--dur) var(--ease), transform var(--dur) var(--ease);
   }
   .video__play :global(svg) { margin-left: 4px; fill: currentColor; }
-  .video__frame:hover .video__play { background: var(--c-white); color: var(--c-blue); transform: translate(-50%, -50%) scale(1.04); }
-  .video__meta { position: absolute; left: clamp(16px, 4%, 48px); bottom: clamp(16px, 6%, 48px); display: grid; gap: var(--sp-2); max-width: 60%; }
-  .video__play { top: 40%; }
-  .video__meta .eyebrow { color: var(--c-mint); }
-  .video__title { font-size: clamp(1rem, 3.2cqw, 1.75rem); font-weight: var(--fw-medium); text-transform: uppercase; letter-spacing: var(--tracking-caps); line-height: 1.15; }
-  @media (max-width: 767px) {
-    .video__meta { max-width: 75%; }
-    .video__play { top: 42%; }
-  }
+  .video__frame:hover .video__play { background: var(--c-blue-hover); transform: translate(-50%, -50%) scale(1.04); }
 </style>

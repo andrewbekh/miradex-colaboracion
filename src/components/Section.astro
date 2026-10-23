@@ -4,7 +4,7 @@ import SectionHeading from './SectionHeading.astro';
 
 interface Props {
   id?: string;
-  tone?: 'light' | 'tint' | 'dark' | 'blue' | 'mint';
+  tone?: 'light' | 'tint' | 'grey' | 'blue' | 'mint';
   title?: string;
   eyebrow?: string;
   lead?: string;
@@ -13,12 +13,11 @@ interface Props {
   class?: string;
 }
 const { id, tone = 'light', title, eyebrow, lead, align = 'start', tight = false, class: cls = '' } = Astro.props;
-const dark = tone === 'dark';
 ---
 <section id={id} class:list={['section', `section--${tone}`, { 'section--tight': tight, 'on-blue': tone === 'blue' }, cls]}>
   <div class="container">
     {title && (
-      <SectionHeading title={title} eyebrow={eyebrow} lead={lead} align={align} tone={dark ? 'dark' : 'light'} seed={id ?? title}>
+      <SectionHeading title={title} eyebrow={eyebrow} lead={lead} align={align} tone={tone === 'blue' ? 'inverse' : 'light'}>
         <slot name="heading-aside" />
       </SectionHeading>
     )}
@@ -32,8 +31,8 @@ const dark = tone === 'dark';
   .section { padding-block: var(--section-y); }
   .section--tight { padding-block: calc(var(--section-y) * 0.6); }
   .section--tint { background: var(--bg-tint); }
-  .section--dark { background: var(--bg-dark); color: var(--text-on-dark); }
-  .section--blue { background: var(--c-blue); color: var(--c-ink); }
+  .section--grey { background: var(--bg-grey); }
+  .section--blue { background: var(--c-blue); color: var(--c-white); }
   .section--mint { background: var(--c-mint); }
   .section__body--spaced { margin-top: var(--stack-gap); }
 </style>

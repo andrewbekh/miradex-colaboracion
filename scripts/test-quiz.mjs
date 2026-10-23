@@ -1,0 +1,21 @@
+// Smoke test for the hub quiz: answers -> ranked formats, ?type= links, form prefilled from the quiz.
+import puppeteer from 'puppeteer-core';
+const b = await puppeteer.launch({ executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', headless: true });
+const p = await b.newPage();
+await p.setViewport({ width: 1440, height: 900 });
+await p.goto('http://localhost:4321/colaboracion', { waitUntil: 'networkidle0' });
+const click = (sel) => p.evaluate((s) => document.querySelector(s).click(), sel);
+await click('[data-quiz] input[value="Заборы и ограждения"]');
+await click('[data-quiz] input[value="Ландшафт и бассейны"]');
+await click('[data-quiz] input[name="quiz_how"][value="recomendar"]');
+const res = await p.$$eval('[data-res]:not([hidden])', (els) => els.sort((a, b) => a.style.order - b.style.order).map((e) => `${e.dataset.res} ${e.querySelector('[data-res-link]').getAttribute('href')} | ${e.querySelector('[data-res-why]').textContent}${e.querySelector('[data-res-best]').hidden ? '' : ' [best]'}`));
+console.log(res.join('\n'));
+const cta = await p.$eval('[data-quiz-cta]', (e) => ({ ...e.dataset }));
+console.log('cta:', JSON.stringify(cta));
+await p.evaluate(() => window.scrollTo(0, document.querySelector('#negocios').offsetTop - 60));
+await new Promise((r) => setTimeout(r, 400));
+await p.screenshot({ path: 'shots/quiz-picked-1440.png' });
+await click('[data-quiz-cta]');
+await new Promise((r) => setTimeout(r, 300));
+console.log('modal:', await p.$eval('#lead-modal [data-scenario-radio]:checked', (s) => s.value), '|', await p.$eval('#lead-modal [data-business-select]', (s) => s.value), '|', await p.$eval('#lead-modal [data-quiz-answers]', (s) => s.value));
+await b.close();

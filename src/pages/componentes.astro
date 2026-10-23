@@ -84,9 +84,9 @@ const faq = [
     <div class="ds-patterns">
       <p class="ds-label">Паттерн · 1, 2 і 3 колонки (вузька = ½ широкої)</p>
       <div class="ds-patterns__row">
-        <div style="width:120px"><Pattern seed="demo-1" cols={1} units={10} /></div>
-        <div style="width:240px"><Pattern seed="demo-2" cols={2} units={10} /></div>
-        <div style="width:400px;max-width:100%"><Pattern seed="demo-3" cols={3} units={10} /></div>
+        <div style="width:120px"><Pattern seed="demo-1" layout="w" height={5} /></div>
+        <div style="width:180px"><Pattern seed="demo-2" layout="wn" height={5} /></div>
+        <div style="width:300px;max-width:100%"><Pattern seed="demo-3" layout="wnw" height={5} /></div>
       </div>
     </div>
 
@@ -99,9 +99,9 @@ const faq = [
   <!-- 2. Headings + buttons -->
   <Section id="headings" tone="tint" title="Заголовок секції" eyebrow="01 · SectionHeading">
     <div class="ds-stack">
-      <SectionHeading title="Producción" seed="h-short" />
-      <SectionHeading title="Cómo empezar a colaborar" seed="h-mid" />
-      <SectionHeading title="Desarrolle su negocio con MIRADEX en toda España" seed="h-long" lead="Ширина паттерну дорівнює ширині заголовка; 1-3 колонки залежно від довжини, під заголовком смуга ½x (брендбук, «Оформление заголовков»)." />
+      <SectionHeading title="Producción" />
+      <SectionHeading title="Cómo empezar a colaborar" />
+      <SectionHeading title="Desarrolle su negocio con MIRADEX en toda España" lead="Заголовок без паттерну: на вебі паттерн біля заголовків забирає місце (правка клієнта)." />
     </div>
   </Section>
 
@@ -192,9 +192,9 @@ const faq = [
   </Section>
 
   <!-- 9. CTA bands -->
-  <div class="ds-label-row container"><p class="ds-label">09 · CtaBand: blue / dark / mint</p></div>
+  <div class="ds-label-row container"><p class="ds-label">09 · CtaBand: blue / grey / mint</p></div>
   <CtaBand title="¿Listo para crear su negocio MIRADEX?" text="Cuéntenos sobre su proyecto. Le respondemos en 24 horas." scenario="negocio" />
-  <CtaBand title="Hablemos de su formato" text="Formulario o WhatsApp: como le resulte más cómodo." tone="dark" />
+  <CtaBand title="Hablemos de su formato" text="Formulario o WhatsApp: como le resulte más cómodo." tone="grey" />
   <CtaBand title="¿Tiene una obra en marcha?" tone="mint" scenario="proyectos" cta="Pedir propuesta" />
 
   <!-- 10. FAQ -->

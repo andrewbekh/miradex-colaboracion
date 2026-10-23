@@ -11,7 +11,7 @@ export interface Scenario {
   title: string;      // "Хочу..." as in the strategy
   short: string;      // nav / select label
   promise: string;    // one-line business promise
-  audience: string[]; // short "для кого" tags
+  audience: string[]; // "для кого": always types of companies, never product categories
   href: string;
   image: string;      // banner photo on the hub (provisional, miradex.bg)
 }
@@ -22,7 +22,7 @@ export const scenarios: Scenario[] = [
     title: 'Хочу продавать MIRADEX',
     short: 'Продавать MIRADEX',
     promise: 'Партнёрская цена и маржа с каждой продажи без собственного производства.',
-    audience: ['Заборы и ограждения', 'Ворота и автоматика', 'Магазины и дистрибьюторы'],
+    audience: ['Компании по заборам и воротам', 'Строительные магазины и шоурумы', 'Дистрибьюторы и интернет-магазины'],
     href: '/colaboracion/vender',
     image: '/img/photos/romb-pro-house.jpg',
   },
@@ -31,7 +31,7 @@ export const scenarios: Scenario[] = [
     title: 'Хочу продавать и устанавливать',
     short: 'Продавать и устанавливать',
     promise: 'Зарабатывайте на продукции и на монтаже, получайте местные заказы.',
-    audience: ['Монтажники', 'Металлообработка', 'Подрядчики'],
+    audience: ['Монтажные компании и бригады', 'Металлообрабатывающие компании', 'Строительные подрядчики'],
     href: '/colaboracion/vender-e-instalar',
     image: '/img/photos/atlas-wood-street.jpg',
   },
@@ -40,7 +40,7 @@ export const scenarios: Scenario[] = [
     title: 'Хочу покупать для проектов',
     short: 'Покупать для проектов',
     promise: 'Специальные условия для строительства, девелопмента и крупных объёмов.',
-    audience: ['Строительные компании', 'Девелоперы', 'Коммерческие объекты'],
+    audience: ['Строительные компании', 'Девелоперы', 'Отели и коммерческие объекты'],
     href: '/colaboracion/proyectos',
     image: '/img/photos/atlas-villas.jpg',
   },
@@ -49,7 +49,7 @@ export const scenarios: Scenario[] = [
     title: 'Хочу рекомендовать клиентов',
     short: 'Рекомендовать клиентов',
     promise: 'Рекомендуйте MIRADEX и получайте вознаграждение после каждой продажи.',
-    audience: ['Архитекторы', 'Риелторы', 'Ландшафт и бассейны'],
+    audience: ['Архитекторы и дизайнеры', 'Риелторы и агентства', 'Ландшафтные компании'],
     href: '/colaboracion/recomendar',
     image: '/img/photos/simetrica-black-house.jpg',
   },
@@ -58,7 +58,7 @@ export const scenarios: Scenario[] = [
     title: 'Хочу делать бизнес MIRADEX',
     short: 'Бизнес MIRADEX',
     promise: 'Постройте собственный бизнес на продукции и модели MIRADEX.',
-    audience: ['Предприниматели', 'Новый бизнес-юнит', 'Сильные дилеры'],
+    audience: ['Предприниматели', 'Компании с новым направлением', 'Крупные дилеры'],
     href: '/colaboracion/negocio-miradex',
     image: '/img/photos/atlas-modern-house.jpg',
   },

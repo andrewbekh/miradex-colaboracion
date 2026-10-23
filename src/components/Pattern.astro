@@ -1,40 +1,42 @@
 ---
-// Brand pattern block. Height = units × --band (one unit = ½x of the brandbook grid).
-import { makePattern } from '../lib/pattern';
+// Brand pattern on the brandbook grid (see src/lib/pattern.ts). Renders at its natural proportions:
+// width = 100% of the parent, height = heightX × (width / widthX). The parent crops it by height (overflow: hidden).
+// A photo can take a merged block of the grid in place of colour bands.
+import { brandGrid, widthX, type Layout } from '../lib/pattern';
 
 interface Props {
   seed: string;
-  cols?: 1 | 2 | 3;
-  units?: number;
+  layout?: Layout;
+  /** height in x; the parent usually shows only part of it */
+  height?: number;
   gaps?: boolean;
-  narrowFirst?: boolean;
+  photo?: { col: number; from: number; size: number; src: string; alt?: string; eager?: boolean };
   class?: string;
-  /** fill parent height instead of units × band */
-  fill?: boolean;
 }
-const { seed, cols = 2, units = 6, gaps = true, narrowFirst = false, class: cls = '', fill = false } = Astro.props;
-const columns = makePattern(seed, cols, units, { gaps, narrowFirst });
-const template = columns.map((c) => `${c.w}fr`).join(' ');
+const { seed, layout = 'wn', height = 10, gaps = true, photo, class: cls = '' } = Astro.props;
+const columns = brandGrid(seed, layout, height, { gaps, photo });
+const template = columns.map((c) => (c.kind === 'wide' ? '2fr' : '1fr')).join(' ');
 ---
-<div
-  class:list={['pattern', cls, { 'pattern--fill': fill }]}
-  style={`--units:${units};grid-template-columns:${template}`}
-  aria-hidden="true"
->
+<div class:list={['pattern', cls]} style={`--pw:${widthX(layout)};--ph:${height};grid-template-columns:${template}`} aria-hidden={photo?.alt ? undefined : 'true'}>
   {columns.map((col) => (
     <div class="pattern__col">
-      {col.bands.map((b) => <span class={`pattern__band pattern__band--${b.c}`} style={`flex-grow:${b.h}`} />)}
+      {col.bands.map((b) =>
+        b.c === 'photo' && photo
+          ? <span class="pattern__band pattern__band--photo" style={`flex-grow:${b.h}`}><img src={photo.src} alt={photo.alt ?? ''} fetchpriority={photo.eager ? 'high' : undefined} loading={photo.eager ? undefined : 'lazy'} /></span>
+          : <span class={`pattern__band pattern__band--${b.c}`} style={`flex-grow:${b.h}`} />
+      )}
     </div>
   ))}
 </div>
 
 <style>
-  .pattern { display: grid; height: calc(var(--units) * var(--band)); width: 100%; }
-  .pattern--fill { height: 100%; }
+  .pattern { display: grid; width: 100%; aspect-ratio: var(--pw) / var(--ph); }
   .pattern__col { display: flex; flex-direction: column; min-width: 0; }
-  .pattern__band { flex-basis: 0; display: block; }
+  .pattern__band { flex-basis: 0; display: block; min-height: 0; }
   .pattern__band--blue { background: var(--c-blue); }
   .pattern__band--sky { background: var(--c-sky); }
   .pattern__band--mint { background: var(--c-mint); }
   .pattern__band--none { background: transparent; }
+  .pattern__band--photo { position: relative; overflow: hidden; background: var(--c-grey); }
+  .pattern__band--photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 </style>

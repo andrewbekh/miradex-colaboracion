@@ -41,27 +41,27 @@
 
   /* ---- Derived neutrals and tints ---- */
   --c-ink-muted: #6e6e6e;  /* derived: ink 72% on white, 5.1:1 on white */
-  --c-ink-soft: #3f3f3f;   /* derived: ink +5% white, cards on dark */
   --c-line: #e3e3e3;       /* derived: ink 14% */
   --c-line-strong: #c2c2c2;/* derived: ink 30% */
   --c-paper: #f7f9ff;      /* derived: blue 6% on white, section tint */
   --c-blue-deep: #5b6da4;  /* derived: blue 55% + ink, text links, 4.7:1 */
-  --c-on-dark-muted: #b9b9b9; /* derived: white 72% on ink */
   --c-blue-hover: #6d8ef2;  /* derived: blue 10% darker, button hover */
   --c-mint-hover: #c2f1bb;  /* derived: mint 6% darker, button hover */
   --c-mint-strong: #9fe796; /* derived: mint 25% stronger, small dots on white */
   --c-ink-80: #5d5d5d;      /* derived: ink 80%, menu text before hover */
-  --c-collab-active: #f4f4f4; /* derived: ink 5% on white, active menu box */
+  --c-grey: #f4f4f4;        /* derived: ink 5% on white. The brandbook has no black: neutral plates use this grey */
+  --c-collab-active: var(--c-grey); /* active menu box */
   --shadow-soft: 0 16px 40px rgb(53 53 53 / 0.08);
 
   /* ---- Semantic roles ---- */
   --bg: var(--c-white);
   --bg-tint: var(--c-paper);
-  --bg-dark: var(--c-ink);
+  --bg-grey: var(--c-grey);
+  --bg-accent: var(--c-blue);  /* strong plates (final form, reference cards): blue with white text, never black */
   --text: var(--c-ink);
   --text-muted: var(--c-ink-muted);
-  --text-on-dark: var(--c-white);
-  --text-on-dark-muted: var(--c-on-dark-muted);
+  --text-on-accent: var(--c-white);
+  --text-on-accent-muted: rgb(255 255 255 / 0.88);
   --accent: var(--c-blue);
   --link: var(--c-blue-deep);
   --border: var(--c-line);
@@ -121,8 +121,7 @@
      mobile < 768, tablet 768 to 1199, desktop >= 1200 (design at 1440) */
 
   /* ---- Brand pattern ---- */
-  /* One pattern unit = ½x of the brandbook grid (a square split in 5 bands). */
-  --band: clamp(8px, 0.4rem + 0.35vw, 12px);
+  /* Grid: a wide column is a square split in 5 bands (x = width / 5); see src/lib/pattern.ts. */
 
   /* ---- Shape, elevation, motion ---- */
   /* Corner radius scale (client: 4, 8, 12, 16, 24). Brand pattern bands stay square. */
