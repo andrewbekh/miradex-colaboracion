@@ -2,6 +2,7 @@
 // Page bar that slides in once the first screen is scrolled past, on the hub and on every landing
 // (Leroy Merlin pattern): where you are + chevron to switch to another format, back to the hub on landings,
 // and «Оставить заявку». Desktop and tablet: docked under the header. Mobile: fixed at the bottom of the screen.
+// The bar is brand blue with everything on it inverted: white text, mint button (client rule for blue).
 // The first screen marks its end with [data-sbar-after]; without it the bar appears after 600px.
 import Icon from './Icon.astro';
 import { ui } from '../data/ui';
@@ -15,7 +16,7 @@ const show = path.startsWith(site.hubPath);
 const sc = scenarioById(current);
 ---
 {show && (
-  <div class="sb" data-sbar aria-hidden="true" inert>
+  <div class="sb on-blue" data-sbar aria-hidden="true" inert>
     <div class="container sb__in">
       {sc && (
         <a class="sb__back" href={site.hubPath} aria-label={ui.sbar.back}>
@@ -58,7 +59,7 @@ const sc = scenarioById(current);
 <style>
   .sb {
     position: fixed; left: 0; right: 0; top: calc(var(--header-h) + 1px); z-index: 45;
-    background: var(--c-white); border-bottom: 1px solid var(--border); box-shadow: var(--shadow-soft);
+    background: var(--c-blue); color: var(--c-white); box-shadow: var(--shadow-soft);
     transform: translateY(-8px); opacity: 0; visibility: hidden;
     transition: transform var(--dur) var(--ease), opacity var(--dur) var(--ease), visibility var(--dur);
   }
@@ -68,20 +69,23 @@ const sc = scenarioById(current);
 
   .sb__back {
     display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 14px 0 10px; border-radius: var(--radius-sm);
-    background: var(--c-grey); color: var(--c-ink); text-decoration: none; font-size: var(--fs-small); font-weight: var(--fw-medium); flex: none;
+    background: rgb(255 255 255 / 0.18); color: var(--c-white); text-decoration: none; font-size: var(--fs-small); font-weight: var(--fw-medium); flex: none;
   }
-  .sb__back:hover { background: var(--c-line); }
+  .sb__back:hover { background: rgb(255 255 255 / 0.28); }
 
   .sb__where { position: relative; min-width: 0; }
   .sb__switch {
     display: inline-flex; align-items: center; gap: 10px; max-width: 100%; height: 44px; padding: 0 10px; border: 0; border-radius: var(--radius-sm);
-    background: transparent; color: var(--c-ink); font-size: var(--fs-small); text-align: left; min-width: 0;
+    background: transparent; color: var(--c-white); font-size: var(--fs-small); text-align: left; min-width: 0;
   }
-  .sb__switch:hover, .sb__switch[aria-expanded='true'] { background: var(--c-grey); }
-  .sb__here { color: var(--text-muted); flex: none; }
+  .sb__switch:hover, .sb__switch[aria-expanded='true'] { background: rgb(255 255 255 / 0.18); }
+  .sb__here { color: rgb(255 255 255 / 0.85); flex: none; }
   .sb__cur { font-weight: var(--fw-medium); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
   .sb__short { display: none; }
   .sb__num { display: grid; place-items: center; flex: none; width: 28px; height: 28px; border-radius: var(--radius-xs); font-size: 12px; font-weight: var(--fw-medium); }
+  /* on the blue bar the current number is a white tile; tone colours stay in the white list */
+  .sb__switch .sb__num { background: var(--c-white) !important; color: var(--c-ink) !important; }
+  .sb__list { color: var(--c-ink); }
   .sb__switch :global(.sb__chev) { flex: none; transition: transform var(--dur) var(--ease); }
   .sb__switch[aria-expanded='true'] :global(.sb__chev) { transform: rotate(180deg); }
 
@@ -107,7 +111,7 @@ const sc = scenarioById(current);
   }
   /* mobile: thumb-reach bar at the bottom, the list opens upwards */
   @media (max-width: 767px) {
-    .sb { top: auto; bottom: 0; border-bottom: 0; border-top: 1px solid var(--border); box-shadow: 0 -8px 24px rgb(53 53 53 / 0.08); transform: translateY(8px); padding-bottom: env(safe-area-inset-bottom); }
+    .sb { top: auto; bottom: 0; box-shadow: 0 -8px 24px rgb(53 53 53 / 0.12); transform: translateY(8px); padding-bottom: env(safe-area-inset-bottom); }
     .sb__in { gap: var(--sp-2); min-height: 64px; }
     .sb__back { width: 44px; padding: 0; justify-content: center; }
     .sb__back-text { display: none; }
