@@ -1,97 +1,77 @@
 ---
-// Hub first screen. Left: the offer and the two ways forward, both visible at once:
-// pick one of the 5 formats, or leave a short application and we help choose.
-// Right: the brand pattern on the brandbook grid (narrow + wide column, the photo takes one square of 5 bands),
-// flush with the header and bleeding to the right edge, cropped by the hero height.
-// Under 1200px the pattern becomes a thin 3-column strip on top, without the photo.
-import Pattern from './Pattern.astro';
+// Hub first screen on a light grey plate, no graphics (client feedback). The offer on top, then the two ways
+// forward side by side: «how do you want to work with MIRADEX» (5 answers, each opens its format)
+// and a short application (we help choose).
 import QuickForm from './QuickForm.astro';
 import Icon from './Icon.astro';
 import { ui } from '../data/ui';
 import { scenarios, toneStyle } from '../data/scenarios';
 
-interface Props { title: string; lead: string; image: string }
-const { title, lead, image } = Astro.props;
+interface Props { title: string; lead: string }
+const { title, lead } = Astro.props;
 ---
 <section class="hx">
-  <div class="hx__strip" aria-hidden="true"><Pattern seed="hub-strip" layout="wnw" height={4} /></div>
-  <div class="container hx__grid">
-    <div class="hx__copy">
+  <div class="container hx__in">
+    <div class="hx__head">
       <h1 class="h-display hx__title" set:html={title} />
       <p class="lead hx__lead">{lead}</p>
+    </div>
 
-      <nav class="hx__formats" aria-labelledby="hx-formats">
-        <p class="hx__label" id="hx-formats">{ui.hubHero.formats}</p>
+    <div class="hx__paths">
+      <nav class="hx__path" aria-labelledby="hx-formats">
+        <h2 class="hx__label" id="hx-formats">{ui.hubHero.formats}</h2>
         <ul class="hx__list" role="list">
           {scenarios.map((s) => (
             <li>
               <a class="hx__fmt" href={s.href}>
                 <span class="hx__num" style={toneStyle(s.tone)}>{s.num}</span>
-                <span class="hx__name">{s.short}</span>
+                <span class="hx__name">{s.title}</span>
                 <Icon name="arrow-right" size={18} class="hx__arrow" />
               </a>
             </li>
           ))}
-          <li>
-            <a class="hx__fmt hx__fmt--all" href="#formatos">
-              <span class="hx__name">{ui.hubHero.all}</span>
-              <Icon name="arrow-down" size={18} class="hx__arrow" />
-            </a>
-          </li>
+          <li><a class="hx__fmt hx__fmt--all" href="#formatos"><span class="hx__name">{ui.hubHero.all}</span></a></li>
         </ul>
       </nav>
 
-      <div class="hx__quick" data-sbar-after>
-        <QuickForm uid="hub-quick" title={ui.hubHero.quick} />
+      <div class="hx__path" data-sbar-after>
+        <h2 class="hx__label" id="hx-quick">{ui.hubHero.quick}</h2>
+        <QuickForm uid="hub-quick" labelledby="hx-quick" text={ui.hubHero.quickText} />
       </div>
-    </div>
-
-    <div class="hx__visual" aria-hidden="true">
-      <Pattern seed="hub-hero" layout="nw" height={14} photo={{ col: 1, from: 2, size: 5, src: image, eager: true }} />
     </div>
   </div>
 </section>
 
 <style>
-  .hx { position: relative; overflow: clip; }
-  .hx__strip { display: none; }
-  .hx__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 0.78fr); gap: clamp(32px, 4vw, 72px); }
-  .hx__copy { display: grid; gap: var(--sp-5); align-content: start; padding-block: clamp(32px, 1rem + 2.5vw, 56px) clamp(48px, 1rem + 4vw, 80px); }
-  .hx__title { max-width: 15ch; }
-  .hx__lead { max-width: 48ch; color: var(--text-muted); }
+  .hx { background: var(--bg-grey); }
+  .hx__in { display: grid; gap: clamp(32px, 1rem + 2.5vw, 56px); padding-block: clamp(32px, 1rem + 3vw, 64px) clamp(40px, 1rem + 4vw, 80px); }
+  .hx__head { display: grid; gap: var(--sp-4); }
+  .hx__title { max-width: 22ch; }
+  .hx__lead { max-width: 52ch; color: var(--text-muted); }
 
-  .hx__formats { display: grid; gap: var(--sp-3); margin-top: var(--sp-2); }
-  .hx__label { font-size: var(--fs-small); font-weight: var(--fw-medium); }
-  .hx__list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .hx__paths { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--grid-gap) clamp(24px, 3vw, 48px); align-items: start; }
+  .hx__path { display: grid; gap: var(--sp-4); }
+  .hx__label { font-size: var(--fs-h3); font-weight: var(--fw-medium); line-height: 1.25; text-transform: none; letter-spacing: 0; }
+
+  .hx__list { display: grid; gap: 8px; }
   .hx__fmt {
-    display: flex; align-items: center; gap: var(--sp-3); height: 52px; padding: 0 14px 0 12px; border-radius: var(--radius-sm);
-    background: var(--c-grey); color: var(--c-ink); text-decoration: none; font-size: var(--fs-small); font-weight: var(--fw-medium);
-    transition: background-color var(--dur) var(--ease);
+    display: flex; align-items: center; gap: var(--sp-3); min-height: 56px; padding: 8px 16px 8px 12px; border-radius: var(--radius-sm);
+    background: var(--c-white); color: var(--c-ink); text-decoration: none; font-size: var(--fs-body); font-weight: var(--fw-medium);
+    transition: box-shadow var(--dur) var(--ease);
   }
-  .hx__fmt:hover { background: var(--c-line); }
+  .hx__fmt:hover { box-shadow: var(--shadow-soft); }
   .hx__num { display: grid; place-items: center; flex: none; width: 32px; height: 32px; border-radius: var(--radius-xs); font-size: 12px; }
-  .hx__name { min-width: 0; line-height: 1.2; }
-  .hx__fmt :global(.hx__arrow) { margin-left: auto; flex: none; color: var(--c-ink-muted); transition: transform var(--dur) var(--ease), color var(--dur) var(--ease); }
-  .hx__fmt:hover :global(.hx__arrow) { transform: translateX(3px); color: var(--c-ink); }
-  .hx__fmt--all { background: var(--c-white); border: 1px solid var(--border); }
-  .hx__fmt--all:hover { background: var(--c-grey); }
-  .hx__fmt--all:hover :global(.hx__arrow) { transform: translateY(2px); }
-
-  .hx__quick { margin-top: var(--sp-2); }
-
-  /* pattern panel: from the header down, to the right edge of the window; cropped by the hero height */
-  .hx__visual { position: relative; overflow: hidden; margin-right: calc(-1 * max(var(--gutter), (100vw - var(--container)) / 2)); }
-  .hx__visual > :global(.pattern) { position: absolute; top: 0; left: 0; right: 0; }
+  .hx__name { min-width: 0; line-height: 1.25; }
+  /* the arrow shows on hover only */
+  .hx__fmt :global(.hx__arrow) { margin-left: auto; flex: none; opacity: 0; transform: translateX(-4px); transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease); }
+  .hx__fmt:hover :global(.hx__arrow), .hx__fmt:focus-visible :global(.hx__arrow) { opacity: 1; transform: none; }
+  .hx__fmt--all { padding-left: 16px; color: var(--c-ink-80); }
+  .hx__fmt--all:hover { color: var(--c-ink); }
 
   @media (max-width: 1199px) {
-    .hx__strip { display: block; height: clamp(56px, 9vw, 96px); overflow: hidden; }
-    .hx__grid { grid-template-columns: 1fr; }
-    .hx__visual { display: none; }
-    .hx__copy { padding-top: clamp(28px, 5vw, 48px); }
-    .hx__title { max-width: 18ch; }
+    .hx__paths { grid-template-columns: 1fr; }
   }
   @media (max-width: 767px) {
-    .hx__list { grid-template-columns: 1fr; gap: 6px; }
-    .hx__fmt { height: 52px; }
+    .hx__fmt { min-height: 52px; font-size: var(--fs-small); }
   }
 </style>

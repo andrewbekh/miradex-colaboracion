@@ -1,23 +1,24 @@
 ---
-// Short application on the first screen: name + phone + consent, one row on desktop.
+// Short application on the first screen: name + phone + consent on a mint plate.
+// The heading sits outside the plate (labelledby points to it); text = one reassuring line inside.
 // Sent by the same handler as the full form (src/scripts/lead-form.ts, [data-lead-form]) with form_type=quick:
 // the manager calls back and helps choose the format.
 import Icon from './Icon.astro';
 import { site } from '../data/site';
 import { ui } from '../data/ui';
 
-interface Props { uid: string; title: string; scenario?: string }
-const { uid, title, scenario = 'no-se' } = Astro.props;
+interface Props { uid: string; labelledby: string; text?: string; scenario?: string }
+const { uid, labelledby, text, scenario = 'no-se' } = Astro.props;
 const id = (n: string) => `${uid}-${n}`;
 ---
-<form class="qf" data-lead-form action={site.formEndpoint ?? '#'} method="post" novalidate aria-labelledby={id('title')}>
+<form class="qf" data-lead-form action={site.formEndpoint ?? '#'} method="post" novalidate aria-labelledby={labelledby}>
   <input type="hidden" name="landing" value={Astro.url.pathname} />
   <input type="hidden" name="form_type" value="quick" />
   <input type="hidden" name="scenario" value={scenario} data-scenario-fixed />
   <input type="hidden" name="utm" value="" data-utm />
   <input type="hidden" name="video_watched" value="" data-video-watched />
 
-  <p class="qf__title" id={id('title')}>{title}</p>
+  {text && <p class="qf__text">{text}</p>}
   <div class="qf__row">
     <div class="lf__field qf__field">
       <label class="visually-hidden" for={id('name')}>{ui.quick.name}</label>
@@ -47,34 +48,35 @@ const id = (n: string) => `${uid}-${n}`;
 </form>
 
 <style>
-  .qf { position: relative; display: grid; gap: 10px; padding: var(--sp-5); border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--c-white); }
-  .qf__title { font-size: var(--fs-small); font-weight: var(--fw-medium); }
-  .qf__row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr) auto; gap: 8px; align-items: start; }
+  .qf { position: relative; display: grid; gap: 12px; padding: var(--sp-6); border-radius: var(--radius-md); background: var(--c-mint); }
+  .qf__text { font-size: var(--fs-small); }
+  .qf__row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; align-items: start; }
+  .qf__submit { grid-column: 1 / -1; width: 100%; margin-top: 4px; }
   .qf__field { display: grid; gap: 4px; min-width: 0; }
   .qf input[type='text'], .qf input[type='tel'] {
-    width: 100%; height: 52px; padding: 0 14px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+    width: 100%; height: 52px; padding: 0 14px; border: 1px solid var(--c-white); border-radius: var(--radius-sm);
     background: var(--c-white); font-size: 1rem; color: var(--text);
     transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
   }
   .qf input::placeholder { color: #8a8a8a; }
   .qf input:hover { border-color: var(--c-ink-muted); }
+  .qf__consent { color: var(--c-ink) !important; }
   .qf input:focus { outline: none; border-color: var(--c-blue); box-shadow: 0 0 0 3px rgb(122 155 255 / 0.35); }
   .qf [aria-invalid='true'] { border-color: var(--danger) !important; }
   .qf__phone { position: relative; }
   .qf__phone span { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; }
   .qf__phone input { padding-left: 52px !important; letter-spacing: 0.02em; }
   .qf__submit { --btn-h: 52px; }
-  .qf__consent { display: grid; grid-template-columns: 18px 1fr; gap: 8px; align-items: start; font-size: var(--fs-micro); color: var(--text-muted); cursor: pointer; }
+  .qf__consent { display: grid; grid-template-columns: 18px 1fr; gap: 8px; align-items: start; font-size: var(--fs-micro); cursor: pointer; }
   .qf__consent input { width: 16px; height: 16px; margin: 1px 0 0; accent-color: var(--c-blue); }
-  .qf__consent a { color: var(--link); }
+  .qf__consent a { color: var(--c-ink); }
   .lf__err { font-size: var(--fs-micro); color: var(--danger); }
   .lf__err:empty { display: none; }
   .qf__done { position: absolute; inset: 0; display: flex; align-items: center; gap: var(--sp-4); padding: var(--sp-5); border-radius: inherit; background: var(--c-mint); font-size: var(--fs-small); }
   .qf__done[hidden] { display: none; }
   .qf__done-ic { display: grid; place-items: center; flex: none; width: 44px; height: 44px; border-radius: var(--radius-sm); background: var(--c-white); }
   @media (max-width: 767px) {
-    .qf { padding: var(--sp-4); }
+    .qf { padding: var(--sp-5) var(--sp-4); }
     .qf__row { grid-template-columns: 1fr; }
-    .qf__submit { width: 100%; }
   }
 </style>

@@ -1,7 +1,8 @@
 ---
-// The choice of format as big photo banners, two per row (5 formats + "not sure" = 3 rows).
+// The five formats as banners, two per row: one half is the text on white, the other half the photo.
 // Every banner opens a full landing, so the whole surface is the link.
 // Hover: the photo zooms in slightly and the arrow turns inside its button. Nothing else moves.
+// Text sits at the top of its half and the photo fills the rest, so unequal texts never stretch the layout.
 import { ui } from '../data/ui';
 import Icon from './Icon.astro';
 import { scenarios, toneStyle } from '../data/scenarios';
@@ -10,17 +11,18 @@ import { scenarios, toneStyle } from '../data/scenarios';
   {scenarios.map((s) => (
     <li>
       <a class="bn" href={s.href}>
-        <img class="bn__img" src={s.image} alt="" loading="lazy" />
-        <span class="bn__shade" aria-hidden="true"></span>
-        <span class="bn__num" style={toneStyle(s.tone)}>{s.num}</span>
-        <span class="bn__go" aria-hidden="true"><Icon name="arrow-up-right" size={22} /></span>
         <span class="bn__body">
+          <span class="bn__num" style={toneStyle(s.tone)}>{s.num}</span>
           <span class="bn__title">{s.title}</span>
           <span class="bn__text">{s.promise}</span>
           <span class="bn__for">
             <span class="bn__for-label">{ui.videosRow.forWhom}</span>
-            <span class="bn__tags">{s.audience.map((a) => <span class="bn__tag">{a}</span>)}</span>
+            <span class="bn__list">{s.audience.map((a) => <span class="bn__li">{a}</span>)}</span>
           </span>
+        </span>
+        <span class="bn__media" aria-hidden="true">
+          <img class="bn__img" src={s.image} alt="" loading="lazy" />
+          <span class="bn__go"><Icon name="arrow-up-right" size={22} /></span>
         </span>
       </a>
     </li>
@@ -28,6 +30,7 @@ import { scenarios, toneStyle } from '../data/scenarios';
   <li>
     <div class="bn bn--ask">
       <span class="bn__body">
+        <span class="bn__num bn__num--ask" aria-hidden="true">?</span>
         <span class="bn__title">{ui.ask.title}</span>
         <span class="bn__text">{ui.ask.text}</span>
         <button type="button" class="btn btn--primary bn__cta" data-open-form data-scenario="no-se"><span>{ui.cta.apply}</span><Icon name="arrow-right" size={18} /></button>
@@ -37,49 +40,46 @@ import { scenarios, toneStyle } from '../data/scenarios';
 </ul>
 
 <style>
-  .bn-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--grid-gap); }
+  .bn-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--grid-gap); }
   .bn-grid > li { display: flex; }
   .bn {
-    position: relative; isolation: isolate; overflow: hidden; display: flex; align-items: flex-end; width: 100%; min-height: clamp(360px, 30vw, 460px);
-    border-radius: var(--radius-lg); color: var(--c-white); text-decoration: none; background: var(--c-grey);
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); width: 100%; min-height: clamp(380px, 30vw, 440px); overflow: hidden;
+    border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--c-white); color: var(--c-ink); text-decoration: none;
   }
-  .bn__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; transition: transform 600ms var(--ease); }
-  .bn__shade { position: absolute; inset: 0; z-index: -1; background: linear-gradient(0deg, rgb(53 53 53 / 0.9) 0%, rgb(53 53 53 / 0.6) 48%, rgb(53 53 53 / 0.08) 100%); }
-  .bn__num {
-    position: absolute; top: 20px; left: 20px; display: grid; place-items: center; min-width: 44px; height: 44px; padding: 0 10px;
-    border-radius: var(--radius-sm); font-weight: var(--fw-medium); font-size: var(--fs-small);
-  }
-  .bn__go {
-    position: absolute; top: 20px; right: 20px; display: grid; place-items: center; width: 48px; height: 48px; border-radius: var(--radius-sm);
-    background: var(--c-white); color: var(--c-ink);
-  }
+  .bn__body { display: flex; flex-direction: column; align-items: flex-start; gap: var(--sp-3); padding: var(--sp-6); min-width: 0; }
+  .bn__num { display: grid; place-items: center; min-width: 40px; height: 40px; padding: 0 8px; margin-bottom: var(--sp-2); border-radius: var(--radius-sm); font-weight: var(--fw-medium); font-size: var(--fs-small); }
+  .bn__title { font-size: clamp(1.25rem, 1rem + 0.6vw, 1.625rem); font-weight: var(--fw-medium); line-height: 1.12; text-transform: uppercase; letter-spacing: var(--tracking-caps); text-wrap: balance; }
+  .bn__text { font-size: var(--fs-small); color: var(--text-muted); }
+  .bn__for { display: grid; gap: 8px; margin-top: var(--sp-2); }
+  .bn__for-label { font-size: var(--fs-micro); font-weight: var(--fw-medium); letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--text-muted); }
+  .bn__list { display: grid; gap: 6px; }
+  .bn__li { position: relative; padding-left: 16px; font-size: var(--fs-small); font-weight: var(--fw-medium); line-height: 1.35; }
+  .bn__li::before { content: '•'; position: absolute; left: 2px; top: 0; color: var(--c-blue); }
+
+  .bn__media { position: relative; overflow: hidden; background: var(--c-grey); }
+  .bn__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 600ms var(--ease); }
+  .bn__go { position: absolute; top: 16px; right: 16px; display: grid; place-items: center; width: 44px; height: 44px; border-radius: var(--radius-sm); background: var(--c-white); color: var(--c-ink); }
   .bn__go :global(svg) { transition: transform var(--dur) var(--ease); }
-  .bn__body { display: grid; gap: var(--sp-3); padding: var(--sp-7); max-width: 660px; }
-  .bn__title { font-size: clamp(1.5rem, 1.1rem + 1.2vw, 2.25rem); font-weight: var(--fw-medium); line-height: 1.08; text-transform: uppercase; letter-spacing: var(--tracking-caps); text-wrap: balance; }
-  .bn__text { font-size: var(--fs-body); color: rgb(255 255 255 / 0.9); max-width: 46ch; }
-  .bn__for { display: grid; gap: 10px; margin-top: var(--sp-3); padding-top: var(--sp-4); border-top: 1px solid rgb(255 255 255 / 0.3); }
-  .bn__for-label { font-size: var(--fs-micro); font-weight: var(--fw-medium); letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--c-mint); }
-  .bn__tags { display: flex; flex-wrap: wrap; gap: 6px; }
-  .bn__tag { padding: 7px 12px; border-radius: var(--radius-xs); background: var(--c-white); color: var(--c-ink); font-size: var(--fs-small); font-weight: var(--fw-medium); line-height: 1.2; }
   a.bn:hover .bn__img { transform: scale(1.04); }
   a.bn:hover .bn__go :global(svg) { transform: rotate(45deg); }
 
-  .bn--ask { background: var(--c-mint); color: var(--c-ink); }
-  .bn--ask .bn__text { color: var(--c-ink); opacity: 0.85; }
-  .bn__cta { justify-self: start; margin-top: var(--sp-2); }
+  .bn--ask { grid-template-columns: 1fr; background: var(--c-mint); border-color: var(--c-mint); }
+  .bn--ask .bn__body { justify-content: flex-start; padding: var(--sp-7); }
+  .bn--ask .bn__text { color: var(--c-ink); font-size: var(--fs-body); max-width: 48ch; }
+  .bn__num--ask { background: var(--c-white); color: var(--c-ink); font-size: 1.125rem; }
+  .bn__cta { margin-top: auto; }
 
   @media (max-width: 1199px) {
     .bn-grid { grid-template-columns: 1fr; }
-    .bn { min-height: 340px; }
-    .bn__body { padding: var(--sp-6); }
+    .bn { min-height: 360px; }
   }
   @media (max-width: 767px) {
     .bn-grid { gap: 12px; }
-    .bn { min-height: 360px; border-radius: var(--radius-md); }
-    .bn__num { top: 16px; left: 16px; }
-    .bn__go { top: 16px; right: 16px; width: 40px; height: 40px; }
+    .bn { grid-template-columns: 1fr; min-height: 0; border-radius: var(--radius-md); }
+    .bn__media { order: -1; aspect-ratio: 16 / 10; }
+    .bn__go { top: 12px; right: 12px; width: 40px; height: 40px; }
     .bn__body { padding: var(--sp-5); }
-    .bn__tag { font-size: var(--fs-micro); padding: 6px 10px; }
-    .bn__cta { width: 100%; }
+    .bn--ask .bn__body { padding: var(--sp-6) var(--sp-5); }
+    .bn__cta { width: 100%; margin-top: var(--sp-3); }
   }
 </style>

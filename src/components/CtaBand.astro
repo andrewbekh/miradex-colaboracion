@@ -1,9 +1,8 @@
 ---
 // Repeated CTA (every 2 to 3 blocks): open the form popup or write on WhatsApp.
-// Inset rounded box inside the container; the brand pattern runs down the right edge, cropped by the box height.
+// Inset rounded box inside the container. No pattern (client feedback: graphics only where they add meaning).
 import { ui } from '../data/ui';
 import Button from './Button.astro';
-import Pattern from './Pattern.astro';
 import { whatsappHref } from '../data/site';
 
 interface Props { title: string; text?: string; scenario?: string; tone?: 'blue' | 'grey' | 'mint'; cta?: string; flush?: boolean }
@@ -20,7 +19,6 @@ const { title, text, scenario, tone = 'blue', cta = ui.cta.apply, flush = false 
         <Button openForm scenario={scenario} variant="primary" size="lg" icon="arrow-right">{cta}</Button>
         <Button href={whatsappHref()} variant={tone === 'blue' ? 'white' : 'mint'} size="lg" iconStart="whatsapp">{ui.cta.whatsapp}</Button>
       </div>
-      <div class="cta__pattern"><Pattern seed={`cta-${title}`} layout="nw" height={40} /></div>
     </div>
   </div>
 </aside>
@@ -31,7 +29,7 @@ const { title, text, scenario, tone = 'blue', cta = ui.cta.apply, flush = false 
   .cta__box {
     position: relative; overflow: hidden; border-radius: var(--radius-xl);
     display: grid; grid-template-columns: 1fr auto; gap: var(--sp-6); align-items: center;
-    padding: clamp(28px, 1rem + 3vw, 64px) calc(clamp(48px, 7vw, 120px) + clamp(24px, 3vw, 48px)) clamp(28px, 1rem + 3vw, 64px) clamp(24px, 1rem + 3vw, 64px);
+    padding: clamp(28px, 1rem + 3vw, 64px) clamp(24px, 1rem + 3vw, 64px);
   }
   .cta__box--blue { background: var(--c-blue); color: var(--c-white); }
   .cta__box--mint { background: var(--c-mint); color: var(--c-ink); }
@@ -39,14 +37,11 @@ const { title, text, scenario, tone = 'blue', cta = ui.cta.apply, flush = false 
   .cta__title { font-size: var(--fs-h2); font-weight: var(--fw-medium); text-transform: uppercase; letter-spacing: var(--tracking-caps); line-height: var(--lh-heading); max-width: 22ch; text-wrap: balance; }
   .cta__text { margin-top: var(--sp-3); max-width: 52ch; font-size: var(--fs-lead); font-weight: var(--fw-light); }
     .cta__actions { position: relative; z-index: 1; display: flex; flex-wrap: wrap; gap: var(--sp-3); }
-  .cta__pattern { position: absolute; top: 0; bottom: 0; right: 0; width: clamp(48px, 7vw, 120px); overflow: hidden; }
-  /* bands in the box colour merge with the background, leaving staggered blocks */
   @media (max-width: 1199px) {
     .cta__box { grid-template-columns: 1fr; }
   }
   @media (max-width: 767px) {
-    .cta__box { padding: var(--sp-6) calc(32px + var(--sp-5)) var(--sp-6) var(--sp-5); border-radius: var(--radius-lg); }
+    .cta__box { padding: var(--sp-6) var(--sp-5); border-radius: var(--radius-lg); }
     .cta__actions { display: grid; grid-template-columns: 1fr; }
-    .cta__pattern { width: 32px; }
   }
 </style>
