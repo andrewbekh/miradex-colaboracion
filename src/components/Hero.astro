@@ -1,17 +1,14 @@
 ---
-// First screen of the hub and landings: audience, promise, CTA + WhatsApp, proof strip.
-// Visual = brand pattern on the brandbook grid: the wide column is the photo, the narrow one steps in ½x bands;
-// cropped by height to the format (src/lib/pattern.ts).
+// First screen of the landings: audience, promise, the same short application as on the hub, proof strip.
+// Visual = one photo, no pattern (client feedback: the pattern does not work on the web pages).
 import { ui } from '../data/ui';
-import Button from './Button.astro';
-import Pattern from './Pattern.astro';
 import FactsStrip from './FactsStrip.astro';
+import QuickForm from './QuickForm.astro';
 import Icon from './Icon.astro';
-import { whatsappHref, site } from '../data/site';
+import { site } from '../data/site';
 import { toneStyle, type Tone } from '../data/scenarios';
 
 interface Props {
-  eyebrow: string;
   title: string;
   lead: string;
   scenario?: string;
@@ -19,12 +16,11 @@ interface Props {
   imageAlt?: string;
   note?: string;
   cta?: string;
-  secondary?: { label: string; href: string };
   facts?: boolean;
   /** breadcrumb back to the hub, shown on scenario landings */
   crumb?: { num: string; label: string; tone?: string };
 }
-const { eyebrow, title, lead, scenario, image, imageAlt = '', note, cta = ui.cta.apply, secondary, facts = true, crumb } = Astro.props;
+const { title, lead, scenario, image, imageAlt = '', note, cta = ui.cta.apply, facts = true, crumb } = Astro.props;
 ---
 <section class="hero">
   <div class="container">
@@ -37,19 +33,17 @@ const { eyebrow, title, lead, scenario, image, imageAlt = '', note, cta = ui.cta
             <span class="hero__crumb-cur"><span class="hero__crumb-num" style={crumb.tone ? toneStyle(crumb.tone as Tone) : undefined}>{crumb.num}</span>{crumb.label}</span>
           </nav>
         )}
-        <p class="eyebrow hero__eyebrow"><span class="hero__dot" aria-hidden="true"></span>{eyebrow}</p>
         <h1 class="h-display hero__title" set:html={title} />
         <p class="lead hero__lead">{lead}</p>
-        <div class="hero__actions" data-sbar-after>
-          <Button openForm scenario={scenario} size="lg" icon="arrow-right">{cta}</Button>
-          {secondary
-            ? <Button href={secondary.href} variant="mint" size="lg">{secondary.label}</Button>
-            : <Button href={whatsappHref()} variant="mint" size="lg" iconStart="whatsapp">{ui.cta.whatsapp}</Button>}
+        <!-- same short application as on the hub: heading outside, mint plate -->
+        <div class="hero__quick" data-sbar-after>
+          <h2 class="hero__qlabel" id="hero-quick">{ui.quick.title}</h2>
+          <QuickForm uid="hero-quick" labelledby="hero-quick" scenario={scenario} cta={cta} />
+          {note && <p class="hero__note">{note}</p>}
         </div>
-        {note && <p class="hero__note">{note}</p>}
       </div>
       <div class="hero__visual">
-        <Pattern seed={`hero-${title}`} layout="wn" height={9} photo={{ col: 0, from: 0, size: 9, src: image, alt: imageAlt, eager: true }} />
+        <img src={image} alt={imageAlt} fetchpriority="high" />
       </div>
     </div>
     {facts && <div class="hero__facts"><FactsStrip /></div>}
@@ -60,29 +54,27 @@ const { eyebrow, title, lead, scenario, image, imageAlt = '', note, cta = ui.cta
   .hero { padding-top: clamp(32px, 1rem + 4vw, 88px); padding-bottom: clamp(40px, 1rem + 4vw, 80px); }
   .hero__grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: clamp(32px, 5vw, 96px); align-items: center; }
   .hero__copy { display: grid; gap: var(--sp-5); justify-items: start; }
-  .hero__eyebrow { display: inline-flex; align-items: center; gap: 10px; color: var(--text-muted); }
   .hero__crumb { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: var(--fs-small); color: var(--text-muted); margin-bottom: var(--sp-2); }
   .hero__crumb a { display: inline-flex; align-items: center; gap: 6px; color: var(--text); text-decoration: none; padding: 6px 10px 6px 8px; border-radius: var(--radius-sm); background: var(--bg-tint); }
   .hero__crumb a:hover { color: var(--c-ink); }
   .hero__crumb-cur { display: inline-flex; align-items: center; gap: 8px; color: var(--text); font-weight: var(--fw-medium); }
   .hero__crumb-num { display: grid; place-items: center; width: 26px; height: 26px; border-radius: var(--radius-xs); background: var(--c-blue); color: var(--c-white); font-size: 12px; }
-  .hero__dot { width: 22px; height: 8px; border-radius: 2px; background: var(--c-blue); }
   .hero__title { max-width: 14ch; }
   .hero__lead { max-width: 46ch; color: var(--text-muted); }
-  .hero__actions { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin-top: var(--sp-3); }
+  .hero__quick { justify-self: stretch; display: grid; gap: var(--sp-4); margin-top: var(--sp-4); }
+  .hero__qlabel { font-size: var(--fs-h3); font-weight: var(--fw-medium); line-height: 1.25; text-transform: none; letter-spacing: 0; }
   .hero__note { font-size: var(--fs-small); color: var(--text-muted); max-width: 52ch; }
 
-  .hero__visual { position: relative; aspect-ratio: 7.5 / 8; overflow: hidden; }
-  .hero__visual > :global(.pattern) { position: absolute; top: 0; left: 0; right: 0; }
+  .hero__visual { position: relative; aspect-ratio: 5 / 5.4; overflow: hidden; border-radius: var(--radius-lg); background: var(--c-grey); }
+  .hero__visual img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
   .hero__facts { margin-top: clamp(40px, 1rem + 4vw, 80px); }
 
   @media (max-width: 1199px) {
     .hero__grid { grid-template-columns: 1fr; }
     .hero__title { max-width: 16ch; }
-    .hero__visual { aspect-ratio: 7.5 / 4.5; }
+    .hero__visual { aspect-ratio: 16 / 9; }
   }
   @media (max-width: 767px) {
-    .hero__actions { display: grid; grid-template-columns: 1fr; width: 100%; }
-    .hero__visual { aspect-ratio: 7.5 / 6; }
+    .hero__visual { aspect-ratio: 4 / 3; border-radius: var(--radius-md); }
   }
 </style>

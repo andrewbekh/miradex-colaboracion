@@ -41,6 +41,7 @@ export interface Landing {
   id: ScenarioId;
   meta: { title: string; description: string };
   order?: BlockKey[];
+  /** eyebrow: audience line, kept for meta and the Spanish version, not shown on the page (client feedback) */
   hero: { eyebrow: string; title: string; lead: string; image: string; imageAlt: string; note: string; cta?: string };
   businesses: { title: string; lead: string; items: Business[] };
   drivers?: { title: string; lead: string; items: Feature[] };

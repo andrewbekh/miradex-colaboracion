@@ -1,5 +1,5 @@
 ---
-// Positioning block (grey plate: the brandbook has no black) from the reference: "not a startup" + advantages grid. Used on every landing.
+// Trust block (grey plate: the brandbook has no black): track record + advantages grid. Used on every landing.
 import Section from './Section.astro';
 import FeatureGrid from './FeatureGrid.astro';
 import { advantages } from '../data/shared';
@@ -7,8 +7,8 @@ import { advantages } from '../data/shared';
 interface Props { id?: string; title?: string; text?: string }
 const {
   id = 'quienes',
-  title = 'Мы не стартап',
-  text = 'MIRADEX: европейский производитель с более чем 15-летним опытом. Мы успешно работаем в балканских странах ЕС и теперь расширяемся в Испанию. Ищем партнёров, которые вместе с нами построят сильное направление на испанском рынке.',
+  title = '15 лет опыта и 1000+ проектов в ЕС',
+  text = 'MIRADEX производит металлические ограждения на собственном заводе в Румынии и поставляет их в страны ЕС на Балканах. Теперь мы выходим в Испанию и ищем партнёров, с которыми построим сильное направление на испанском рынке.',
 } = Astro.props;
 ---
 <Section id={id} tone="grey" title={title}>

@@ -42,7 +42,7 @@ for (const k of order) if (sectionKeys.includes(k)) tone[k] = n++ % 2 === 0 ? 't
   {order.map((k) => {
     switch (k) {
       case 'hero':
-        return <Hero crumb={{ num: s.num, label: s.short, tone: s.tone }} eyebrow={L.hero.eyebrow} title={L.hero.title} lead={L.hero.lead} scenario={L.id} image={L.hero.image} imageAlt={L.hero.imageAlt} note={L.hero.note} cta={L.hero.cta} />;
+        return <Hero crumb={{ num: s.num, label: s.short, tone: s.tone }} title={L.hero.title} lead={L.hero.lead} scenario={L.id} image={L.hero.image} imageAlt={L.hero.imageAlt} note={L.hero.note} cta={L.hero.cta} />;
       case 'businesses':
         return <Section id="tipos" tone={tone.businesses} title={L.businesses.title} lead={L.businesses.lead}><BusinessTypes items={L.businesses.items} scenario={L.id} /></Section>;
       case 'drivers':

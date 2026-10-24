@@ -35,7 +35,6 @@ const swatches = ['mint', 'sky', 'blue'];
             <Icon name="chevron-down" size={18} class="bt__acc-chev" />
           </button>
           <div class="bt__body">
-            <p class="eyebrow bt__eyebrow">{ui.biz.forYou}</p>
             <h3 class="bt__title">{b.name}</h3>
             <p class="bt__logic">{b.logic}</p>
 
@@ -108,7 +107,6 @@ const swatches = ['mint', 'sky', 'blue'];
   .bt__panel.is-active { display: block; }
   .bt__acc { display: none; }
   .bt__body { padding: clamp(24px, 1rem + 2vw, 40px); border-radius: var(--radius-lg); background: var(--c-white); border: 1px solid var(--border); }
-  .bt__eyebrow { color: var(--text-muted); }
   .bt__title { margin-top: var(--sp-2); font-size: var(--fs-h2); }
   .bt__logic { margin-top: var(--sp-4); font-size: var(--fs-lead); font-weight: var(--fw-light); line-height: 1.45; max-width: 48ch; }
   .bt__cols { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-7); margin-top: var(--sp-7); }
@@ -155,7 +153,7 @@ const swatches = ['mint', 'sky', 'blue'];
     .bt__panel.is-open .bt__acc :global(.bt__acc-chev) { transform: rotate(180deg); }
     .bt__body { display: none; border: 0; border-radius: 0; padding: 0 16px 20px; }
     .bt__panel.is-open .bt__body { display: block; }
-    .bt__eyebrow, .bt__title { display: none; }
+    .bt__title { display: none; }
     .bt__logic { margin-top: 0; font-size: var(--fs-body); font-weight: var(--fw-regular); }
     .bt__cols { grid-template-columns: 1fr; gap: var(--sp-5); margin-top: var(--sp-5); }
     .bt__foot { margin-top: var(--sp-5); }

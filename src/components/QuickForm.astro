@@ -7,8 +7,8 @@ import Icon from './Icon.astro';
 import { site } from '../data/site';
 import { ui } from '../data/ui';
 
-interface Props { uid: string; labelledby: string; text?: string; scenario?: string }
-const { uid, labelledby, text, scenario = 'no-se' } = Astro.props;
+interface Props { uid: string; labelledby: string; text?: string; scenario?: string; cta?: string }
+const { uid, labelledby, text, scenario = 'no-se', cta = ui.cta.apply } = Astro.props;
 const id = (n: string) => `${uid}-${n}`;
 ---
 <form class="qf" data-lead-form action={site.formEndpoint ?? '#'} method="post" novalidate aria-labelledby={labelledby}>
@@ -33,7 +33,7 @@ const id = (n: string) => `${uid}-${n}`;
       </div>
       <p class="lf__err" aria-live="polite"></p>
     </div>
-    <button type="submit" class="btn btn--primary qf__submit"><span>{ui.cta.apply}</span><Icon name="arrow-right" size={18} /></button>
+    <button type="submit" class="btn btn--primary qf__submit"><span>{cta}</span><Icon name="arrow-right" size={18} /></button>
   </div>
   <label class="qf__consent">
     <input type="checkbox" name="consent" required />
@@ -51,9 +51,14 @@ const id = (n: string) => `${uid}-${n}`;
   .qf { position: relative; display: grid; gap: 12px; padding: var(--sp-6); border-radius: var(--radius-md); background: var(--c-mint); }
   .qf__text { font-size: var(--fs-small); }
   .qf__row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr) auto; gap: 8px; align-items: start; }
-  @media (max-width: 1299px) and (min-width: 1200px), (max-width: 599px) {
+  /* one row only when the plate is wide enough, otherwise the button goes under the fields */
+  .qf { container-type: inline-size; }
+  @container (max-width: 600px) {
     .qf__row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .qf__submit { grid-column: 1 / -1; width: 100%; }
+  }
+  @container (max-width: 420px) {
+    .qf__row { grid-template-columns: 1fr; }
   }
   .qf__field { display: grid; gap: 4px; min-width: 0; }
   .qf input[type='text'], .qf input[type='tel'] {
@@ -80,7 +85,5 @@ const id = (n: string) => `${uid}-${n}`;
   .qf__done-ic { display: grid; place-items: center; flex: none; width: 44px; height: 44px; border-radius: var(--radius-sm); background: var(--c-white); }
   @media (max-width: 767px) {
     .qf { padding: var(--sp-5) var(--sp-4); }
-    .qf__row { grid-template-columns: 1fr; }
-    .qf__submit { grid-column: auto; }
   }
 </style>

@@ -2,7 +2,6 @@
 // Review index for the client: links to the hub, the five landings and the component sheet.
 // Not part of the future public site.
 import Base from '../layouts/Base.astro';
-import Pattern from '../components/Pattern.astro';
 import Icon from '../components/Icon.astro';
 import logo from '../assets/logo.svg?raw';
 import { scenarios, toneStyle } from '../data/scenarios';
@@ -24,7 +23,6 @@ const notes = [
     <div class="container ix__in">
       <header class="ix__head">
         <span class="ix__logo" set:html={logo} />
-        <div class="ix__pattern"><Pattern seed="index" layout="wnw" height={3} gaps={false} /></div>
         <h1 class="h2">Раздел «Сотрудничество» для MIRADEX España</h1>
         <p class="lead muted">Черновик для согласования: хаб и пять лендингов. Выберите страницу.</p>
       </header>
@@ -55,7 +53,6 @@ const notes = [
   .ix__head { display: grid; gap: var(--sp-4); justify-items: start; }
   .ix__logo { width: 150px; color: var(--c-ink); }
   .ix__logo :global(svg) { width: 100%; height: auto; }
-  .ix__pattern { width: min(420px, 100%); margin-top: var(--sp-5); }
   .ix__list { display: grid; gap: 10px; }
   .ix__card {
     display: grid; grid-template-columns: 64px 1fr 24px; gap: var(--sp-5); align-items: center; padding: var(--sp-5);
