@@ -5,7 +5,7 @@
 // (?type=), and one button that opens the form with the answers filled in (scenario, business type, quiz_answers).
 import Icon from './Icon.astro';
 import { hub } from '../data/hub';
-import { scenarios, toneStyle } from '../data/scenarios';
+import { scenarios } from '../data/scenarios';
 
 const q = hub.quiz;
 ---
@@ -47,8 +47,7 @@ const q = hub.quiz;
       {scenarios.map((s) => (
         <li class="qz__item" data-res={s.id} data-href={s.href} hidden>
           <span class="qz__best" data-res-best hidden>{q.result.best}</span>
-          <a class="qz__link" href={s.href} data-res-link>
-            <span class="qz__num" style={toneStyle(s.tone)}>{s.num}</span>
+          <a class={`qz__link qz__link--${s.tone}`} href={s.href} data-res-link>
             <span class="qz__name"><span>{s.title}</span><small data-res-why></small></span>
             <Icon name="arrow-right" size={18} class="qz__arrow" />
           </a>
@@ -169,16 +168,21 @@ const q = hub.quiz;
   .qz__list { display: flex; flex-direction: column; gap: 6px; }
   .qz__item { display: grid; gap: 6px; }
   .qz__item[hidden] { display: none; }
-  .qz__best { justify-self: start; padding: 3px 8px; border-radius: var(--radius-xs); background: var(--c-mint); font-size: 12px; font-weight: var(--fw-medium); }
+  .qz__best { justify-self: start; font-size: 12px; font-weight: var(--fw-medium); color: var(--text-muted); }
   .qz__best[hidden] { display: none; }
   .qz__link {
-    display: grid; grid-template-columns: 28px 1fr 18px; gap: 10px; align-items: center; padding: 10px; border-radius: var(--radius-sm);
-    background: var(--c-grey); color: var(--c-ink); text-decoration: none; transition: background-color var(--dur) var(--ease);
+    display: grid; grid-template-columns: 1fr 18px; gap: 10px; align-items: center; padding: 12px 14px; border-radius: var(--radius-sm);
+    text-decoration: none; transition: background-color var(--dur) var(--ease);
   }
-  .qz__link:hover { background: var(--c-line); }
-  .qz__num { display: grid; place-items: center; width: 28px; height: 28px; border-radius: var(--radius-xs); font-size: 12px; font-weight: var(--fw-medium); }
+  /* the plate takes the format colour: white text on blue and sky, ink on mint (client rule) */
+  .qz__link--mint { background: var(--c-mint); color: var(--c-ink); }
+  .qz__link--mint:hover { background: var(--c-mint-hover); }
+  .qz__link--sky { background: var(--c-sky); color: var(--c-white); }
+  .qz__link--sky:hover { background: var(--c-sky-hover); }
+  .qz__link--blue { background: var(--c-blue); color: var(--c-white); }
+  .qz__link--blue:hover { background: var(--c-blue-hover); }
   .qz__name { display: grid; gap: 2px; font-size: var(--fs-small); font-weight: var(--fw-medium); line-height: 1.25; }
-  .qz__name small { font-size: 12px; font-weight: var(--fw-regular); color: var(--text-muted); }
+  .qz__name small { font-size: 12px; font-weight: var(--fw-regular); opacity: 0.85; }
   .qz__link :global(.qz__arrow) { transition: transform var(--dur) var(--ease); }
   .qz__link:hover :global(.qz__arrow) { transform: translateX(3px); }
   .qz__cta { margin-top: var(--sp-1); white-space: normal; text-align: center; }

@@ -1,5 +1,5 @@
 ---
-// The five formats as banners, two per row: one half is the text on white, the other half the photo.
+// The five formats as banners on a grey section, two per row: one half is the text on white, the other half the photo.
 // Every banner opens a full landing, so the whole surface is the link.
 // Hover: the photo zooms in slightly and the arrow turns inside its button. Nothing else moves.
 // Text sits at the top of its half and the photo fills the rest, so unequal texts never stretch the layout.
@@ -44,7 +44,7 @@ import { scenarios, toneStyle } from '../data/scenarios';
   .bn-grid > li { display: flex; }
   .bn {
     display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); width: 100%; min-height: clamp(380px, 30vw, 440px); overflow: hidden;
-    border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--c-white); color: var(--c-ink); text-decoration: none;
+    border-radius: var(--radius-lg); background: var(--c-white); color: var(--c-ink); text-decoration: none;
   }
   .bn__body { display: flex; flex-direction: column; align-items: flex-start; gap: var(--sp-3); padding: var(--sp-6); min-width: 0; }
   .bn__num { display: grid; place-items: center; min-width: 40px; height: 40px; padding: 0 8px; margin-bottom: var(--sp-2); border-radius: var(--radius-sm); font-weight: var(--fw-medium); font-size: var(--fs-small); }
@@ -63,7 +63,7 @@ import { scenarios, toneStyle } from '../data/scenarios';
   a.bn:hover .bn__img { transform: scale(1.04); }
   a.bn:hover .bn__go :global(svg) { transform: rotate(45deg); }
 
-  .bn--ask { grid-template-columns: 1fr; background: var(--c-mint); border-color: var(--c-mint); }
+  .bn--ask { grid-template-columns: 1fr; background: var(--c-mint); }
   .bn--ask .bn__body { justify-content: flex-start; padding: var(--sp-7); }
   .bn--ask .bn__text { color: var(--c-ink); font-size: var(--fs-body); max-width: 48ch; }
   .bn__num--ask { background: var(--c-white); color: var(--c-ink); font-size: 1.125rem; }

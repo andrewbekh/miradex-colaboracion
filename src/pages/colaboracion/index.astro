@@ -28,21 +28,21 @@ import { ui } from '../../data/ui';
 const v1 = videos[1];
 ---
 <Page title={hub.meta.title} description={hub.meta.description}>
-  <!-- 1 · First screen: grey plate, no graphics; formats and a short application side by side -->
-  <HubHero title={hub.hero.title} lead={hub.hero.lead} />
+  <!-- 1 · First screen on white: formats and a short application, photo on the right half -->
+  <HubHero title={hub.hero.title} lead={hub.hero.lead} image={hub.hero.image} />
 
   <!-- 2 · The choice: five formats as banners -->
-  <Section id="formatos" title={hub.formats.title} lead={hub.formats.lead}>
+  <Section id="formatos" tone="grey" title={hub.formats.title} lead={hub.formats.lead}>
     <ScenarioBanners />
   </Section>
 
   <!-- 2b · Second entry: two questions about the business (strategy 5.2) -->
-  <Section id="negocios" tone="tint" title={hub.quiz.title} lead={hub.quiz.lead}>
+  <Section id="negocios" title={hub.quiz.title} lead={hub.quiz.lead}>
     <BusinessQuiz />
   </Section>
 
   <!-- 3 · Video №1 + how the model works -->
-  <Section id="video" title={hub.video.title} lead={hub.video.lead}>
+  <Section id="video" tone="tint" title={hub.video.title} lead={hub.video.lead}>
     <VideoPlaceholder num={v1.num} title={v1.title} duration={v1.duration} poster={v1.poster} />
     <div class="gap-top"><ModelPillars items={hub.pillars} /></div>
   </Section>

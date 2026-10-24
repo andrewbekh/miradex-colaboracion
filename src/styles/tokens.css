@@ -47,6 +47,7 @@
   --c-blue-deep: #5b6da4;  /* derived: blue 55% + ink, text links, 4.7:1 */
   --c-blue-hover: #6d8ef2;  /* derived: blue 10% darker, button hover */
   --c-mint-hover: #c2f1bb;  /* derived: mint 6% darker, button hover */
+  --c-sky-hover: #6cc4f7;   /* derived: sky 6% darker, plate hover */
   --c-mint-strong: #9fe796; /* derived: mint 25% stronger, small dots on white */
   --c-ink-80: #5d5d5d;      /* derived: ink 80%, menu text before hover */
   --c-grey: #f4f4f4;        /* derived: ink 5% on white. The brandbook has no black: neutral plates use this grey */
