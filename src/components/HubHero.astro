@@ -1,6 +1,7 @@
 ---
-// Hub first screen on white. Left: the offer, «how do you want to work with MIRADEX» (5 answers in two columns,
-// each opens its format) and a short application on a mint plate. Right: a photo on half of the screen,
+// Hub first screen on white. Left: the offer and the main action, «how do you want to work with MIRADEX»
+// (5 answers, each opens its format; Business MIRADEX full width as the priority format), then a compact
+// short application as the secondary action. Right: a photo on half of the screen,
 // flush with the header and the right edge, cropped by the hero height. Under 1200px the photo is a strip on top.
 import QuickForm from './QuickForm.astro';
 import Icon from './Icon.astro';
@@ -22,21 +23,20 @@ const { title, lead, image } = Astro.props;
         <h2 class="hx__label" id="hx-formats">{ui.hubHero.formats}</h2>
         <ul class="hx__list" role="list">
           {scenarios.map((s) => (
-            <li>
+            <li class:list={{ 'hx__wide': s.id === 'negocio' }}>
               <a class="hx__fmt" href={s.href}>
                 <span class="hx__num" style={toneStyle(s.tone)}>{s.num}</span>
-                <span class="hx__name">{s.title}</span>
+                <span class="hx__name">{s.title}{s.id === 'negocio' && <span class="hx__sub">{ui.hubHero.negocio}</span>}</span>
                 <Icon name="arrow-right" size={18} class="hx__arrow" />
               </a>
             </li>
           ))}
-          <li><a class="hx__fmt hx__fmt--all" href="#formatos"><span class="hx__name">{ui.hubHero.all}</span></a></li>
         </ul>
       </nav>
 
-      <div class="hx__path" data-sbar-after>
-        <h2 class="hx__label" id="hx-quick">{ui.hubHero.quick}</h2>
-        <QuickForm uid="hub-quick" labelledby="hx-quick" />
+      <!-- secondary: a compact short application for those who are not sure yet -->
+      <div class="hx__quick" data-sbar-after>
+        <QuickForm uid="hub-quick" labelledby="hx-quick" text={ui.hubHero.quick} textId="hx-quick" compact />
       </div>
     </div>
 
@@ -69,8 +69,9 @@ const { title, lead, image } = Astro.props;
   /* the arrow shows on hover only */
   .hx__fmt :global(.hx__arrow) { margin-left: auto; flex: none; opacity: 0; transform: translateX(-4px); transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease); }
   .hx__fmt:hover :global(.hx__arrow), .hx__fmt:focus-visible :global(.hx__arrow) { opacity: 1; transform: none; }
-  .hx__fmt--all { padding-left: 16px; color: var(--c-ink-80); }
-  .hx__fmt--all:hover { color: var(--c-ink); }
+  .hx__wide { grid-column: 1 / -1; }
+  .hx__sub { display: block; margin-top: 2px; font-size: var(--fs-micro); font-weight: var(--fw-regular); color: var(--text-muted); }
+  .hx__quick { margin-top: calc(var(--sp-2) * -1); }
 
   /* photo: from the header down, to the right edge of the window */
   .hx__photo { position: relative; overflow: hidden; margin-right: calc(-1 * max(var(--gutter), (100vw - var(--container)) / 2)); background: var(--c-grey); }

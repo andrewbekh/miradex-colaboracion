@@ -1,4 +1,5 @@
 // Main site navigation (structure follows miradex.bg). Catalog URLs point to the future Spanish main site.
+import { sectors, sectorHref } from './sectors';
 
 export const mainNav = [
   { label: 'Каталог', href: '#', hasMenu: true },
@@ -30,19 +31,5 @@ export const productLines = [
   },
 ];
 
-/** Footer B2B map (strategy 9.2): every audience gets its own link. Sector pages are not built yet. */
-export const sectorLinks = [
-  'Компании по заборам и ограждениям',
-  'Монтажные компании и установщики',
-  'Компании по воротам и автоматике',
-  'Окна, перголы, фасады и outdoor',
-  'Металлообрабатывающие компании',
-  'Строительные компании и подрядчики',
-  'Девелоперы и крупные проекты',
-  'Архитекторы, дизайнеры и проектировщики',
-  'Риелторы и агентства недвижимости',
-  'Ландшафт, бассейны и благоустройство',
-  'Строительные магазины и шоурумы',
-  'Дистрибьюторы и оптовые компании',
-  'Интернет-магазины и онлайн-дистрибьюторы',
-].map((label) => ({ label, href: '#' }));
+/** Footer B2B map (strategy 9.2): every audience links to its own industry page. */
+export const sectorLinks = sectors.map((s) => ({ label: s.name, href: sectorHref(s.id) }));

@@ -17,8 +17,8 @@ interface Props {
   note?: string;
   cta?: string;
   facts?: boolean;
-  /** breadcrumb back to the hub, shown on scenario landings */
-  crumb?: { num: string; label: string; tone?: string };
+  /** breadcrumb back to the hub: a format shows its number, an industry page its icon */
+  crumb?: { num?: string; icon?: string; label: string; tone?: string };
 }
 const { title, lead, scenario, image, imageAlt = '', note, cta = ui.cta.apply, facts = true, crumb } = Astro.props;
 ---
@@ -30,7 +30,9 @@ const { title, lead, scenario, image, imageAlt = '', note, cta = ui.cta.apply, f
           <nav class="hero__crumb" aria-label={ui.crumbs.label}>
             <a href={site.hubPath}><Icon name="arrow-left" size={16} />{site.navLabel}</a>
             <span aria-hidden="true">/</span>
-            <span class="hero__crumb-cur"><span class="hero__crumb-num" style={crumb.tone ? toneStyle(crumb.tone as Tone) : undefined}>{crumb.num}</span>{crumb.label}</span>
+            <span class="hero__crumb-cur">{crumb.icon
+              ? <span class="hero__crumb-num hero__crumb-num--icon"><Icon name={crumb.icon} size={16} /></span>
+              : <span class="hero__crumb-num" style={crumb.tone ? toneStyle(crumb.tone as Tone) : undefined}>{crumb.num}</span>}{crumb.label}</span>
           </nav>
         )}
         <h1 class="h-display hero__title" set:html={title} />
@@ -59,6 +61,7 @@ const { title, lead, scenario, image, imageAlt = '', note, cta = ui.cta.apply, f
   .hero__crumb a:hover { color: var(--c-ink); }
   .hero__crumb-cur { display: inline-flex; align-items: center; gap: 8px; color: var(--text); font-weight: var(--fw-medium); }
   .hero__crumb-num { display: grid; place-items: center; width: 26px; height: 26px; border-radius: var(--radius-xs); background: var(--c-blue); color: var(--c-white); font-size: 12px; }
+  .hero__crumb-num--icon { background: var(--c-mint); color: var(--c-ink); }
   .hero__title { max-width: 14ch; }
   .hero__lead { max-width: 46ch; color: var(--text-muted); }
   .hero__quick { justify-self: stretch; display: grid; gap: var(--sp-4); margin-top: var(--sp-4); }

@@ -1,0 +1,50 @@
+---
+// Hub, second path «Какой у меня бизнес?» (strategy 5.2): every audience is its own clickable card
+// and opens its industry page. The small numbers show which formats fit that business.
+import Icon from './Icon.astro';
+import { businessCards } from '../data/sectors';
+import { scenarioById, toneStyle } from '../data/scenarios';
+import { ui } from '../data/ui';
+---
+<ul class="sc-grid" role="list">
+  {businessCards.map((c) => (
+    <li>
+      <a class="sct" href={c.href}>
+        <span class="sct__ic"><Icon name={c.icon} size={22} /></span>
+        <span class="sct__name">{c.name}</span>
+        <span class="sct__fits">
+          <span class="visually-hidden">{ui.sector.fits}</span>
+          {c.formats.map((f) => {
+            const s = scenarioById(f)!;
+            return <span class="sct__num" style={toneStyle(s.tone)} title={s.title}>{s.num}</span>;
+          })}
+          <Icon name="arrow-right" size={18} class="sct__arrow" />
+        </span>
+      </a>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .sc-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+  .sc-grid > li { display: flex; }
+  .sct {
+    display: flex; flex-direction: column; gap: var(--sp-3); width: 100%; padding: var(--sp-4); border-radius: var(--radius-md);
+    background: var(--c-white); color: var(--c-ink); text-decoration: none; border: 1px solid var(--border);
+    transition: border-color var(--dur) var(--ease);
+  }
+  .sct:hover { border-color: var(--c-blue); }
+  .sct__ic { display: grid; place-items: center; width: 44px; height: 44px; border-radius: var(--radius-sm); background: var(--bg-tint); }
+  .sct__name { font-size: var(--fs-small); font-weight: var(--fw-medium); line-height: 1.3; }
+  .sct__fits { margin-top: auto; display: flex; align-items: center; gap: 4px; }
+  .sct__num { display: grid; place-items: center; width: 24px; height: 24px; border-radius: var(--radius-xs); font-size: 11px; font-weight: var(--fw-medium); }
+  .sct__fits :global(.sct__arrow) { margin-left: auto; opacity: 0; transform: translateX(-4px); transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease); }
+  .sct:hover :global(.sct__arrow) { opacity: 1; transform: none; }
+  @media (max-width: 1199px) { .sc-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (max-width: 767px) {
+    .sc-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .sct { padding: var(--sp-3); gap: 10px; }
+    .sct__ic { width: 36px; height: 36px; }
+    .sct__name { font-size: var(--fs-micro); }
+  }
+</style>

@@ -9,15 +9,23 @@ import { scenarios, toneStyle } from '../data/scenarios';
 ---
 <ul class="bn-grid" role="list">
   {scenarios.map((s) => (
-    <li>
-      <a class="bn" href={s.href}>
+    <li class:list={{ 'bn-wide': !!s.includes }}>
+      <a class:list={['bn', { 'bn--wide': !!s.includes }]} href={s.href}>
         <span class="bn__body">
           <span class="bn__num" style={toneStyle(s.tone)}>{s.num}</span>
           <span class="bn__title">{s.title}</span>
           <span class="bn__text">{s.promise}</span>
-          <span class="bn__for">
-            <span class="bn__for-label">{ui.videosRow.forWhom}</span>
-            <span class="bn__list">{s.audience.map((a) => <span class="bn__li">{a}</span>)}</span>
+          <span class="bn__lists">
+            <span class="bn__for">
+              <span class="bn__for-label">{ui.videosRow.forWhom}</span>
+              <span class="bn__list">{s.audience.map((a) => <span class="bn__li">{a}</span>)}</span>
+            </span>
+            {s.includes && (
+              <span class="bn__for">
+                <span class="bn__for-label">{ui.banners.builds}</span>
+                <span class="bn__list">{s.includes.map((a) => <span class="bn__li">{a}</span>)}</span>
+              </span>
+            )}
           </span>
         </span>
         <span class="bn__media" aria-hidden="true">
@@ -27,7 +35,7 @@ import { scenarios, toneStyle } from '../data/scenarios';
       </a>
     </li>
   ))}
-  <li>
+  <li class="bn-wide">
     <div class="bn bn--ask">
       <span class="bn__body">
         <span class="bn__num bn__num--ask" aria-hidden="true">?</span>
@@ -42,6 +50,12 @@ import { scenarios, toneStyle } from '../data/scenarios';
 <style>
   .bn-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--grid-gap); }
   .bn-grid > li { display: flex; }
+  /* Business MIRADEX is the priority format: full row, with what the partner builds */
+  .bn-grid > li.bn-wide { grid-column: 1 / -1; }
+  .bn__lists { display: grid; gap: var(--sp-4); align-items: start; }
+  .bn__for, .bn__list { align-content: start; }
+  .bn--wide .bn__lists { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-6); }
+  .bn--wide .bn__text { font-size: var(--fs-body); max-width: 52ch; }
   .bn {
     display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); width: 100%; min-height: clamp(380px, 30vw, 440px); overflow: hidden;
     border-radius: var(--radius-lg); background: var(--c-white); color: var(--c-ink); text-decoration: none;
@@ -63,8 +77,12 @@ import { scenarios, toneStyle } from '../data/scenarios';
   a.bn:hover .bn__img { transform: scale(1.04); }
   a.bn:hover .bn__go :global(svg) { transform: rotate(45deg); }
 
-  .bn--ask { grid-template-columns: 1fr; background: var(--c-mint); }
-  .bn--ask .bn__body { justify-content: flex-start; padding: var(--sp-7); }
+  .bn--ask { grid-template-columns: 1fr; min-height: 0; background: var(--c-mint); }
+  .bn--ask .bn__body { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; grid-template-areas: 'num title cta' 'num text cta'; align-items: center; gap: 4px var(--sp-5); padding: var(--sp-6) var(--sp-7); }
+  .bn--ask .bn__num { grid-area: num; margin: 0; }
+  .bn--ask .bn__title { grid-area: title; }
+  .bn--ask .bn__text { grid-area: text; }
+  .bn--ask .bn__cta { grid-area: cta; margin: 0; }
   .bn--ask .bn__text { color: var(--c-ink); font-size: var(--fs-body); max-width: 48ch; }
   .bn__num--ask { background: var(--c-white); color: var(--c-ink); font-size: 1.125rem; }
   .bn__cta { margin-top: auto; }
@@ -73,8 +91,13 @@ import { scenarios, toneStyle } from '../data/scenarios';
     .bn-grid { grid-template-columns: 1fr; }
     .bn { min-height: 360px; }
   }
+  @media (max-width: 1199px) {
+    .bn--ask .bn__body { grid-template-columns: auto minmax(0, 1fr); grid-template-areas: 'num title' 'text text' 'cta cta'; }
+    .bn--ask .bn__cta { justify-self: start; margin-top: var(--sp-3); }
+  }
   @media (max-width: 767px) {
     .bn-grid { gap: 12px; }
+    .bn--wide .bn__lists { grid-template-columns: 1fr; gap: var(--sp-4); }
     .bn { grid-template-columns: 1fr; min-height: 0; border-radius: var(--radius-md); }
     .bn__media { order: -1; aspect-ratio: 16 / 10; }
     .bn__go { top: 12px; right: 12px; width: 40px; height: 40px; }

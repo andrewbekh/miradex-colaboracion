@@ -12,6 +12,7 @@ export interface Scenario {
   short: string;      // nav / select label
   promise: string;    // one-line business promise
   audience: string[]; // "для кого": always types of companies, never product categories
+  includes?: string[]; // Business MIRADEX: what the partner builds (shown on the hub banner)
   href: string;
   image: string;      // banner photo on the hub (provisional, miradex.bg)
 }
@@ -57,7 +58,8 @@ export const scenarios: Scenario[] = [
     id: 'negocio', tone: 'sky', num: '05',
     title: 'Хочу делать бизнес MIRADEX',
     short: 'Бизнес MIRADEX',
-    promise: 'Постройте собственный бизнес на продукции и модели MIRADEX.',
+    promise: 'Полноценная модель бизнеса, а не ещё один дилерский тариф: своя компания на продукте и поддержке MIRADEX.',
+    includes: ['Собственный сайт', 'Команда продаж', 'Маркетинг и реклама', 'Стенды и шоурум', 'Монтажная инфраструктура', 'Своя партнёрская сеть'],
     audience: ['Предприниматели', 'Компании с новым направлением', 'Крупные дилеры'],
     href: '/colaboracion/negocio-miradex',
     image: '/img/photos/atlas-modern-house.jpg',

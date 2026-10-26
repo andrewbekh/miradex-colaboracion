@@ -4,12 +4,11 @@
 import Page from '../../layouts/Page.astro';
 import HubHero from '../../components/HubHero.astro';
 import Section from '../../components/Section.astro';
-import ScenarioGrid from '../../components/ScenarioGrid.astro';
 import ScenarioBanners from '../../components/ScenarioBanners.astro';
 import BusinessQuiz from '../../components/BusinessQuiz.astro';
+import SectorCards from '../../components/SectorCards.astro';
 import VideoPlaceholder from '../../components/VideoPlaceholder.astro';
 import WhyMiradex from '../../components/WhyMiradex.astro';
-import ScenarioButtons from '../../components/ScenarioButtons.astro';
 import ModelPillars from '../../components/ModelPillars.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import SplitFeature from '../../components/SplitFeature.astro';
@@ -36,24 +35,25 @@ const v1 = videos[1];
     <ScenarioBanners />
   </Section>
 
-  <!-- 2b · Second entry: two questions about the business (strategy 5.2) -->
-  <Section id="negocios" title={hub.quiz.title} lead={hub.quiz.lead}>
-    <BusinessQuiz />
-  </Section>
-
   <!-- 3 · Video №1 + how the model works -->
-  <Section id="video" tone="tint" title={hub.video.title} lead={hub.video.lead}>
+  <Section id="video" title={hub.video.title} lead={hub.video.lead}>
     <VideoPlaceholder num={v1.num} title={v1.title} duration={v1.duration} poster={v1.poster} />
     <div class="gap-top"><ModelPillars items={hub.pillars} /></div>
   </Section>
 
+  <!-- 4 · Second path: «Какой у меня бизнес?» (strategy 5.2), every audience opens its industry page;
+       below, the two-question quiz for mixed or unlisted businesses -->
+  <Section id="negocios" tone="tint" title={ui.sector.title} lead={ui.sector.lead}>
+    <SectorCards />
+    <div class="hub-quiz">
+      <h3 class="hub-quiz__title">{hub.quiz.title}</h3>
+      <p class="hub-quiz__lead">{hub.quiz.lead}</p>
+      <BusinessQuiz />
+    </div>
+  </Section>
+
   <!-- 4 · Why MIRADEX -->
   <WhyMiradex id="por-que" title={hub.why.title} />
-
-  <!-- Choice again, compact -->
-  <Section id="elegir" tone="tint" title={hub.choose.title} lead={hub.choose.lead}>
-    <ScenarioGrid compact />
-  </Section>
 
   <!-- 5 · Production -->
   <Section id="produccion" title={hub.production.title} lead={hub.production.lead}>
@@ -102,12 +102,13 @@ const v1 = videos[1];
   <!-- 12 · Form -->
   <FinalForm title={hub.final.title} text={hub.final.text} points={finalPoints} />
 
-  <!-- Choice once more, as buttons -->
-  <ScenarioButtons />
 </Page>
 
 <style>
   .gap-top { margin-top: var(--stack-gap); }
+  .hub-quiz { display: grid; gap: var(--sp-3); margin-top: clamp(48px, 2rem + 3vw, 88px); padding-top: clamp(32px, 1rem + 2vw, 48px); border-top: 1px solid var(--border); }
+  .hub-quiz__title { font-size: var(--fs-h3); line-height: 1.25; text-transform: none; letter-spacing: 0; }
+  .hub-quiz__lead { color: var(--text-muted); max-width: 60ch; margin-bottom: var(--sp-4); }
   .ref { height: 100%; display: flex; flex-direction: column; gap: var(--sp-3); padding: var(--sp-6); border-radius: var(--radius-md); background: var(--bg-accent); color: var(--text-on-accent); }
   .ref__eyebrow { color: var(--c-mint); }
   .ref__title { font-size: var(--fs-h2); }

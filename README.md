@@ -17,7 +17,7 @@ npm run test:form  # перевірка форми (потрібен запущ�
 - `src/styles/tokens.css`: усі дизайн-токени (кольори, шрифти, відступи, заокруглення).
 - `src/components/`: спільні компоненти (паттерн-заголовок, банери, форма, попап, FAQ…).
 - `src/data/`: сценарії, навігація, контакти (`site.ts`), спільні факти й FAQ.
-- `src/pages/colaboracion/`: хаб (`index.astro`) і маршрут лендингів (`[slug].astro`).
+- `src/pages/colaboracion/`: хаб (`index.astro`), маршрут лендингів форматів (`[slug].astro`) і галузевих лендингів (`para/[sector].astro`, дані в `src/data/sectors.ts`).
 - `src/components/LandingPage.astro`: один шаблон для всіх лендингів, порядок блоків задається в даних.
 - `docs/TODO.md`: що треба отримати від клієнта перед запуском.
 

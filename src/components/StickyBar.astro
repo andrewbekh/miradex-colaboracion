@@ -9,8 +9,9 @@ import { ui } from '../data/ui';
 import { site } from '../data/site';
 import { scenarios, scenarioById, toneStyle } from '../data/scenarios';
 
-interface Props { current?: string }
-const { current } = Astro.props;
+/** here: an industry page shows its own name and icon */
+interface Props { current?: string; here?: { label: string; icon: string } }
+const { current, here } = Astro.props;
 const path = Astro.url.pathname.replace(/\/$/, '');
 const show = path.startsWith(site.hubPath);
 const sc = scenarioById(current);
@@ -18,7 +19,7 @@ const sc = scenarioById(current);
 {show && (
   <div class="sb on-blue" data-sbar aria-hidden="true" inert>
     <div class="container sb__in">
-      {sc && (
+      {(sc || here) && (
         <a class="sb__back" href={site.hubPath} aria-label={ui.sbar.back}>
           <Icon name="arrow-left" size={18} /><span class="sb__back-text">{site.navLabel}</span>
         </a>
@@ -28,7 +29,9 @@ const sc = scenarioById(current);
           <span class="sb__here">{ui.sbar.here}</span>
           {sc
             ? <><span class="sb__num" style={toneStyle(sc.tone)}>{sc.num}</span><span class="sb__cur"><span class="sb__long">{sc.title}</span><span class="sb__short">{sc.short}</span></span></>
-            : <span class="sb__cur"><span class="sb__long">{ui.sbar.hub}</span><span class="sb__short">{ui.sbar.hubShort}</span></span>}
+            : here
+              ? <><span class="sb__num"><Icon name={here.icon} size={16} /></span><span class="sb__cur">{here.label}</span></>
+              : <span class="sb__cur"><span class="sb__long">{ui.sbar.hub}</span><span class="sb__short">{ui.sbar.hubShort}</span></span>}
           <Icon name="chevron-down" size={18} class="sb__chev" />
         </button>
         <div class="sb__list" id="sbar-list">
@@ -42,7 +45,7 @@ const sc = scenarioById(current);
               </li>
             ))}
             <li class="sb__all">
-              <a href={site.hubPath} class:list={['sb__link', { 'is-current': !sc }]} aria-current={!sc ? 'page' : undefined}>
+              <a href={site.hubPath} class:list={['sb__link', { 'is-current': !sc && !here }]} aria-current={!sc && !here ? 'page' : undefined}>
                 <span>{ui.header.allOptions}</span><Icon name="arrow-right" size={16} />
               </a>
             </li>

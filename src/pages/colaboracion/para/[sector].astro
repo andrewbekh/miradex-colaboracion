@@ -1,0 +1,112 @@
+---
+// Industry landing (strategy 6): one page per audience, understandable without the hub.
+// Order follows the strategy: promise → why it pays for this business → industry film → formats that fit →
+// economics → support → why clients like MIRADEX → how to start → projects → FAQ → form.
+// Content comes from src/data/sectors.ts and the scenario landings it points to.
+import Page from '../../../layouts/Page.astro';
+import Hero from '../../../components/Hero.astro';
+import Section from '../../../components/Section.astro';
+import VideoRows from '../../../components/VideoRows.astro';
+import SectorFormats from '../../../components/SectorFormats.astro';
+import CtaBand from '../../../components/CtaBand.astro';
+import Economics from '../../../components/Economics.astro';
+import SupportGroups from '../../../components/SupportGroups.astro';
+import Stats from '../../../components/Stats.astro';
+import CategoryCards from '../../../components/CategoryCards.astro';
+import Steps from '../../../components/Steps.astro';
+import Gallery from '../../../components/Gallery.astro';
+import Faq from '../../../components/Faq.astro';
+import FinalForm from '../../../components/FinalForm.astro';
+import Icon from '../../../components/Icon.astro';
+import { sectors, type Sector } from '../../../data/sectors';
+import { landings } from '../../../data/landings';
+import { scenarioById } from '../../../data/scenarios';
+import { productStats, statsFootnote, finalPoints } from '../../../data/shared';
+import { ui } from '../../../data/ui';
+
+export function getStaticPaths() {
+  return sectors.map((sector) => ({ params: { sector: sector.id }, props: { sector } }));
+}
+
+interface Props { sector: Sector }
+const { sector } = Astro.props;
+const byId = (id: string) => landings.find((l) => l.id === id)!;
+const P = byId(sector.primary);
+
+// formats that fit this business, each with its business entry from that landing
+const formats = sector.formats.map(([sid, bid]) => {
+  const business = byId(sid).businesses.items.find((b) => b.id === bid);
+  if (!business) throw new Error(`Sector ${sector.id}: business "${bid}" not found on landing "${sid}"`);
+  return { scenario: scenarioById(sid)!, business };
+});
+// why it pays: the gains of those entries, without repeats (two gains starting with the same two words count as one)
+const seen = new Set<string>();
+const gains = formats.flatMap((f) => f.business.gains).filter((g) => {
+  const key = g.toLowerCase().split(' ').slice(0, 2).join(' ');
+  return !seen.has(key) && seen.add(key);
+}).slice(0, 6);
+// the industry film, with its row text from whichever landing tells it
+const video = landings.flatMap((l) => l.videos.items).find((v) => v.num === sector.video);
+---
+<Page
+  title={`${sector.name}: сотрудничество с MIRADEX`}
+  description={`${sector.title}. ${sector.lead}`}
+  scenario={sector.primary}
+  here={{ label: sector.short, icon: sector.icon }}
+>
+  <Hero crumb={{ icon: sector.icon, label: sector.short }} title={sector.title} lead={sector.lead} scenario={sector.primary} image={sector.image} imageAlt={sector.name} />
+
+  <Section id="por-que" tone="tint" title={ui.sector.why} lead={sector.name}>
+    <ul class="gain-grid" role="list">
+      {gains.map((g) => <li><span class="gain-grid__ic"><Icon name="check" size={18} /></span><span>{g}</span></li>)}
+    </ul>
+  </Section>
+
+  {video && (
+    <Section id="video" title={ui.sector.video}>
+      <VideoRows items={[video]} scenario={sector.primary} />
+    </Section>
+  )}
+
+  <Section id="formatos" tone="tint" title={ui.sector.formats} lead={formats.length > 1 ? ui.sector.formatsLead : undefined}>
+    <SectorFormats items={formats} />
+  </Section>
+
+  <CtaBand title={P.ctaA.title} text={P.ctaA.text} cta={P.ctaA.cta} scenario={sector.primary} />
+
+  <Section id="economia" title={P.economics.title} lead={P.economics.lead}>
+    <Economics sources={P.economics.sources} factors={P.economics.factors} sourcesLabel={P.economics.sourcesLabel} factorsLabel={P.economics.factorsLabel} principle={P.economics.principle} model={P.economics.model} />
+  </Section>
+
+  <Section id="apoyo" tone="tint" title={P.support.title} lead={P.support.lead}>
+    <SupportGroups groups={P.support.groups} />
+  </Section>
+
+  <Section id="producto" title={ui.sector.product} lead={P.product.lead}>
+    <Stats stats={productStats} footnote={statsFootnote} />
+    <div class="gap-top"><CategoryCards /></div>
+  </Section>
+
+  <Section id="inicio" tone="tint" title={P.steps.title ?? 'Как начинается сотрудничество'}>
+    <Steps steps={P.steps.items} />
+  </Section>
+
+  <Section id="proyectos" title={ui.sector.projects} lead={P.projects.lead}>
+    <Gallery items={P.projects.gallery} />
+  </Section>
+
+  <Section id="faq" tone="tint" title="Частые вопросы">
+    <Faq items={P.faq} />
+  </Section>
+
+  <FinalForm title={P.final.title} text={P.final.text} scenario={sector.primary} business={sector.form} points={finalPoints} />
+</Page>
+
+<style>
+  .gap-top { margin-top: var(--stack-gap); }
+  .gain-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--grid-gap); }
+  .gain-grid li { display: grid; grid-template-columns: 32px 1fr; gap: var(--sp-3); align-items: start; padding: var(--sp-5); border-radius: var(--radius-md); background: var(--c-white); font-size: var(--fs-body); font-weight: var(--fw-medium); line-height: 1.35; }
+  .gain-grid__ic { display: grid; place-items: center; width: 32px; height: 32px; border-radius: var(--radius-sm); background: var(--c-mint); }
+  @media (max-width: 1199px) { .gain-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 767px) { .gain-grid { grid-template-columns: 1fr; } }
+</style>

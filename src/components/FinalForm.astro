@@ -6,8 +6,8 @@ import LeadForm from './LeadForm.astro';
 import Icon from './Icon.astro';
 import { site, whatsappHref } from '../data/site';
 
-interface Props { title: string; text: string; scenario?: string; lockScenario?: boolean; points?: string[] }
-const { title, text, scenario = '', lockScenario = false, points = [] } = Astro.props;
+interface Props { title: string; text: string; scenario?: string; lockScenario?: boolean; points?: string[]; business?: string }
+const { title, text, scenario = '', lockScenario = false, points = [], business = '' } = Astro.props;
 ---
 <section class="ff" id="solicitud">
   <div class="container ff__inner">
@@ -27,7 +27,7 @@ const { title, text, scenario = '', lockScenario = false, points = [] } = Astro.
       </div>
     </div>
     <div class="ff__panel">
-      <LeadForm uid="final" scenario={scenario} lockScenario={lockScenario} />
+      <LeadForm uid="final" scenario={scenario} lockScenario={lockScenario} business={business} />
     </div>
   </div>
 </section>

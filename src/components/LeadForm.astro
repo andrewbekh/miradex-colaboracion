@@ -13,8 +13,9 @@ interface Props {
   scenario?: string;        // preselected scenario id
   lockScenario?: boolean;   // send scenario as hidden field instead of the role picker
   layout?: 'wide' | 'compact';
+  business?: string;        // preselected business type (industry pages)
 }
-const { uid, scenario = '', lockScenario = false, layout = 'wide' } = Astro.props;
+const { uid, scenario = '', lockScenario = false, layout = 'wide', business = '' } = Astro.props;
 const id = (n: string) => `${uid}-${n}`;
 const current = scenario || 'no-se';
 
@@ -76,8 +77,8 @@ const forRoles = (...r: string[]) => ({ 'data-for': r.join(' ') });
     <div class="lf__field lf__field--2">
       <label for={id('type')}>{ui.form.type}</label>
       <select id={id('type')} name="business_type" required data-business-select>
-        <option value="" selected disabled>{ui.form.choose}</option>
-        {businessTypes.map((t) => <option>{t}</option>)}
+        <option value="" selected={!business} disabled>{ui.form.choose}</option>
+        {businessTypes.map((t) => <option selected={t === business}>{t}</option>)}
       </select>
       <p class="lf__err" aria-live="polite"></p>
     </div>
