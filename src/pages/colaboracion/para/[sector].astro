@@ -55,9 +55,9 @@ const video = landings.flatMap((l) => l.videos.items).find((v) => v.num === sect
   title={`${sector.name}: сотрудничество с MIRADEX`}
   description={`${sector.title}. ${sector.lead}`}
   scenario={sector.primary}
-  here={{ label: sector.short, icon: sector.icon }}
+  here={{ label: sector.name, short: sector.short, formats: sector.formats, scenario: sector.primary, business: sector.form }}
 >
-  <Hero crumb={{ icon: sector.icon, label: sector.short }} title={sector.title} lead={sector.lead} scenario={sector.primary} image={sector.image} imageAlt={sector.name} note={send ? `${ui.biz.send} ${send.join(', ')}.` : undefined} />
+  <Hero crumb={{ label: sector.name }} title={sector.title} lead={sector.lead} scenario={sector.primary} image={sector.image} imageAlt={sector.name} note={send ? `${ui.biz.send} ${send.join(', ')}.` : undefined} />
 
   <Section id="por-que" tone="tint" title={ui.sector.why} lead={sector.name}>
     <ul class="gain-grid" role="list">

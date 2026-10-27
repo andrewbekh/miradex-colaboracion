@@ -9,9 +9,14 @@ import { ui } from '../data/ui';
 import { site } from '../data/site';
 import { scenarios, scenarioById, toneStyle } from '../data/scenarios';
 
-/** here: an industry page shows its own name and icon */
-interface Props { current?: string; here?: { label: string; icon: string } }
+/** here: an industry page. The bar names it in words, the list shows only the formats that fit this business
+ *  (each opens with the business preselected) plus links to all formats and to the other business types. */
+export interface Here { label: string; short: string; formats: [string, string][]; scenario: string; business: string }
+interface Props { current?: string; here?: Here }
 const { current, here } = Astro.props;
+const list = here
+  ? here.formats.map(([sid, bid]) => ({ s: scenarioById(sid)!, href: `${scenarioById(sid)!.href}?type=${bid}` }))
+  : scenarios.map((s) => ({ s, href: s.href }));
 const path = Astro.url.pathname.replace(/\/$/, '');
 const show = path.startsWith(site.hubPath);
 const sc = scenarioById(current);
@@ -30,16 +35,16 @@ const sc = scenarioById(current);
           {sc
             ? <><span class="sb__num" style={toneStyle(sc.tone)}>{sc.num}</span><span class="sb__cur"><span class="sb__long">{sc.title}</span><span class="sb__short">{sc.short}</span></span></>
             : here
-              ? <><span class="sb__num"><Icon name={here.icon} size={16} /></span><span class="sb__cur">{here.label}</span></>
+              ? <span class="sb__cur"><span class="sb__long">{here.label}</span><span class="sb__short">{here.short}</span></span>
               : <span class="sb__cur"><span class="sb__long">{ui.sbar.hub}</span><span class="sb__short">{ui.sbar.hubShort}</span></span>}
           <Icon name="chevron-down" size={18} class="sb__chev" />
         </button>
         <div class="sb__list" id="sbar-list">
-          <p class="sb__list-title">{ui.sbar.other}</p>
+          <p class="sb__list-title">{here ? ui.sbar.forBusiness : ui.sbar.other}</p>
           <ul role="list">
-            {scenarios.map((s) => (
+            {list.map(({ s, href }) => (
               <li>
-                <a href={s.href} class:list={['sb__link', { 'is-current': s.id === current }]} aria-current={s.id === current ? 'page' : undefined}>
+                <a href={href} class:list={['sb__link', { 'is-current': s.id === current }]} aria-current={s.id === current ? 'page' : undefined}>
                   <span class="sb__num" style={toneStyle(s.tone)}>{s.num}</span><span>{s.title}</span>
                 </a>
               </li>
@@ -49,10 +54,15 @@ const sc = scenarioById(current);
                 <span>{ui.header.allOptions}</span><Icon name="arrow-right" size={16} />
               </a>
             </li>
+            {here && (
+              <li class="sb__all sb__all--next">
+                <a href={`${site.hubPath}#negocios`} class="sb__link"><span>{ui.sbar.otherBusiness}</span><Icon name="arrow-right" size={16} /></a>
+              </li>
+            )}
           </ul>
         </div>
       </div>
-      <button type="button" class="btn btn--primary sb__cta" data-open-form data-scenario={sc?.id ?? 'no-se'}>
+      <button type="button" class="btn btn--primary sb__cta" data-open-form data-scenario={sc?.id ?? here?.scenario ?? 'no-se'} data-business={here?.business}>
         <span class="sb__cta-long">{ui.cta.apply}</span><span class="sb__cta-short">{ui.cta.applyShort}</span>
       </button>
     </div>
@@ -105,6 +115,7 @@ const sc = scenarioById(current);
   .sb__link.is-current { color: var(--c-ink); font-weight: var(--fw-medium); background: var(--c-grey); }
   .sb__all { margin-top: var(--sp-2); padding-top: var(--sp-2); border-top: 1px solid var(--border); }
   .sb__all .sb__link { justify-content: space-between; color: var(--c-ink); font-weight: var(--fw-medium); }
+  .sb__all--next { margin-top: 0; padding-top: 0; border-top: 0; }
 
   .sb__cta { margin-left: auto; --btn-h: 48px; flex: none; }
   .sb__cta-short { display: none; }
