@@ -1,7 +1,7 @@
 ---
 // The five formats as banners on a grey section, two per row: one half is the text on white, the other half the photo.
 // Every banner opens a full landing, so the whole surface is the link.
-// Hover: the photo zooms in slightly and the arrow turns inside its button. Nothing else moves.
+// Hover: the photo zooms in slightly and the «Смотреть формат» arrow moves. Nothing else.
 // Text sits at the top of its half and the photo fills the rest, so unequal texts never stretch the layout.
 import { ui } from '../data/ui';
 import Icon from './Icon.astro';
@@ -31,7 +31,6 @@ import { scenarios, toneStyle } from '../data/scenarios';
         </span>
         <span class="bn__media" aria-hidden="true">
           <img class="bn__img" src={s.image} alt="" loading="lazy" />
-          <span class="bn__go"><Icon name="arrow-up-right" size={22} /></span>
         </span>
       </a>
     </li>
@@ -63,10 +62,7 @@ import { scenarios, toneStyle } from '../data/scenarios';
 
   .bn__media { position: relative; overflow: hidden; background: var(--c-grey); }
   .bn__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 600ms var(--ease); }
-  .bn__go { position: absolute; top: 16px; right: 16px; display: grid; place-items: center; width: 44px; height: 44px; border-radius: var(--radius-sm); background: var(--c-white); color: var(--c-ink); }
-  .bn__go :global(svg) { transition: transform var(--dur) var(--ease); }
   a.bn:hover .bn__img { transform: scale(1.04); }
-  a.bn:hover .bn__go :global(svg) { transform: rotate(45deg); }
   .bn__more { margin-top: auto; padding-top: var(--sp-4); display: inline-flex; align-items: center; gap: 8px; font-size: var(--fs-small); font-weight: var(--fw-medium); letter-spacing: 0.06em; text-transform: uppercase; }
   .bn__more :global(svg) { transition: transform var(--dur) var(--ease); }
   a.bn:hover .bn__more :global(svg) { transform: translateX(4px); }
@@ -80,7 +76,6 @@ import { scenarios, toneStyle } from '../data/scenarios';
     .bn--wide .bn__lists { grid-template-columns: 1fr; gap: var(--sp-4); }
     .bn { grid-template-columns: 1fr; min-height: 0; border-radius: var(--radius-md); }
     .bn__media { order: -1; aspect-ratio: 16 / 10; }
-    .bn__go { top: 12px; right: 12px; width: 40px; height: 40px; }
     .bn__body { padding: var(--sp-5); }
   }
 </style>
