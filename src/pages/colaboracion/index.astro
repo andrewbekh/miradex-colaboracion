@@ -99,8 +99,14 @@ const v1 = videos[1];
 
 <style>
   /* film and the three pillars side by side, so the block is one screen, not two */
+  /* the film takes the height of the pillars column */
   .film { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: var(--grid-gap); align-items: stretch; }
-  @media (max-width: 1023px) { .film { grid-template-columns: 1fr; } }
+  .film > :global(.video) { height: 100%; }
+  .film :global(.video__frame) { height: 100%; aspect-ratio: auto; min-height: 360px; }
+  @media (max-width: 1023px) {
+    .film { grid-template-columns: 1fr; }
+    .film :global(.video__frame) { height: auto; aspect-ratio: 16 / 9; min-height: 0; }
+  }
 
   /* quiz folded under the cards: one click opens it, so the 16 businesses are not shown twice */
   .hub-quiz { margin-top: var(--sp-6); border-radius: var(--radius-md); background: var(--c-white); }
