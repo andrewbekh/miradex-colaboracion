@@ -80,7 +80,8 @@ const sc = scenarioById(current);
   /* header hidden on scroll down (see script): the bar moves up to the top */
   :global(.hd) { transition: transform var(--dur) var(--ease); }
   :global(html.hd-hidden .hd) { transform: translateY(-100%); }
-  :global(html.hd-hidden) .sb { top: 0; }
+  /* only where the bar is docked under the header; on phones it sits at the bottom and must keep top: auto */
+  @media (min-width: 768px) { :global(html.hd-hidden) .sb { top: 0; } }
   :global(.hd.is-menu-open) ~ .sb { visibility: hidden; }
   .sb__in { display: flex; align-items: center; gap: var(--sp-4); min-height: 64px; }
 
