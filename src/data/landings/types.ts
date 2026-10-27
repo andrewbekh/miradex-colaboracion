@@ -17,6 +17,8 @@ export interface Business {
   /** advantages for this business */
   gains: string[];
   ways: BusinessWay[];
+  /** what to prepare for the application (idea from the TPS partner page): shown under the panel and on industry pages */
+  send?: string[];
   /** film that speaks to this business (catalog in src/data/videos.ts) */
   video?: number;
   /** value preselected in the lead form (one of businessTypes in src/data/scenarios.ts) */

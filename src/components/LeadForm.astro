@@ -28,8 +28,10 @@ const projectTypes = ui.form.projectTypeOpts;
 const projectTiming = ui.form.timingOpts;
 const referralClients = ui.form.refClientsOpts;
 const businessPlan = ui.form.planOpts;
-// Placeholder options: real ranges (linear metres or €) come from the client, see docs/TODO.md
+// Working ranges in € per year (as on the TPS partner page); the client confirms them for Spain, see docs/TODO.md
 const volumes = ui.form.volumeOpts;
+const products = ui.form.productsOpts;
+const heard = ui.form.heardOpts;
 
 /** field visible only for these roles */
 const forRoles = (...r: string[]) => ({ 'data-for': r.join(' ') });
@@ -96,6 +98,21 @@ const forRoles = (...r: string[]) => ({ 'data-for': r.join(' ') });
       <div class="lf__field lf__field--full">
         <label for={id('web')}>{ui.form.web}</label>
         <input id={id('web')} name="website" type="text" inputmode="url" autocomplete="url" placeholder="www.company.es" />
+      </div>
+
+      <!-- Every role: products of interest and how they found us (CRM: lead source, strategy 12) -->
+      <div class="lf__field lf__field--full">
+        <span class="lf__label" id={id('products-l')}>{ui.form.products} <span class="lf__opt">{ui.form.several}</span></span>
+        <div class="lf__chips" role="group" aria-labelledby={id('products-l')}>
+          {products.map((p) => <label class="chip"><input type="checkbox" name="products" value={p} /><span>{p}</span></label>)}
+        </div>
+      </div>
+      <div class="lf__field">
+        <label for={id('heard')}>{ui.form.heard}</label>
+        <select id={id('heard')} name="heard_from">
+          <option value="" selected>{ui.form.choose}</option>
+          {heard.map((h) => <option>{h}</option>)}
+        </select>
       </div>
 
       <!-- Sell / business / not sure: business profile -->

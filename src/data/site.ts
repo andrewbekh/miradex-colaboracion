@@ -15,7 +15,7 @@ export const site = {
   /** Where the lead form posts. null = demo mode (validates, shows success, logs payload). */
   formEndpoint: null as string | null,
   privacyUrl: '#',
-  responsePromise: 'Ответим в течение 24 часов. Данные конфиденциальны.',
+  responsePromise: 'Ответим в течение 24 часов. Без обязательств, данные конфиденциальны.',
 };
 
 export const whatsappHref = (text = 'Здравствуйте, хочу обсудить сотрудничество с MIRADEX') =>
