@@ -10,6 +10,7 @@ import VideoRows from '../../../components/VideoRows.astro';
 import SectorFormats from '../../../components/SectorFormats.astro';
 import Economics from '../../../components/Economics.astro';
 import SupportGroups from '../../../components/SupportGroups.astro';
+import SamplesStrip from '../../../components/SamplesStrip.astro';
 import Stats from '../../../components/Stats.astro';
 import CategoryCards from '../../../components/CategoryCards.astro';
 import Steps from '../../../components/Steps.astro';
@@ -84,6 +85,7 @@ const video = landings.flatMap((l) => l.videos.items).find((v) => v.num === sect
 
   <Section id="apoyo" tone="tint" title={P.support.title} lead={P.support.lead}>
     <SupportGroups groups={P.support.groups} />
+    <SamplesStrip />
   </Section>
 
   <Section id="producto" title={ui.sector.product} lead={P.product.lead}>

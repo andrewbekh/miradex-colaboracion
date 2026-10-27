@@ -58,3 +58,10 @@ export const projectGallery = [
   { src: '/img/photos/siding-wood.jpg', model: 'Сайдинг', color: 'Золотой дуб' },
   { src: '/img/photos/gate-wood-2.jpg', model: 'Ворота Romb Grande', color: 'Орех' },
 ];
+
+/** «Образцы и стенды» strip in support (placeholders until the photos are chosen: src undefined = grey placeholder). */
+export const samplePhotos: { title: string; src?: string }[] = [
+  { title: 'Образцы всех покрытий' },
+  { title: 'Демонстрационные стенды' },
+  { title: 'Стенд MIRADEX на выставке' },
+];

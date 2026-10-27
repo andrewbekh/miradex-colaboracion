@@ -11,6 +11,7 @@ import WhyMiradex from './WhyMiradex.astro';
 import CtaBand from './CtaBand.astro';
 import Economics from './Economics.astro';
 import SupportGroups from './SupportGroups.astro';
+import SamplesStrip from './SamplesStrip.astro';
 import Responsibilities from './Responsibilities.astro';
 import Stats from './Stats.astro';
 import CategoryCards from './CategoryCards.astro';
@@ -68,7 +69,7 @@ for (const k of order) if (sectionKeys.includes(k)) tone[k] = n++ % 2 === 0 ? 't
       case 'model':
         return <Section id="modelo" tone={tone.model} title={ui.model.title} lead={ui.model.lead}><ModelPillars items={modelPillars} /></Section>;
       case 'support':
-        return <Section id="apoyo" tone={tone.support} title={L.support.title} lead={L.support.lead}><SupportGroups groups={L.support.groups} /></Section>;
+        return <Section id="apoyo" tone={tone.support} title={L.support.title} lead={L.support.lead}><SupportGroups groups={L.support.groups} /><SamplesStrip /></Section>;
       case 'resp':
         return (
           <Section id="funciones" tone={tone.resp} title={L.resp.title} lead={L.resp.lead}>

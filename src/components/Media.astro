@@ -30,7 +30,8 @@ const { src, alt = '', ratio = '4/3', placeholder, caption, class: cls = '', eag
   .media { display: grid; gap: var(--sp-3); }
   .media__frame { position: relative; aspect-ratio: var(--ratio); overflow: hidden; border-radius: var(--radius-lg); background: var(--bg-tint); }
   .media__frame img { width: 100%; height: 100%; object-fit: cover; }
-  .media__empty { position: absolute; inset: 0; display: grid; place-items: center; background: var(--c-grey); color: var(--c-line-strong); }
+  /* a shade darker than the grey sections, so the placeholder reads on white and on grey */
+  .media__empty { position: absolute; inset: 0; display: grid; place-items: center; background: var(--c-line); color: var(--c-ink-muted); }
   .media__label {
     position: absolute; left: 16px; bottom: 16px; padding: 6px 10px; border-radius: var(--radius-xs); background: rgb(255 255 255 / 0.92);
     font-size: 11px; font-weight: var(--fw-medium); letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--c-ink);

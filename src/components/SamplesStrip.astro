@@ -1,0 +1,27 @@
+---
+// «Образцы и стенды» as photos, not an icon card (team meeting: the strip of the TPS partner page, with MIRADEX).
+// Neutral placeholders until the photos are chosen; the list lives in src/data/shared.ts.
+import Media from './Media.astro';
+import { samplePhotos } from '../data/shared';
+import { ui } from '../data/ui';
+---
+<div class="ss">
+  <h3 class="ss__title">{ui.samples.title}</h3>
+  <ul class="ss__row" role="list">
+    {samplePhotos.map((p) => (
+      <li><Media src={p.src} alt={p.title} ratio="4/3" caption={p.title} /></li>
+    ))}
+  </ul>
+</div>
+
+<style>
+  .ss { display: grid; gap: var(--sp-4); margin-top: var(--stack-gap); }
+  .ss__title { font-size: var(--fs-h3); }
+  .ss__row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--grid-gap); }
+  .ss__row :global(.media__cap) { color: var(--text); font-weight: var(--fw-medium); }
+  @media (max-width: 767px) {
+    .ss__row { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; margin-inline: calc(-1 * var(--gutter)); padding-inline: var(--gutter); }
+    .ss__row::-webkit-scrollbar { display: none; }
+    .ss__row > li { flex: 0 0 78%; scroll-snap-align: start; }
+  }
+</style>

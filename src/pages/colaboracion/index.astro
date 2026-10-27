@@ -15,6 +15,7 @@ import FactsStrip from '../../components/FactsStrip.astro';
 import SplitFeature from '../../components/SplitFeature.astro';
 import CategoryCards from '../../components/CategoryCards.astro';
 import SupportGroups from '../../components/SupportGroups.astro';
+import SamplesStrip from '../../components/SamplesStrip.astro';
 import LogisticsTrack from '../../components/LogisticsTrack.astro';
 import ProjectGallery from '../../components/ProjectGallery.astro';
 import Faq from '../../components/Faq.astro';
@@ -81,6 +82,7 @@ const v1 = videos[1];
   <!-- 6 · Support and training -->
   <Section id="apoyo" tone="tint" title={hub.support.title} lead={hub.support.lead}>
     <SupportGroups groups={hub.support.groups} />
+    <SamplesStrip />
   </Section>
 
   <!-- 7 · Projects -->

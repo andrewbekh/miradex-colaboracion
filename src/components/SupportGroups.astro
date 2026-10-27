@@ -5,7 +5,7 @@ interface Group { icon: string; title: string; items: string[] }
 interface Props { groups: Group[] }
 const { groups } = Astro.props;
 ---
-<ul class="sgp" role="list">
+<ul class="sgp" role="list" style={`--n:${Math.min(groups.length, 4)}`}>
   {groups.map((g) => (
     <li class="sgp__card">
       <span class="sgp__ic"><Icon name={g.icon} size={24} /></span>
@@ -18,7 +18,7 @@ const { groups } = Astro.props;
 </ul>
 
 <style>
-  .sgp { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--grid-gap); }
+  .sgp { display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: var(--grid-gap); }
   .sgp__card { display: grid; align-content: start; gap: var(--sp-4); padding: var(--sp-6); background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-md); }
   .sgp__ic { display: grid; place-items: center; width: 48px; height: 48px; border-radius: var(--radius-sm); }
   .sgp__ic { background: var(--c-mint); }
