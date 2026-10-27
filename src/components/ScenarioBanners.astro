@@ -27,6 +27,7 @@ import { scenarios, toneStyle } from '../data/scenarios';
               </span>
             )}
           </span>
+          <span class="bn__more">{ui.cta.seeFormat}<Icon name="arrow-right" size={18} /></span>
         </span>
         <span class="bn__media" aria-hidden="true">
           <img class="bn__img" src={s.image} alt="" loading="lazy" />
@@ -35,16 +36,6 @@ import { scenarios, toneStyle } from '../data/scenarios';
       </a>
     </li>
   ))}
-  <li class="bn-wide">
-    <div class="bn bn--ask">
-      <span class="bn__body">
-        <span class="bn__num bn__num--ask" aria-hidden="true">?</span>
-        <span class="bn__title">{ui.ask.title}</span>
-        <span class="bn__text">{ui.ask.text}</span>
-        <button type="button" class="btn btn--primary bn__cta" data-open-form data-scenario="no-se"><span>{ui.cta.apply}</span><Icon name="arrow-right" size={18} /></button>
-      </span>
-    </div>
-  </li>
 </ul>
 
 <style>
@@ -57,7 +48,7 @@ import { scenarios, toneStyle } from '../data/scenarios';
   .bn--wide .bn__lists { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-6); }
   .bn--wide .bn__text { font-size: var(--fs-body); max-width: 52ch; }
   .bn {
-    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); width: 100%; min-height: clamp(380px, 30vw, 440px); overflow: hidden;
+    display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); width: 100%; min-height: clamp(380px, 30vw, 440px); overflow: hidden;
     border-radius: var(--radius-lg); background: var(--c-white); color: var(--c-ink); text-decoration: none;
   }
   .bn__body { display: flex; flex-direction: column; align-items: flex-start; gap: var(--sp-3); padding: var(--sp-6); min-width: 0; }
@@ -76,24 +67,13 @@ import { scenarios, toneStyle } from '../data/scenarios';
   .bn__go :global(svg) { transition: transform var(--dur) var(--ease); }
   a.bn:hover .bn__img { transform: scale(1.04); }
   a.bn:hover .bn__go :global(svg) { transform: rotate(45deg); }
-
-  .bn--ask { grid-template-columns: 1fr; min-height: 0; background: var(--c-mint); }
-  .bn--ask .bn__body { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; grid-template-areas: 'num title cta' 'num text cta'; align-items: center; gap: 4px var(--sp-5); padding: var(--sp-6) var(--sp-7); }
-  .bn--ask .bn__num { grid-area: num; margin: 0; }
-  .bn--ask .bn__title { grid-area: title; }
-  .bn--ask .bn__text { grid-area: text; }
-  .bn--ask .bn__cta { grid-area: cta; margin: 0; }
-  .bn--ask .bn__text { color: var(--c-ink); font-size: var(--fs-body); max-width: 48ch; }
-  .bn__num--ask { background: var(--c-white); color: var(--c-ink); font-size: 1.125rem; }
-  .bn__cta { margin-top: auto; }
+  .bn__more { margin-top: auto; padding-top: var(--sp-4); display: inline-flex; align-items: center; gap: 8px; font-size: var(--fs-small); font-weight: var(--fw-medium); letter-spacing: 0.06em; text-transform: uppercase; }
+  .bn__more :global(svg) { transition: transform var(--dur) var(--ease); }
+  a.bn:hover .bn__more :global(svg) { transform: translateX(4px); }
 
   @media (max-width: 1199px) {
     .bn-grid { grid-template-columns: 1fr; }
     .bn { min-height: 360px; }
-  }
-  @media (max-width: 1199px) {
-    .bn--ask .bn__body { grid-template-columns: auto minmax(0, 1fr); grid-template-areas: 'num title' 'text text' 'cta cta'; }
-    .bn--ask .bn__cta { justify-self: start; margin-top: var(--sp-3); }
   }
   @media (max-width: 767px) {
     .bn-grid { gap: 12px; }
@@ -102,7 +82,5 @@ import { scenarios, toneStyle } from '../data/scenarios';
     .bn__media { order: -1; aspect-ratio: 16 / 10; }
     .bn__go { top: 12px; right: 12px; width: 40px; height: 40px; }
     .bn__body { padding: var(--sp-5); }
-    .bn--ask .bn__body { padding: var(--sp-6) var(--sp-5); }
-    .bn__cta { width: 100%; margin-top: var(--sp-3); }
   }
 </style>

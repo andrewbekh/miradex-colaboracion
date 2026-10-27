@@ -103,6 +103,8 @@ const q = hub.quiz;
       });
       empty.hidden = ranked.length > 0;
       reset.hidden = !pickedBiz.length && !pickedHow.length;
+      cta.hidden = ranked.length === 0;
+      cta.nextElementSibling.hidden = ranked.length === 0;
       cta.dataset.scenario = ranked[0]?.[0] ?? 'no-se';
       cta.dataset.business = pickedBiz[0]?.dataset.form ?? '';
       cta.dataset.quiz = [
@@ -186,6 +188,7 @@ const q = hub.quiz;
   .qz__link :global(.qz__arrow) { transition: transform var(--dur) var(--ease); }
   .qz__link:hover :global(.qz__arrow) { transform: translateX(3px); }
   .qz__cta { margin-top: var(--sp-1); white-space: normal; text-align: center; }
+  .qz__cta[hidden], .qz__note[hidden] { display: none; }
   .qz__note { font-size: var(--fs-micro); color: var(--text-muted); }
 
   @media (max-width: 1199px) {

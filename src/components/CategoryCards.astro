@@ -4,7 +4,8 @@ import { ui } from '../data/ui';
 import Icon from './Icon.astro';
 import { productLines } from '../data/nav';
 interface Props { linked?: boolean }
-const { linked = true } = Astro.props;
+// not linked until the Spanish catalogue exists: a «Смотреть каталог» to nowhere reads as broken
+const { linked = false } = Astro.props;
 ---
 <ul class="cc" role="list">
   {productLines.map((p) => (

@@ -30,7 +30,8 @@ const { id, tone = 'light', title, eyebrow, lead, align = 'start', tight = false
 <style>
   .section { padding-block: var(--section-y); }
   .section--tight { padding-block: calc(var(--section-y) * 0.6); }
-  .section--tint { background: var(--bg-tint); }
+  /* alternate white and grey: the paper tint was too close to white to separate blocks */
+  .section--tint { background: var(--bg-grey); }
   .section--grey { background: var(--bg-grey); }
   .section--blue { background: var(--c-blue); color: var(--c-white); }
   .section--mint { background: var(--c-mint); }

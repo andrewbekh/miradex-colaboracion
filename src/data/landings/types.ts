@@ -34,9 +34,11 @@ export type BlockKey =
   | 'hero' | 'businesses' | 'drivers' | 'videos' | 'why' | 'ctaA' | 'ways' | 'economics' | 'model' | 'support'
   | 'resp' | 'ctaB' | 'product' | 'fit' | 'steps' | 'projects' | 'ctaC' | 'other' | 'faq' | 'final';
 
+/** One story per page, following strategy 6: promise → your business → film → how you can work → how you earn →
+ *  the open model → what you get → why clients choose MIRADEX → how to start → projects → FAQ → form.
+ *  'why', 'resp', 'fit', 'ctaA/B/C' and 'other' stay in the data and can be switched on per landing with `order`. */
 export const defaultOrder: BlockKey[] = [
-  'hero', 'businesses', 'videos', 'why', 'ctaA', 'ways', 'economics', 'model', 'support', 'resp', 'ctaB',
-  'product', 'fit', 'steps', 'projects', 'ctaC', 'other', 'faq', 'final',
+  'hero', 'businesses', 'videos', 'ways', 'economics', 'model', 'support', 'product', 'steps', 'projects', 'faq', 'final',
 ];
 
 export interface Landing {

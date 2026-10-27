@@ -44,11 +44,19 @@ export const ui = {
     fits: 'Подходящие форматы:',
   },
   sbar: { forBusiness: 'Форматы для вашего бизнеса', otherBusiness: 'Другие типы бизнеса', here: 'Вы здесь:', hub: 'Сотрудничество с MIRADEX', hubShort: 'Все форматы', other: 'Форматы сотрудничества', back: 'Назад: все форматы сотрудничества' },
+  /** landing first screen: business facts; product facts are in productStats (no repeats between the two) */
   facts: [
-    { value: 'Европа', label: 'Европейский бренд современных ограждений' },
-    { value: '15+ лет', label: 'Опыта в металлических ограждениях' },
-    { value: 'Корея', label: 'Сталь KG Dongbu Steel (Южная Корея)' },
-    { value: '1000+', label: 'Реализованных проектов в ЕС' },
+    { value: '15+ лет', label: 'опыта в металлических ограждениях' },
+    { value: '1000+', label: 'реализованных проектов в ЕС' },
+    { value: '3-5 дней', label: 'производство под размер, рабочих' },
+    { value: '5-10 дней', label: 'доставка по Испании, рабочих' },
+  ],
+  /** hub «Почему MIRADEX»: days are shown by the logistics timeline there */
+  hubFacts: [
+    { value: '15+ лет', label: 'опыта в металлических ограждениях' },
+    { value: '1000+', label: 'реализованных проектов в ЕС' },
+    { value: '10+', label: 'моделей ограждений, ворота и фасад' },
+    { value: 'до 30 лет', label: 'гарантии в зависимости от покрытия' },
   ],
   hubHero: {
     formats: 'Как вы хотите сотрудничать с MIRADEX?',
@@ -78,6 +86,7 @@ export const ui = {
   video: {
     play: (title: string) => `Смотреть ролик: ${title}`,
     watch: 'Смотреть ролик',
+    soon: 'Ролик скоро появится',
   },
   toTop: 'Наверх',
   biz: { send: 'Для заявки пригодится:', tabs: 'Типы бизнеса', forYou: 'Для вас', gains: 'Чем выгодно', ways: 'Как можно работать' },

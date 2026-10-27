@@ -69,6 +69,11 @@ document.addEventListener('click', (e) => {
   }
   if ((e.target as HTMLElement).closest('[data-close-form]')) closeModal();
   const v = (e.target as HTMLElement).closest<HTMLElement>('[data-video]');
+  // placeholder films: say so instead of a dead play button
+  if (v?.classList.contains('video__frame')) {
+    v.classList.add('is-soon');
+    window.setTimeout(() => v.classList.remove('is-soon'), 2400);
+  }
   if (v) {
     try { sessionStorage.setItem('mx_video', v.dataset.video ?? ''); } catch {}
     document.querySelectorAll<HTMLInputElement>('[data-video-watched]').forEach((i) => (i.value = v.dataset.video ?? ''));

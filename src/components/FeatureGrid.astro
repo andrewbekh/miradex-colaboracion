@@ -5,12 +5,11 @@ import Icon from './Icon.astro';
 interface Item { icon: string; title: string; text: string }
 interface Props { items: Item[]; cols?: 2 | 3 | 4; tone?: 'light' }
 const { items, cols = 3, tone = 'light' } = Astro.props;
-const swatches = ['mint', 'sky', 'blue'];
 ---
 <ul class:list={['fg', `fg--${cols}`, `fg--${tone}`]} role="list">
-  {items.map((it, i) => (
+  {items.map((it) => (
     <li class="fg__item">
-      <span class={`fg__icon fg__icon--${swatches[i % 3]}`}><Icon name={it.icon} size={26} /></span>
+      <span class="fg__icon"><Icon name={it.icon} size={26} /></span>
       <h3 class="fg__title">{it.title}</h3>
       <p class="fg__text">{it.text}</p>
     </li>
@@ -24,9 +23,8 @@ const swatches = ['mint', 'sky', 'blue'];
   .fg--4 { grid-template-columns: repeat(4, 1fr); }
   .fg__item { display: grid; align-content: start; gap: var(--sp-3); padding: var(--sp-6) var(--sp-6) var(--sp-7) 0; border-bottom: 1px solid var(--border); }
   .fg__icon { display: grid; place-items: center; width: 56px; height: 56px; margin-bottom: var(--sp-3); color: var(--c-ink); border-radius: var(--radius-sm); }
-  .fg__icon--mint { background: var(--c-mint); }
-  .fg__icon--sky { background: var(--c-sky); color: var(--c-white); }
-  .fg__icon--blue { background: var(--c-blue); color: var(--c-white); }
+  /* one colour for decorative icons: the brand colours as a cycle read like the format code */
+  .fg__icon { background: var(--c-mint); }
   .fg__title { font-size: var(--fs-h3); }
   .fg__text { color: var(--text-muted); max-width: 34ch; }
   .fg--dark { border-color: rgb(255 255 255 / 0.16); }

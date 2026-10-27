@@ -8,7 +8,6 @@ import Hero from '../../../components/Hero.astro';
 import Section from '../../../components/Section.astro';
 import VideoRows from '../../../components/VideoRows.astro';
 import SectorFormats from '../../../components/SectorFormats.astro';
-import CtaBand from '../../../components/CtaBand.astro';
 import Economics from '../../../components/Economics.astro';
 import SupportGroups from '../../../components/SupportGroups.astro';
 import Stats from '../../../components/Stats.astro';
@@ -78,8 +77,6 @@ const video = landings.flatMap((l) => l.videos.items).find((v) => v.num === sect
   <Section id="modelo" title={ui.model.title} lead={ui.model.lead}>
     <ModelPillars items={modelPillars} />
   </Section>
-
-  <CtaBand title={P.ctaA.title} text={P.ctaA.text} cta={P.ctaA.cta} scenario={sector.primary} />
 
   <Section id="economia" title={P.economics.title} lead={P.economics.lead}>
     <Economics sources={P.economics.sources} factors={P.economics.factors} sourcesLabel={P.economics.sourcesLabel} factorsLabel={P.economics.factorsLabel} principle={P.economics.principle} model={P.economics.model} />

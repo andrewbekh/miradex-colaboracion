@@ -1,5 +1,7 @@
 ---
-// Hub «Сотрудничество»: explains the whole B2B system and routes to the 5 landings, by format and by business type.
+// Hub «Сотрудничество»: helps a visitor quickly see where to go, by format or by business type (strategy 5).
+// One story, nine blocks: choice → film and the open model → your business → why MIRADEX (production, range and
+// logistics as one block) → support and training → projects → FAQ → form. Each fact is shown once.
 // Content: src/data/hub.ts.
 import Page from '../../layouts/Page.astro';
 import HubHero from '../../components/HubHero.astro';
@@ -8,109 +10,119 @@ import ScenarioBanners from '../../components/ScenarioBanners.astro';
 import BusinessQuiz from '../../components/BusinessQuiz.astro';
 import SectorCards from '../../components/SectorCards.astro';
 import VideoPlaceholder from '../../components/VideoPlaceholder.astro';
-import WhyMiradex from '../../components/WhyMiradex.astro';
 import ModelPillars from '../../components/ModelPillars.astro';
-import CtaBand from '../../components/CtaBand.astro';
+import FactsStrip from '../../components/FactsStrip.astro';
 import SplitFeature from '../../components/SplitFeature.astro';
-import Stats from '../../components/Stats.astro';
 import CategoryCards from '../../components/CategoryCards.astro';
 import SupportGroups from '../../components/SupportGroups.astro';
 import LogisticsTrack from '../../components/LogisticsTrack.astro';
 import Gallery from '../../components/Gallery.astro';
 import Faq from '../../components/Faq.astro';
 import FinalForm from '../../components/FinalForm.astro';
+import Icon from '../../components/Icon.astro';
 import { hub } from '../../data/hub';
 import { videos } from '../../data/videos';
-import { productStats, statsFootnote, finalPoints } from '../../data/shared';
+import { finalPoints } from '../../data/shared';
 import { ui } from '../../data/ui';
 
 const v1 = videos[1];
 ---
 <Page title={hub.meta.title} description={hub.meta.description}>
-  <!-- 1 · First screen on white: formats and a short application, photo on the right half -->
+  <!-- 1 · First screen: the format choice is the main action, the short application is secondary -->
   <HubHero title={hub.hero.title} lead={hub.hero.lead} image={hub.hero.image} />
 
-  <!-- 2 · The choice: five formats as banners -->
+  <!-- 2 · The five formats in detail -->
   <Section id="formatos" tone="grey" title={hub.formats.title} lead={hub.formats.lead}>
     <ScenarioBanners />
   </Section>
 
-  <!-- 3 · Video №1 + how the model works -->
+  <!-- 3 · Film №1 + the open national model -->
   <Section id="video" title={hub.video.title} lead={hub.video.lead}>
-    <VideoPlaceholder num={v1.num} title={v1.title} duration={v1.duration} poster={v1.poster} />
-    <div class="gap-top"><ModelPillars items={hub.pillars} /></div>
-  </Section>
-
-  <!-- 4 · Second path: «Какой у меня бизнес?» (strategy 5.2), every audience opens its industry page;
-       below, the two-question quiz for mixed or unlisted businesses -->
-  <Section id="negocios" tone="tint" title={ui.sector.title} lead={ui.sector.lead}>
-    <SectorCards />
-    <div class="hub-quiz">
-      <h3 class="hub-quiz__title">{hub.quiz.title}</h3>
-      <p class="hub-quiz__lead">{hub.quiz.lead}</p>
-      <BusinessQuiz />
+    <div class="film">
+      <VideoPlaceholder num={v1.num} title={v1.title} duration={v1.duration} poster={v1.poster} />
+      <ModelPillars items={hub.pillars} compact />
     </div>
   </Section>
 
-  <!-- 4 · Why MIRADEX -->
-  <WhyMiradex id="por-que" title={hub.why.title} />
-
-  <!-- 5 · Production -->
-  <Section id="produccion" title={hub.production.title} lead={hub.production.lead}>
-    <SplitFeature items={hub.production.items} media={{ src: '/img/photos/texture-graphite.jpg', alt: 'Стальные ламели MIRADEX', placeholder: ui.photoFactory }} aside={hub.production.aside} />
+  <!-- 4 · Second path: «Какой у меня бизнес?» (strategy 5.2); the quiz is folded for mixed businesses -->
+  <Section id="negocios" tone="tint" title={ui.sector.title} lead={ui.sector.lead}>
+    <SectorCards />
+    <details class="hub-quiz">
+      <summary class="hub-quiz__sum">
+        <span class="hub-quiz__text"><span class="hub-quiz__title">{hub.quiz.title}</span><span class="hub-quiz__lead">{hub.quiz.lead}</span></span>
+        <span class="hub-quiz__btn"><span>{hub.quiz.open}</span><Icon name="chevron-down" size={18} /></span>
+      </summary>
+      <div class="hub-quiz__body"><BusinessQuiz /></div>
+    </details>
   </Section>
 
-  <!-- 6 · Range -->
-  <Section id="gama" tone="tint" title={hub.range.title} lead={hub.range.lead}>
-    <Stats stats={productStats} footnote={statsFootnote} />
-    <div class="gap-top"><CategoryCards /></div>
+  <!-- 5 · Why MIRADEX: key numbers, then production, range and logistics as parts of one block -->
+  <Section id="por-que" title={hub.why.title} lead={hub.why.lead}>
+    <FactsStrip facts={ui.hubFacts} />
+
+    <div class="why-part">
+      <h3 class="why-part__title">{hub.production.title}</h3>
+      <SplitFeature items={hub.production.items} media={{ src: '/img/photos/texture-graphite.jpg', alt: 'Стальные ламели MIRADEX' }} aside={hub.production.aside} />
+    </div>
+
+    <div class="why-part">
+      <h3 class="why-part__title">{hub.range.title}</h3>
+      <p class="why-part__lead">{hub.range.lead}</p>
+      <CategoryCards />
+    </div>
+
+    <div class="why-part">
+      <h3 class="why-part__title">{hub.logistics.title}</h3>
+      <p class="why-part__lead">{hub.logistics.lead}</p>
+      <LogisticsTrack stages={hub.logistics.stages} total={hub.logistics.total} />
+    </div>
   </Section>
 
-  <!-- 7 · Support -->
-  <Section id="apoyo" title={hub.support.title} lead={hub.support.lead}>
+  <!-- 6 · Support and training -->
+  <Section id="apoyo" tone="tint" title={hub.support.title} lead={hub.support.lead}>
     <SupportGroups groups={hub.support.groups} />
   </Section>
 
-  <!-- 8 · Training -->
-  <Section id="formacion" tone="tint" title={hub.training.title} lead={hub.training.lead}>
-    <SplitFeature items={hub.training.items} media={{ src: '/img/photos/tisa-wood-stone.jpg', alt: 'Установленный забор Tisa' }} reverse />
+  <!-- 7 · Projects -->
+  <Section id="proyectos" title={hub.projects.title} lead={hub.projects.lead}>
+    <Gallery items={hub.projects.gallery} />
   </Section>
 
-  <!-- 9 · Logistics -->
-  <Section id="logistica" title={hub.logistics.title} lead={hub.logistics.lead}>
-    <LogisticsTrack stages={hub.logistics.stages} total={hub.logistics.total} notes={hub.logistics.notes} />
-  </Section>
-
-  <!-- 10 · Projects -->
-  <Section id="proyectos" tone="tint" title={hub.projects.title} lead={hub.projects.lead}>
-    <Gallery items={hub.projects.gallery}>
-      <article class="ref">
-        <p class="eyebrow ref__eyebrow">{hub.projects.ref.eyebrow}</p>
-        <h3 class="ref__title">{hub.projects.ref.title}</h3>
-        <p class="ref__text">{hub.projects.ref.text}</p>
-      </article>
-    </Gallery>
-  </Section>
-
-  <CtaBand title={hub.cta.title} text={hub.cta.text} tone="mint" scenario="no-se" cta={hub.cta.cta} />
-
-  <!-- 11 · FAQ -->
-  <Section id="faq" title="Частые вопросы">
+  <!-- 8 · FAQ -->
+  <Section id="faq" tone="tint" title="Частые вопросы">
     <Faq items={hub.faq} />
   </Section>
 
-  <!-- 12 · Form -->
+  <!-- 9 · Form -->
   <FinalForm title={hub.final.title} text={hub.final.text} points={finalPoints} />
-
 </Page>
 
 <style>
-  .gap-top { margin-top: var(--stack-gap); }
-  .hub-quiz { display: grid; gap: var(--sp-3); margin-top: clamp(48px, 2rem + 3vw, 88px); padding-top: clamp(32px, 1rem + 2vw, 48px); border-top: 1px solid var(--border); }
-  .hub-quiz__title { font-size: var(--fs-h3); line-height: 1.25; text-transform: none; letter-spacing: 0; }
-  .hub-quiz__lead { color: var(--text-muted); max-width: 60ch; margin-bottom: var(--sp-4); }
-  .ref { height: 100%; display: flex; flex-direction: column; gap: var(--sp-3); padding: var(--sp-6); border-radius: var(--radius-md); background: var(--bg-accent); color: var(--text-on-accent); }
-  .ref__eyebrow { color: var(--c-mint); }
-  .ref__title { font-size: var(--fs-h2); }
-  .ref__text { color: var(--text-on-accent-muted); max-width: 40ch; }
+  /* film and the three pillars side by side, so the block is one screen, not two */
+  .film { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: var(--grid-gap); align-items: stretch; }
+  @media (max-width: 1023px) { .film { grid-template-columns: 1fr; } }
+
+  /* quiz folded under the cards: one click opens it, so the 16 businesses are not shown twice */
+  .hub-quiz { margin-top: var(--sp-6); border-radius: var(--radius-md); background: var(--c-white); }
+  .hub-quiz__sum { list-style: none; display: flex; align-items: center; justify-content: space-between; gap: var(--sp-5); padding: var(--sp-5) var(--sp-6); cursor: pointer; }
+  .hub-quiz__sum::-webkit-details-marker { display: none; }
+  .hub-quiz__text { display: grid; gap: 4px; }
+  .hub-quiz__title { font-size: 1.125rem; font-weight: var(--fw-medium); line-height: 1.3; }
+  .hub-quiz__lead { color: var(--text-muted); font-size: var(--fs-small); max-width: 60ch; }
+  .hub-quiz__btn { display: inline-flex; align-items: center; gap: 8px; flex: none; height: 44px; padding: 0 16px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); font-size: var(--fs-small); font-weight: var(--fw-medium); }
+  .hub-quiz__btn :global(svg) { transition: transform var(--dur) var(--ease); }
+  .hub-quiz[open] .hub-quiz__btn :global(svg) { transform: rotate(180deg); }
+  .hub-quiz__sum:hover .hub-quiz__btn { border-color: var(--c-blue); }
+  .hub-quiz__body { padding: 0 var(--sp-6) var(--sp-6); }
+
+  /* parts of «Почему MIRADEX» */
+  .why-part { display: grid; gap: var(--sp-4); margin-top: clamp(48px, 2rem + 3vw, 88px); }
+  .why-part__title { font-size: var(--fs-h3); }
+  .why-part__lead { color: var(--text-muted); max-width: 60ch; margin-bottom: var(--sp-3); }
+
+  @media (max-width: 767px) {
+    .hub-quiz__sum { flex-direction: column; align-items: stretch; padding: var(--sp-5); }
+    .hub-quiz__btn { justify-content: center; }
+    .hub-quiz__body { padding: 0 var(--sp-4) var(--sp-5); }
+  }
 </style>

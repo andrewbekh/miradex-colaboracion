@@ -15,7 +15,8 @@ import Icon from './Icon.astro';
   }
   .totop.is-visible { opacity: 1; visibility: visible; transform: none; }
   /* mobile: lift above the page bar at the bottom */
-  @media (max-width: 767px) { :global(html.has-sbar) .totop { bottom: calc(64px + 16px + env(safe-area-inset-bottom)); } }
+  /* phones: the page bar at the bottom already gives a way around; one floating element is enough */
+  @media (max-width: 767px) { :global(html.has-sbar) .totop { opacity: 0; visibility: hidden; } }
   .totop:hover { background: var(--c-blue-hover); }
   .totop:hover :global(svg) { transform: translateY(-2px); }
   .totop :global(svg) { transition: transform var(--dur) var(--ease); }

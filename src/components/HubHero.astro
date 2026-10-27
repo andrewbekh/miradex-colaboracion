@@ -82,6 +82,7 @@ const { title, lead, image } = Astro.props;
     .hx__photo { order: -1; aspect-ratio: 16 / 7; margin-inline: calc(-1 * var(--gutter)); }
   }
   @media (max-width: 767px) {
+    .hx__photo { display: none; }
     .hx__list { grid-template-columns: 1fr; }
     .hx__fmt { min-height: 52px; }
     .hx__photo { aspect-ratio: 16 / 9; }

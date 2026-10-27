@@ -74,9 +74,13 @@ const sc = scenarioById(current);
     position: fixed; left: 0; right: 0; top: calc(var(--header-h) + 1px); z-index: 45;
     background: var(--c-blue); color: var(--c-white); box-shadow: var(--shadow-soft);
     transform: translateY(-8px); opacity: 0; visibility: hidden;
-    transition: transform var(--dur) var(--ease), opacity var(--dur) var(--ease), visibility var(--dur);
+    transition: transform var(--dur) var(--ease), opacity var(--dur) var(--ease), visibility var(--dur), top var(--dur) var(--ease);
   }
   .sb.is-on { transform: none; opacity: 1; visibility: visible; }
+  /* header hidden on scroll down (see script): the bar moves up to the top */
+  :global(.hd) { transition: transform var(--dur) var(--ease); }
+  :global(html.hd-hidden .hd) { transform: translateY(-100%); }
+  :global(html.hd-hidden) .sb { top: 0; }
   :global(.hd.is-menu-open) ~ .sb { visibility: hidden; }
   .sb__in { display: flex; align-items: center; gap: var(--sp-4); min-height: 64px; }
 
@@ -152,7 +156,16 @@ const sc = scenarioById(current);
     const toggle = bar.querySelector<HTMLButtonElement>('[data-sbar-toggle]')!;
     const setOpen = (open: boolean) => { menu.classList.toggle('is-open', open); toggle.setAttribute('aria-expanded', String(open)); };
     let on = false;
+    let lastY = window.scrollY;
+    const root = document.documentElement;
     const update = () => {
+      // while the bar is on, the main header slides away on scroll down and comes back on scroll up,
+      // so only one strip (the bar) takes the screen
+      const y = window.scrollY;
+      const menuOpen = header?.classList.contains('is-menu-open');
+      if (on && !menuOpen && Math.abs(y - lastY) > 4) root.classList.toggle('hd-hidden', y > lastY);
+      if (!on) root.classList.remove('hd-hidden');
+      lastY = y;
       const edge = after ? after.getBoundingClientRect().bottom : 600 - window.scrollY;
       const next = edge < (header?.offsetHeight ?? 72);
       if (next === on) return;

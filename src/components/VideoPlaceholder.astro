@@ -1,6 +1,7 @@
 ---
 // Video slot for the B2B films (scripts: docs/Miradex_Spain_b2b.docx). Placeholder poster until the films are edited.
 // Clean poster: play button in the centre, no film number, duration or pattern on top (client feedback).
+// Until the films exist, a click shows «Ролик скоро появится» instead of doing nothing (src/scripts/lead-form.ts).
 import { ui } from '../data/ui';
 import Icon from './Icon.astro';
 
@@ -11,6 +12,7 @@ const { num, title, poster = '/img/photos/atlas-villas.jpg', id = `video-${num}`
   <button type="button" class="video__frame" data-video={num} aria-label={ui.video.play(title)}>
     <img src={poster} alt="" loading="lazy" />
     <span class="video__play"><Icon name="play" size={34} /></span>
+    <span class="video__soon" aria-live="polite">{ui.video.soon}</span>
   </button>
 </figure>
 
@@ -29,4 +31,10 @@ const { num, title, poster = '/img/photos/atlas-villas.jpg', id = `video-${num}`
   }
   .video__play :global(svg) { margin-left: 4px; fill: currentColor; }
   .video__frame:hover .video__play { background: var(--c-blue-hover); transform: translate(-50%, -50%) scale(1.04); }
+  .video__soon {
+    position: absolute; left: 50%; bottom: clamp(16px, 6%, 40px); transform: translate(-50%, 8px); padding: 10px 16px; border-radius: var(--radius-sm);
+    background: var(--c-white); color: var(--c-ink); font-size: var(--fs-small); font-weight: var(--fw-medium); white-space: nowrap;
+    opacity: 0; transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease); pointer-events: none;
+  }
+  .video__frame.is-soon .video__soon { opacity: 1; transform: translate(-50%, 0); }
 </style>

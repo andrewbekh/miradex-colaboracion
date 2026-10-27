@@ -3,12 +3,11 @@
 interface Step { title: string; text: string }
 interface Props { steps: Step[]; tone?: 'light' | 'dark' }
 const { steps, tone = 'light' } = Astro.props;
-const swatches = ['blue', 'sky', 'mint'];
 ---
 <ol class:list={['steps', `steps--${tone}`]} role="list" style={`--n:${steps.length}`}>
   {steps.map((s, i) => (
     <li class="steps__item">
-      <span class={`steps__num steps__num--${swatches[i % 3]}`}>{String(i + 1).padStart(2, '0')}</span>
+      <span class="steps__num">{i + 1}</span>
       <h3 class="steps__title">{s.title}</h3>
       <p class="steps__text">{s.text}</p>
     </li>
@@ -20,9 +19,8 @@ const swatches = ['blue', 'sky', 'mint'];
   .steps__item { position: relative; display: grid; align-content: start; gap: var(--sp-3); padding-top: var(--sp-5); border-top: 2px solid var(--c-ink); }
   .steps--dark .steps__item { border-color: rgb(255 255 255 / 0.85); }
   .steps__num { display: grid; place-items: center; width: 44px; height: 44px; font-weight: var(--fw-medium); font-size: var(--fs-small); color: var(--c-ink); margin-bottom: var(--sp-2); border-radius: var(--radius-sm); }
-  .steps__num--blue { background: var(--c-blue); color: var(--c-white); }
-  .steps__num--sky { background: var(--c-sky); color: var(--c-white); }
-  .steps__num--mint { background: var(--c-mint); }
+  /* neutral: coloured 01-05 squares are reserved for the five formats */
+  .steps__num { background: var(--c-white); box-shadow: inset 0 0 0 1.5px var(--c-ink); }
   .steps__title { font-size: 1.0625rem; }
   .steps__text { color: var(--text-muted); font-size: var(--fs-small); }
   .steps--dark .steps__text { color: var(--text-on-accent-muted); }

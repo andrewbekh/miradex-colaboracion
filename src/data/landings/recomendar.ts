@@ -7,6 +7,8 @@ const refer = { title: 'Рекомендуете клиенту', text: 'Дел�
 
 export const recomendar: Landing = {
   id: 'recomendar',
+  // the split of work is the core message here: you recommend, MIRADEX does the rest
+  order: ['hero', 'businesses', 'videos', 'ways', 'economics', 'resp', 'support', 'product', 'steps', 'projects', 'faq', 'final'],
   meta: {
     title: 'Реферальная программа MIRADEX · Рекомендуйте и получайте вознаграждение',
     description: 'Рекомендуйте металлические ограждения MIRADEX своим клиентам по персональной ссылке или QR-коду. MIRADEX продаёт и сопровождает клиента, вы получаете вознаграждение.',
