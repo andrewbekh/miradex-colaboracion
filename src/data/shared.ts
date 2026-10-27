@@ -37,3 +37,24 @@ export const faq = {
 };
 
 export const finalPoints = ['Ответим в течение 24 часов', 'Без обязательств', 'Данные конфиденциальны', 'Продажи по всей Испании, без территориальных ограничений'];
+
+/** Realized projects: the gallery block of miradex.bg (big photo, «model | colour», thumbnails), without category tabs
+ *  and without links. Photos are from miradex.bg until the Spanish selection is ready (docs/TODO.md). */
+export const projectGallery = [
+  { src: '/img/photos/romb-pro-house.jpg', model: 'Romb Pro', color: 'Антрацит RAL 7016' },
+  { src: '/img/photos/atlas-villas.jpg', model: 'Atlas', color: 'Графит RAL 7024' },
+  { src: '/img/photos/sigma-red-house.jpg', model: 'Sigma', color: 'Оксидно-красный RAL 3009' },
+  { src: '/img/photos/tisa-wood-stone.jpg', model: 'Tisa', color: 'Тёмный орех' },
+  { src: '/img/photos/jupiter-facade-house.jpg', model: 'Фасад Jupiter', color: 'Графит RAL 7024' },
+  { src: '/img/photos/gate-wood.jpg', model: 'Ворота Romb Grande', color: 'Орех' },
+  { src: '/img/photos/atlas-mountain.jpg', model: 'Atlas', color: 'Антрацит RAL 7016' },
+  { src: '/img/photos/terra-wood.jpg', model: 'Terra', color: 'Золотой дуб' },
+  { src: '/img/photos/simetrica-black.jpg', model: 'Simetrica', color: 'Чёрный RAL 9005' },
+  { src: '/img/photos/piramida-garden.jpg', model: 'Piramida', color: 'Графит RAL 7024' },
+  { src: '/img/photos/atlas-wood-house.jpg', model: 'Atlas', color: 'Тёмный орех' },
+  { src: '/img/photos/romb-mini-street.jpg', model: 'Romb Mini', color: 'Антрацит RAL 7016' },
+  { src: '/img/photos/jupiter-facade-black.jpg', model: 'Фасад Jupiter', color: 'Чёрный RAL 9005' },
+  { src: '/img/photos/simetrica-slats.jpg', model: 'Simetrica', color: 'Графит RAL 7024' },
+  { src: '/img/photos/siding-wood.jpg', model: 'Сайдинг', color: 'Золотой дуб' },
+  { src: '/img/photos/gate-wood-2.jpg', model: 'Ворота Romb Grande', color: 'Орех' },
+];

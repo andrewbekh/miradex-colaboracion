@@ -1,0 +1,104 @@
+---
+// Realized projects, the gallery block of miradex.bg: a big photo with «model | colour» and prev/next,
+// thumbnails on the right. No category tabs and no links: the page goal is the application, not the catalogue.
+// Phones: the big photo with arrows, thumbnails as a row that scrolls sideways.
+import Icon from './Icon.astro';
+import { projectGallery } from '../data/shared';
+import { ui } from '../data/ui';
+
+interface Item { src: string; model: string; color: string }
+interface Props { items?: Item[] }
+const { items = projectGallery } = Astro.props;
+const first = items[0];
+---
+<div class="pg" data-pg>
+  <figure class="pg__stage">
+    <img class="pg__main" src={first.src} alt={`${first.model}, ${first.color}`} loading="lazy" data-pg-main />
+    <figcaption class="pg__cap" aria-live="polite">
+      <span class="pg__model" data-pg-model>{first.model}</span><span class="pg__sep">|</span><span data-pg-color>{first.color}</span>
+    </figcaption>
+    <div class="pg__nav">
+      <button type="button" class="pg__btn" data-pg-prev aria-label={ui.gallery.prev}><Icon name="chevron-left" size={20} /></button>
+      <span class="pg__div" aria-hidden="true"></span>
+      <button type="button" class="pg__btn" data-pg-next aria-label={ui.gallery.next}><Icon name="chevron-right" size={20} /></button>
+    </div>
+  </figure>
+
+  <ul class="pg__thumbs" role="list">
+    {items.map((it, i) => (
+      <li>
+        <button type="button" class:list={['pg__thumb', { 'is-active': i === 0 }]} data-pg-thumb={i} data-src={it.src} data-model={it.model} data-color={it.color} aria-label={`${it.model}, ${it.color}`} aria-pressed={i === 0 ? 'true' : 'false'}>
+          <img src={it.src} alt="" loading="lazy" />
+        </button>
+      </li>
+    ))}
+  </ul>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-pg]').forEach((root) => {
+    const thumbs = [...root.querySelectorAll<HTMLButtonElement>('[data-pg-thumb]')];
+    const main = root.querySelector<HTMLImageElement>('[data-pg-main]')!;
+    const model = root.querySelector<HTMLElement>('[data-pg-model]')!;
+    const color = root.querySelector<HTMLElement>('[data-pg-color]')!;
+    let current = 0;
+    const show = (i: number) => {
+      current = (i + thumbs.length) % thumbs.length;
+      const t = thumbs[current];
+      main.src = t.dataset.src!;
+      main.alt = `${t.dataset.model}, ${t.dataset.color}`;
+      model.textContent = t.dataset.model!;
+      color.textContent = t.dataset.color!;
+      thumbs.forEach((b, k) => { b.classList.toggle('is-active', k === current); b.setAttribute('aria-pressed', String(k === current)); });
+      // keep the active thumbnail visible inside its own scroll box, without moving the page
+      const box = t.closest('.pg__thumbs') as HTMLElement;
+      const tb = t.getBoundingClientRect(); const bb = box.getBoundingClientRect();
+      if (tb.top < bb.top || tb.bottom > bb.bottom) box.scrollTop += tb.top - bb.top - 8;
+      if (tb.left < bb.left || tb.right > bb.right) box.scrollLeft += tb.left - bb.left - 8;
+    };
+    thumbs.forEach((t, i) => t.addEventListener('click', () => show(i)));
+    root.querySelector('[data-pg-prev]')!.addEventListener('click', () => show(current - 1));
+    root.querySelector('[data-pg-next]')!.addEventListener('click', () => show(current + 1));
+  });
+</script>
+
+<style>
+  .pg { --pg-h: clamp(420px, 44vw, 632px); display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: var(--grid-gap); }
+
+  .pg__stage { position: relative; margin: 0; height: var(--pg-h); border-radius: var(--radius-lg); overflow: hidden; background: var(--c-grey); }
+  .pg__main { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .pg__cap {
+    position: absolute; left: 24px; bottom: 24px; display: inline-flex; align-items: center; gap: 6px; max-width: calc(100% - 160px);
+    padding: 8px 14px; border-radius: var(--radius-sm); background: var(--c-white); font-size: var(--fs-small); color: var(--c-ink);
+  }
+  .pg__model { color: var(--c-blue-deep); font-weight: var(--fw-medium); white-space: nowrap; }
+  .pg__sep { color: var(--c-line-strong); }
+  .pg__nav { position: absolute; right: 24px; bottom: 24px; display: flex; align-items: center; border-radius: var(--radius-sm); background: var(--c-white); }
+  .pg__btn { display: grid; place-items: center; width: 40px; height: 40px; border: 0; background: transparent; color: var(--c-blue-deep); border-radius: var(--radius-sm); cursor: pointer; }
+  .pg__btn:hover { color: var(--c-ink); }
+  .pg__div { width: 1px; height: 18px; background: var(--border); }
+
+  /* thumbnails: three per row, scroll inside the column at the height of the big photo */
+  .pg__thumbs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; align-content: start; height: var(--pg-h); overflow-y: auto; scrollbar-width: thin; padding-right: 2px; }
+  .pg__thumb { position: relative; display: block; width: 100%; aspect-ratio: 1 / 0.9; padding: 0; border: 0; border-radius: var(--radius-sm); overflow: hidden; background: var(--c-grey); cursor: pointer; opacity: 0.85; transition: opacity var(--dur) var(--ease), box-shadow var(--dur) var(--ease); }
+  .pg__thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .pg__thumb:hover { opacity: 1; }
+  .pg__thumb.is-active { opacity: 1; }
+  /* the frame sits on top of the photo, so the active thumbnail stays visible */
+  .pg__thumb.is-active::after { content: ''; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 3px var(--c-blue); pointer-events: none; }
+
+  @media (max-width: 1023px) {
+    .pg { grid-template-columns: 1fr; }
+    .pg__stage { height: auto; aspect-ratio: 4 / 3; }
+    .pg__thumbs { display: flex; height: auto; overflow-x: auto; overflow-y: hidden; gap: 8px; padding: 0 0 4px; scrollbar-width: none; }
+    .pg__thumbs::-webkit-scrollbar { display: none; }
+    .pg__thumbs > li { flex: 0 0 22%; }
+  }
+  @media (max-width: 767px) {
+    .pg__stage { border-radius: var(--radius-md); }
+    .pg__cap { left: 12px; bottom: 12px; max-width: calc(100% - 24px); padding: 6px 10px; font-size: var(--fs-micro); }
+    .pg__nav { top: 12px; right: 12px; bottom: auto; }
+    .pg__btn { width: 36px; height: 36px; }
+    .pg__thumbs > li { flex: 0 0 30%; }
+  }
+</style>

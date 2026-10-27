@@ -13,7 +13,7 @@ import SupportGroups from '../../../components/SupportGroups.astro';
 import Stats from '../../../components/Stats.astro';
 import CategoryCards from '../../../components/CategoryCards.astro';
 import Steps from '../../../components/Steps.astro';
-import Gallery from '../../../components/Gallery.astro';
+import ProjectGallery from '../../../components/ProjectGallery.astro';
 import Faq from '../../../components/Faq.astro';
 import FinalForm from '../../../components/FinalForm.astro';
 import Icon from '../../../components/Icon.astro';
@@ -96,7 +96,7 @@ const video = landings.flatMap((l) => l.videos.items).find((v) => v.num === sect
   </Section>
 
   <Section id="proyectos" title={ui.sector.projects} lead={P.projects.lead}>
-    <Gallery items={P.projects.gallery} />
+    <ProjectGallery />
   </Section>
 
   <Section id="faq" tone="tint" title="Частые вопросы">

@@ -89,6 +89,7 @@ export const ui = {
     soon: 'Ролик скоро появится',
   },
   toTop: 'Наверх',
+  gallery: { prev: 'Предыдущее фото', next: 'Следующее фото' },
   biz: { send: 'Для заявки пригодится:', tabs: 'Типы бизнеса', forYou: 'Для вас', gains: 'Чем выгодно', ways: 'Как можно работать' },
   videosRow: { forWhom: 'Для кого' },
   banners: { builds: 'Что вы строите' },

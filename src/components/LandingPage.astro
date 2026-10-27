@@ -16,7 +16,7 @@ import Stats from './Stats.astro';
 import CategoryCards from './CategoryCards.astro';
 import FitList from './FitList.astro';
 import Steps from './Steps.astro';
-import Gallery from './Gallery.astro';
+import ProjectGallery from './ProjectGallery.astro';
 import Faq from './Faq.astro';
 import FinalForm from './FinalForm.astro';
 import ScenarioButtons from './ScenarioButtons.astro';
@@ -92,19 +92,20 @@ for (const k of order) if (sectionKeys.includes(k)) tone[k] = n++ % 2 === 0 ? 't
         return (
           <Section id="proyectos" tone={tone.projects} title={L.projects.title} lead={L.projects.lead}>
             {L.projects.items && <div class="gap-bottom"><FeatureGrid items={L.projects.items} cols={L.projects.cols} /></div>}
-            <Gallery items={L.projects.gallery}>
-              {L.projects.reference && (
-                <article class="ref">
+            {L.projects.reference && (
+              <article class="ref gap-bottom">
+                <div class="ref__copy">
                   <p class="eyebrow ref__eyebrow">{L.projects.reference.eyebrow}</p>
                   <h3 class="ref__title">{L.projects.reference.title}</h3>
                   <p class="ref__text">{L.projects.reference.text}</p>
-                  <dl class="ref__stats">
-                    {L.projects.reference.stats.map((st) => <div><dt>{st.value}</dt><dd>{st.label}</dd></div>)}
-                  </dl>
                   <a class="ref__link" href={L.projects.reference.link.href} target="_blank" rel="noopener">{L.projects.reference.link.label} <Icon name="arrow-up-right" size={16} /></a>
-                </article>
-              )}
-            </Gallery>
+                </div>
+                <dl class="ref__stats">
+                  {L.projects.reference.stats.map((st) => <div><dt>{st.value}</dt><dd>{st.label}</dd></div>)}
+                </dl>
+              </article>
+            )}
+            <ProjectGallery />
           </Section>
         );
       case 'ctaC':
@@ -122,14 +123,18 @@ for (const k of order) if (sectionKeys.includes(k)) tone[k] = n++ % 2 === 0 ? 't
 <style>
   .gap-top { margin-top: var(--stack-gap); }
   .gap-bottom { margin-bottom: var(--stack-gap); }
-  .ref { height: 100%; display: flex; flex-direction: column; gap: var(--sp-3); padding: var(--sp-6); border-radius: var(--radius-md); background: var(--bg-accent); color: var(--text-on-accent); }
+  /* reference model card (Business MIRADEX): copy on the left, numbers on the right, above the gallery */
+  .ref { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: var(--sp-6); align-items: center; padding: var(--sp-7); border-radius: var(--radius-md); background: var(--bg-accent); color: var(--text-on-accent); }
+  .ref__copy { display: grid; gap: var(--sp-3); justify-items: start; }
   .ref__eyebrow { color: var(--c-mint); }
   .ref__title { font-size: var(--fs-h2); }
   .ref__text { color: var(--text-on-accent-muted); max-width: 40ch; }
-  .ref__stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-3); margin-top: var(--sp-3); }
+  .ref__stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-3); }
   .ref__stats div { padding: var(--sp-4); border-radius: var(--radius-sm); background: rgb(255 255 255 / 0.18); }
   .ref__stats dt { font-size: var(--fs-stat); font-weight: var(--fw-medium); line-height: 1; }
   .ref__stats dd { margin-top: 6px; font-size: var(--fs-micro); color: var(--text-on-accent-muted); }
-  .ref__link { margin-top: auto; display: inline-flex; align-items: center; gap: 6px; color: var(--c-white); font-weight: var(--fw-medium); }
+  .ref__link { margin-top: var(--sp-2); display: inline-flex; align-items: center; gap: 6px; color: var(--c-white); font-weight: var(--fw-medium); }
   .ref__link:hover { color: var(--c-mint); }
+  @media (max-width: 1023px) { .ref { grid-template-columns: 1fr; padding: var(--sp-6); } }
+  @media (max-width: 767px) { .ref { padding: var(--sp-5); } .ref__stats { grid-template-columns: 1fr; } }
 </style>
