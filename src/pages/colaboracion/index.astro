@@ -49,10 +49,10 @@ const v1 = videos[1];
     <SectorCards />
     <details class="hub-quiz">
       <summary class="hub-quiz__sum">
-        <span class="hub-quiz__text"><span class="hub-quiz__title">{hub.quiz.title}</span><span class="hub-quiz__lead">{hub.quiz.lead}</span></span>
-        <span class="hub-quiz__btn"><span>{hub.quiz.open}</span><Icon name="chevron-down" size={18} /></span>
+        <span class="hub-quiz__title">{hub.quiz.title}</span>
+        <span class="btn btn--primary hub-quiz__btn"><span>{hub.quiz.open}</span><Icon name="chevron-down" size={18} /></span>
       </summary>
-      <div class="hub-quiz__body"><BusinessQuiz /></div>
+      <div class="hub-quiz__body"><p class="hub-quiz__lead">{hub.quiz.lead}</p><BusinessQuiz /></div>
     </details>
   </Section>
 
@@ -109,17 +109,17 @@ const v1 = videos[1];
   }
 
   /* quiz folded under the cards: one click opens it, so the 16 businesses are not shown twice */
-  .hub-quiz { margin-top: var(--sp-6); border-radius: var(--radius-md); background: var(--c-white); }
-  .hub-quiz__sum { list-style: none; display: flex; align-items: center; justify-content: space-between; gap: var(--sp-5); padding: var(--sp-5) var(--sp-6); cursor: pointer; }
+  .hub-quiz { margin-top: 8px; border-radius: var(--radius-sm); background: var(--c-white); }
+  .hub-quiz__sum { list-style: none; display: flex; align-items: center; justify-content: space-between; gap: var(--sp-5); min-height: 64px; padding: 10px 10px 10px 20px; cursor: pointer; }
   .hub-quiz__sum::-webkit-details-marker { display: none; }
-  .hub-quiz__text { display: grid; gap: 4px; }
-  .hub-quiz__title { font-size: 1.125rem; font-weight: var(--fw-medium); line-height: 1.3; }
-  .hub-quiz__lead { color: var(--text-muted); font-size: var(--fs-small); max-width: 60ch; }
-  .hub-quiz__btn { display: inline-flex; align-items: center; gap: 8px; flex: none; height: 44px; padding: 0 16px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); font-size: var(--fs-small); font-weight: var(--fw-medium); }
+  .hub-quiz__title { font-size: var(--fs-body); font-weight: var(--fw-medium); line-height: 1.3; }
+  .hub-quiz__lead { color: var(--text-muted); font-size: var(--fs-small); max-width: 60ch; margin-bottom: var(--sp-5); }
+  /* the quiz is a real second path, so its button is a primary one */
+  .hub-quiz__btn { flex: none; --btn-h: 48px; }
   .hub-quiz__btn :global(svg) { transition: transform var(--dur) var(--ease); }
   .hub-quiz[open] .hub-quiz__btn :global(svg) { transform: rotate(180deg); }
-  .hub-quiz__sum:hover .hub-quiz__btn { border-color: var(--c-blue); }
-  .hub-quiz__body { padding: 0 var(--sp-6) var(--sp-6); }
+  .hub-quiz__sum:hover .hub-quiz__btn { background: var(--c-blue-hover); }
+  .hub-quiz__body { padding: var(--sp-2) var(--sp-5) var(--sp-6); }
 
   /* parts of «Почему MIRADEX» */
   .why-part { display: grid; gap: var(--sp-4); margin-top: clamp(48px, 2rem + 3vw, 88px); }
@@ -127,7 +127,7 @@ const v1 = videos[1];
   .why-part__lead { color: var(--text-muted); max-width: 60ch; margin-bottom: var(--sp-3); }
 
   @media (max-width: 767px) {
-    .hub-quiz__sum { flex-direction: column; align-items: stretch; padding: var(--sp-5); }
+    .hub-quiz__sum { flex-direction: column; align-items: stretch; padding: var(--sp-4); }
     .hub-quiz__btn { justify-content: center; }
     .hub-quiz__body { padding: 0 var(--sp-4) var(--sp-5); }
   }

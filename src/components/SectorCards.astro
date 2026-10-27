@@ -1,16 +1,16 @@
 ---
-// Hub, second path «Какой у меня бизнес?» (strategy 5.2): every audience is its own clickable card
-// and opens its industry page.
+// Hub, second path «Какой у меня бизнес?» (strategy 5.2): every audience is its own clickable item
+// and opens its industry page. Compact one-line rows of equal height, four per row on desktop.
 import Icon from './Icon.astro';
 import { businessCards } from '../data/sectors';
 ---
 <ul class="sc-grid" role="list">
   {businessCards.map((c) => (
     <li>
-      <a class="sct" href={c.href}>
-        <span class="sct__ic"><Icon name={c.icon} size={22} /></span>
+      <a class="sct" href={c.href} title={c.title} aria-label={c.title}>
+        <Icon name={c.icon} size={20} class="sct__ic" />
         <span class="sct__name">{c.name}</span>
-        <Icon name="arrow-right" size={18} class="sct__arrow" />
+        <Icon name="arrow-right" size={16} class="sct__arrow" />
       </a>
     </li>
   ))}
@@ -18,22 +18,23 @@ import { businessCards } from '../data/sectors';
 
 <style>
   .sc-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
-  .sc-grid > li { display: flex; }
+  .sc-grid > li { display: flex; min-width: 0; }
   .sct {
-    display: flex; flex-direction: column; gap: var(--sp-3); width: 100%; padding: var(--sp-4); border-radius: var(--radius-md);
+    display: flex; align-items: center; gap: 12px; width: 100%; height: 56px; padding: 0 16px; border-radius: var(--radius-sm);
     background: var(--c-white); color: var(--c-ink); text-decoration: none;
     box-shadow: inset 0 0 0 1px transparent; transition: box-shadow var(--dur) var(--ease);
   }
   .sct:hover { box-shadow: inset 0 0 0 1px var(--c-blue); }
-  .sct__ic { display: grid; place-items: center; width: 44px; height: 44px; border-radius: var(--radius-sm); background: var(--c-grey); }
-  .sct__name { font-size: var(--fs-small); font-weight: var(--fw-medium); line-height: 1.3; }
-  .sct :global(.sct__arrow) { margin-top: auto; align-self: flex-end; color: var(--c-ink-muted); transition: transform var(--dur) var(--ease), color var(--dur) var(--ease); }
+  .sct :global(.sct__ic) { flex: none; color: var(--c-ink-muted); }
+  .sct__name { flex: 1; min-width: 0; font-size: var(--fs-small); font-weight: var(--fw-medium); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sct :global(.sct__arrow) { flex: none; color: var(--c-line-strong); transition: transform var(--dur) var(--ease), color var(--dur) var(--ease); }
   .sct:hover :global(.sct__arrow) { color: var(--c-ink); transform: translateX(3px); }
   @media (max-width: 1199px) { .sc-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
   @media (max-width: 767px) {
-    .sc-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .sct { padding: var(--sp-3); gap: 10px; }
-    .sct__ic { width: 36px; height: 36px; }
-    .sct__name { font-size: var(--fs-micro); }
+    .sc-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+    /* two columns: names may take two lines, every item keeps the same height */
+    .sct { height: 60px; padding: 0 12px; gap: 8px; }
+    .sct__name { font-size: var(--fs-micro); line-height: 1.25; white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+    .sct :global(.sct__arrow) { display: none; }
   }
 </style>

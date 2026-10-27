@@ -116,10 +116,11 @@ export const sectorHref = (id: string) => `/colaboracion/para/${id}`;
 
 const order: ScenarioId[] = ['vender', 'instalar', 'proyectos', 'recomendar', 'negocio'];
 
-/** «Выберите свой бизнес» on the hub: the industry pages + three audiences served by a format page directly. */
+/** «Какой у вас бизнес?» on the hub: the industry pages + three audiences served by a format page directly.
+ *  name = short label on the card (one line), title = full audience name (tooltip and screen readers). */
 export const businessCards = [
-  ...sectors.map((s) => ({ icon: s.icon, name: s.name, href: sectorHref(s.id), formats: order.filter((id) => s.formats.some(([f]) => f === id)) })),
-  { icon: 'hotel', name: 'Отели и коммерческие объекты', href: '/colaboracion/proyectos?type=hotels', formats: ['proyectos'] as ScenarioId[] },
-  { icon: 'rocket', name: 'Предприниматели и новый бизнес', href: '/colaboracion/negocio-miradex', formats: ['negocio'] as ScenarioId[] },
-  { icon: 'handshake', name: 'Другой бизнес: рекомендуйте клиентов', href: '/colaboracion/recomendar', formats: ['recomendar'] as ScenarioId[] },
+  ...sectors.map((s) => ({ icon: s.icon, name: s.short, title: s.name, href: sectorHref(s.id), formats: order.filter((id) => s.formats.some(([f]) => f === id)) })),
+  { icon: 'hotel', name: 'Отели и объекты', title: 'Отели и коммерческие объекты', href: '/colaboracion/proyectos?type=hotels', formats: ['proyectos'] as ScenarioId[] },
+  { icon: 'rocket', name: 'Новый бизнес', title: 'Предприниматели и новый бизнес', href: '/colaboracion/negocio-miradex', formats: ['negocio'] as ScenarioId[] },
+  { icon: 'handshake', name: 'Другой бизнес', title: 'Другой бизнес: рекомендуйте клиентов', href: '/colaboracion/recomendar', formats: ['recomendar'] as ScenarioId[] },
 ];
