@@ -19,7 +19,7 @@ const { uid, scenario = '', lockScenario = false, layout = 'wide', business = ''
 const id = (n: string) => `${uid}-${n}`;
 const current = scenario || 'no-se';
 
-// «Пока не знаю» gets a compass instead of a number: a «?» in the number tile looked like a broken glyph
+// «Пока не знаю» has no number tile: a «?» or an icon there looked broken
 const roles = [...scenarios.map((s) => ({ id: s.id, num: s.num, label: s.short })), { id: 'no-se', num: '', label: ui.form.notSure }];
 
 const profile = ui.form.profileOpts;
@@ -51,7 +51,7 @@ const forRoles = (...r: string[]) => ({ 'data-for': r.join(' ') });
         {roles.map((r) => (
           <label class="role">
             <input type="radio" name="scenario" value={r.id} checked={r.id === current} data-scenario-radio />
-            <span class="role__box"><span class="role__num">{r.num || <Icon name="compass" size={16} />}</span><span class="role__label">{r.label}</span></span>
+            <span class:list={['role__box', { 'role__box--plain': !r.num }]}>{r.num && <span class="role__num">{r.num}</span>}<span class="role__label">{r.label}</span></span>
           </label>
         ))}
       </div>
@@ -229,6 +229,7 @@ const forRoles = (...r: string[]) => ({ 'data-for': r.join(' ') });
     background: var(--c-white); font-size: var(--fs-micro); font-weight: var(--fw-medium); line-height: 1.2;
     transition: background-color var(--dur) var(--ease), border-color var(--dur) var(--ease);
   }
+  .role__box--plain { padding-left: 14px; }
   .role__num { display: grid; place-items: center; flex: none; width: 28px; height: 28px; border-radius: var(--radius-xs); background: var(--c-grey); font-size: 11px; }
   .role:hover .role__box { border-color: var(--c-blue); }
   .role input:checked + .role__box { background: var(--c-blue); border-color: var(--c-blue); color: var(--c-white); }
