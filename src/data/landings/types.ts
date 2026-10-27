@@ -29,15 +29,17 @@ export interface VideoRow { num: number; audience: string; lead: string; points:
 export interface Cta { title: string; text?: string; cta?: string }
 
 export type BlockKey =
-  | 'hero' | 'businesses' | 'drivers' | 'videos' | 'why' | 'ctaA' | 'ways' | 'economics' | 'support'
+  | 'hero' | 'businesses' | 'drivers' | 'videos' | 'why' | 'ctaA' | 'ways' | 'economics' | 'model' | 'support'
   | 'resp' | 'ctaB' | 'product' | 'fit' | 'steps' | 'projects' | 'ctaC' | 'other' | 'faq' | 'final';
 
 export const defaultOrder: BlockKey[] = [
-  'hero', 'businesses', 'videos', 'why', 'ctaA', 'ways', 'economics', 'support', 'resp', 'ctaB',
+  'hero', 'businesses', 'videos', 'why', 'ctaA', 'ways', 'economics', 'model', 'support', 'resp', 'ctaB',
   'product', 'fit', 'steps', 'projects', 'ctaC', 'other', 'faq', 'final',
 ];
 
 export interface Landing {
+  /** dealer formats explain the open national model (strategy 10, updated 20.10.2026) */
+  openModel?: boolean;
   id: ScenarioId;
   meta: { title: string; description: string };
   order?: BlockKey[];

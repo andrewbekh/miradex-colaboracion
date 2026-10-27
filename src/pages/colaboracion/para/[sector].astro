@@ -1,7 +1,7 @@
 ---
 // Industry landing (strategy 6): one page per audience, understandable without the hub.
 // Order follows the strategy: promise → why it pays for this business → industry film → formats that fit →
-// economics → support → why clients like MIRADEX → how to start → projects → FAQ → form.
+// the open national model (strategy 10, updated 20.10.2026) → economics → support → why clients like MIRADEX → how to start → projects → FAQ → form.
 // Content comes from src/data/sectors.ts and the scenario landings it points to.
 import Page from '../../../layouts/Page.astro';
 import Hero from '../../../components/Hero.astro';
@@ -18,10 +18,11 @@ import Gallery from '../../../components/Gallery.astro';
 import Faq from '../../../components/Faq.astro';
 import FinalForm from '../../../components/FinalForm.astro';
 import Icon from '../../../components/Icon.astro';
+import ModelPillars from '../../../components/ModelPillars.astro';
 import { sectors, type Sector } from '../../../data/sectors';
 import { landings } from '../../../data/landings';
 import { scenarioById } from '../../../data/scenarios';
-import { productStats, statsFootnote, finalPoints } from '../../../data/shared';
+import { productStats, statsFootnote, finalPoints, modelPillars } from '../../../data/shared';
 import { ui } from '../../../data/ui';
 
 export function getStaticPaths() {
@@ -70,6 +71,10 @@ const video = landings.flatMap((l) => l.videos.items).find((v) => v.num === sect
 
   <Section id="formatos" tone="tint" title={ui.sector.formats} lead={formats.length > 1 ? ui.sector.formatsLead : undefined}>
     <SectorFormats items={formats} />
+  </Section>
+
+  <Section id="modelo" title={ui.model.title} lead={ui.model.lead}>
+    <ModelPillars items={modelPillars} />
   </Section>
 
   <CtaBand title={P.ctaA.title} text={P.ctaA.text} cta={P.ctaA.cta} scenario={sector.primary} />

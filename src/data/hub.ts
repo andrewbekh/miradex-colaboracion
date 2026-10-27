@@ -1,7 +1,7 @@
 // Hub «Сотрудничество» content. Sources: strategy 1, 3, 4, 5.1, 5.2 (two entry points: by format and by business), 6.1;
 // video script №1, №3 and №4 for production and logistics facts.
 import type { ScenarioId } from './scenarios';
-import { faq as common } from './shared';
+import { faq as common, modelPillars } from './shared';
 
 /** Quiz «Подберите формат», answer 1: a business type routes to the formats that fit it (scenario, business id on that landing);
  *  form = the matching option of the lead form select (businessTypes). */
@@ -63,11 +63,7 @@ export const hub = {
     },
   },
   video: { title: 'Всё сотрудничество за 3 минуты', lead: 'Продукция, форматы сотрудничества, условия и поддержка MIRADEX в Испании.' },
-  pillars: [
-    { icon: 'map', kicker: 'Продажи', title: 'Национальные', text: 'Партнёр может находиться в любой точке Испании и продавать MIRADEX по всей стране. MIRADEX тоже ведёт национальные продажи.' },
-    { icon: 'map-pin', kicker: 'Монтаж', title: 'Локальный', text: 'Монтаж и сервис организуются на месте через сеть проверенных монтажных партнёров.' },
-    { icon: 'network', kicker: 'Партнёрская сеть', title: 'Открытая', text: 'Продажи по всей Испании без территориальных ограничений. Каждый партнёр развивает собственную клиентскую базу. Для крупных проектов возможны индивидуальные условия.' },
-  ],
+  pillars: modelPillars,
   why: { title: 'Почему MIRADEX' },
   production: {
     title: 'Производство',
@@ -91,7 +87,7 @@ export const hub = {
       { icon: 'handshake', title: 'Коммерческая', items: ['Цены и условия по формату сотрудничества и объёму', 'Фото, каталоги и материалы для продаж', 'Помощь с расчётами и предложениями'] },
       { icon: 'file-text', title: 'Техническая', items: ['Техническая документация', 'Инструкции и видео по монтажу', 'Техподдержка на первых проектах'] },
       { icon: 'qr-code', title: 'Образцы и стенды', items: ['Образцы моделей, цветов и покрытий', 'Стенды для магазина, шоурума или офиса', 'Персональный QR-код для ваших клиентов'] },
-      { icon: 'users', title: 'Сопровождение', items: ['Сопровождение запуска и первых проектов', 'Индивидуальные условия для отдельных крупных проектов', 'Местные заказы на монтаж для обученных партнёров'] },
+      { icon: 'users', title: 'Сопровождение', items: ['Сопровождение запуска и первых проектов', 'Письменные договорённости по отдельным крупным проектам', 'Местные заказы на монтаж для обученных партнёров'] },
     ],
   },
   training: {
@@ -142,6 +138,7 @@ export const hub = {
     common.leadTimes,
     common.warranty,
     common.network,
+    common.fairPlay,
   ],
   final: { title: 'Расскажите о своём бизнесе', text: 'Мы предложим формат сотрудничества и коммерческие условия под ваш потенциал.' },
 };

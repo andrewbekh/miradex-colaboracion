@@ -21,19 +21,20 @@ import Gallery from './Gallery.astro';
 import Faq from './Faq.astro';
 import FinalForm from './FinalForm.astro';
 import ScenarioButtons from './ScenarioButtons.astro';
+import ModelPillars from './ModelPillars.astro';
 import Icon from './Icon.astro';
 import { defaultOrder, type Landing, type BlockKey } from '../data/landings/types';
 import { scenarioById } from '../data/scenarios';
-import { productStats, statsFootnote, finalPoints } from '../data/shared';
+import { productStats, statsFootnote, finalPoints, modelPillars } from '../data/shared';
 import { ui } from '../data/ui';
 
 interface Props { landing: Landing }
 const { landing: L } = Astro.props;
 const s = scenarioById(L.id)!;
-const order: BlockKey[] = (L.order ?? defaultOrder).filter((k) => k !== 'drivers' || L.drivers);
+const order: BlockKey[] = (L.order ?? defaultOrder).filter((k) => (k !== 'drivers' || L.drivers) && (k !== 'model' || L.openModel));
 
 // background rhythm: every content section alternates; hero, dark blocks, CTA bands and the form do not count
-const sectionKeys: BlockKey[] = ['businesses', 'drivers', 'videos', 'ways', 'economics', 'support', 'resp', 'product', 'fit', 'steps', 'projects', 'faq'];
+const sectionKeys: BlockKey[] = ['businesses', 'drivers', 'videos', 'ways', 'economics', 'model', 'support', 'resp', 'product', 'fit', 'steps', 'projects', 'faq'];
 const tone: Partial<Record<BlockKey, 'light' | 'tint'>> = {};
 let n = 0;
 for (const k of order) if (sectionKeys.includes(k)) tone[k] = n++ % 2 === 0 ? 'tint' : 'light';
@@ -66,6 +67,8 @@ for (const k of order) if (sectionKeys.includes(k)) tone[k] = n++ % 2 === 0 ? 't
             <Economics sources={L.economics.sources} factors={L.economics.factors} sourcesLabel={L.economics.sourcesLabel} factorsLabel={L.economics.factorsLabel} principle={L.economics.principle} model={L.economics.model} />
           </Section>
         );
+      case 'model':
+        return <Section id="modelo" tone={tone.model} title={ui.model.title} lead={ui.model.lead}><ModelPillars items={modelPillars} /></Section>;
       case 'support':
         return <Section id="apoyo" tone={tone.support} title={L.support.title} lead={L.support.lead}><SupportGroups groups={L.support.groups} /></Section>;
       case 'resp':
