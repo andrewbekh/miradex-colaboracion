@@ -16,20 +16,15 @@ interface Props {
 const { sources, factors = [], principle, model, sourcesLabel = ui.eco.sources, factorsLabel = ui.eco.factors } = Astro.props;
 ---
 <div class="eco">
-  <div class="eco__sources">
-    <p class="eco__label eyebrow">{sourcesLabel}</p>
-    <ol role="list">
-      {sources.map((s) => (
-        <li class="eco__source">
-          <span class="eco__check" aria-hidden="true"><Icon name="plus" size={16} /></span>
-          <div>
-            <h3 class="eco__src-title">{s.title}</h3>
-            <p class="eco__src-text">{s.text}</p>
-          </div>
-        </li>
-      ))}
-    </ol>
-  </div>
+  <p class="eco__label eyebrow eco__head">{sourcesLabel}</p>
+  <ol class="eco__sources" role="list">
+    {sources.map((s) => (
+      <li class="eco__source">
+        <h3 class="eco__src-title">{s.title}</h3>
+        <p class="eco__src-text">{s.text}</p>
+      </li>
+    ))}
+  </ol>
   <div class="eco__side">
     <div class="eco__card">
       {factors.length > 0 && (
@@ -55,12 +50,17 @@ const { sources, factors = [], principle, model, sourcesLabel = ui.eco.sources, 
 </div>
 
 <style>
-  .eco { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--grid-gap); align-items: start; }
-  .eco__label { color: var(--text-muted); margin-bottom: var(--sp-5); }
-  .eco__sources ol { display: grid; gap: var(--sp-3); }
-  /* income sources add up: a «+» per source, no colour bars */
-  .eco__source { display: grid; grid-template-columns: 28px 1fr; gap: var(--sp-4); padding: var(--sp-5); background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-md); }
-  .eco__check { display: grid; place-items: center; width: 28px; height: 28px; border-radius: var(--radius-xs); background: var(--c-mint); }
+  /* the label sits above the left column only, so both columns start on the same line */
+  .eco { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-areas: 'head .' 'list side'; gap: var(--sp-4) var(--grid-gap); align-items: start; }
+  .eco__head { grid-area: head; }
+  .eco__sources { grid-area: list; }
+  .eco__side { grid-area: side; }
+  .eco__label { color: var(--text-muted); }
+  .eco__card .eco__label { margin-bottom: var(--sp-5); }
+  /* sources as one list in one card: plain rows, nothing that looks like a button */
+  .eco__sources { display: grid; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-md); }
+  .eco__source { padding: var(--sp-5) var(--sp-6); }
+  .eco__source + .eco__source { border-top: 1px solid var(--border); }
   .eco__src-title { font-size: 1.0625rem; margin-bottom: 6px; }
   .eco__src-text { color: var(--text-muted); }
   .eco__side { display: grid; gap: var(--grid-gap); }
@@ -74,6 +74,6 @@ const { sources, factors = [], principle, model, sourcesLabel = ui.eco.sources, 
   .eco__principle--solo { margin-top: 0; padding-top: 0; border-top: 0; font-size: var(--fs-lead); font-weight: var(--fw-light); line-height: 1.45; }
   .eco__principle :global(svg) { color: var(--c-mint); }
   .eco__model { display: grid; grid-template-columns: 28px 1fr; gap: var(--sp-4); padding: var(--sp-6); background: var(--c-mint); border-radius: var(--radius-md); }
-  @media (max-width: 1199px) { .eco { grid-template-columns: 1fr; } }
-  @media (max-width: 767px) { .eco__card, .eco__model { padding: var(--sp-5); } }
+  @media (max-width: 1199px) { .eco { grid-template-columns: 1fr; grid-template-areas: 'head' 'list' 'side'; } }
+  @media (max-width: 767px) { .eco__card, .eco__model { padding: var(--sp-5); } .eco__source { padding: var(--sp-4) var(--sp-5); } }
 </style>

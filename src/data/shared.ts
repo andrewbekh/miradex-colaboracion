@@ -14,8 +14,8 @@ export const advantages = [
 export const productStats = [
   { value: '10+', label: 'моделей ограждений' },
   { value: '25+', label: 'цветов и покрытий' },
-  { value: '30 лет', label: 'техническая гарантия, до*' },
-  { value: '15 лет', label: 'эстетическая гарантия, до*' },
+  { value: 'до 30 лет', label: 'техническая гарантия*' },
+  { value: 'до 15 лет', label: 'эстетическая гарантия*' },
 ];
 export const statsFootnote = '* В зависимости от выбранного покрытия.';
 
