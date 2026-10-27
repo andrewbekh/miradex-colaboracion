@@ -18,6 +18,7 @@ import ProjectGallery from '../../../components/ProjectGallery.astro';
 import Faq from '../../../components/Faq.astro';
 import FinalForm from '../../../components/FinalForm.astro';
 import Icon from '../../../components/Icon.astro';
+import FeatureGrid from '../../../components/FeatureGrid.astro';
 import ModelPillars from '../../../components/ModelPillars.astro';
 import { sectors, type Sector } from '../../../data/sectors';
 import { landings } from '../../../data/landings';
@@ -60,9 +61,11 @@ const video = landings.flatMap((l) => l.videos.items).find((v) => v.num === sect
   <Hero crumb={{ label: sector.name }} title={sector.title} lead={sector.lead} scenario={sector.primary} image={sector.image} imageAlt={sector.name} note={send ? `${ui.biz.send} ${send.join(', ')}.` : undefined} />
 
   <Section id="por-que" tone="tint" title={ui.sector.why} lead={sector.name}>
-    <ul class="gain-grid" role="list">
-      {gains.map((g) => <li><span class="gain-grid__ic"><Icon name="check" size={18} /></span><span>{g}</span></li>)}
-    </ul>
+    {sector.why
+      ? <FeatureGrid items={sector.why} />
+      : <ul class="gain-grid" role="list">
+          {gains.map((g) => <li><span class="gain-grid__ic"><Icon name="check" size={18} /></span><span>{g}</span></li>)}
+        </ul>}
   </Section>
 
   {video && (

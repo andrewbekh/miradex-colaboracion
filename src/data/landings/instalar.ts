@@ -1,6 +1,6 @@
 // Landing 02 · «Хочу продавать и устанавливать» (монтажный партнёр). Sources: strategy 3.2, 11, pricing model
 // (installer role, no numbers); video scripts №3, №10, №5.
-import type { Landing } from './types';
+import { defaultOrder, type Landing, type Feature } from './types';
 import { faq } from '../shared';
 
 // Three income sources of an installer (strategy 3.2)
@@ -8,9 +8,31 @@ const own = { title: 'Свой клиент', text: 'Продаёте и уст�
 const passed = { title: 'Передаёте клиента', text: 'MIRADEX консультирует и продаёт, вы получаете вознаграждение и можете сделать монтаж.' };
 const lead = { title: 'Заказ от MIRADEX', text: 'После обучения получаете местные заказы на монтаж в своей зоне.' };
 
+/** Why installers choose MIRADEX: from the interview with an installer who works with MIRADEX in Bulgaria
+ *  and miradex.bg/montazhni-ekipi (team meeting). Strongest first: new clients, income, then the installation itself.
+ *  Also used on the industry pages for installers and metalworkers (src/data/sectors.ts). */
+export const installerDrivers: Feature[] = [
+  { icon: 'users', title: 'Новые клиенты', text: 'Заказы на монтаж от клиентов MIRADEX в вашей зоне и рекомендации нашей команды.' },
+  { icon: 'coins', title: 'Доход с продукции и монтажа', text: 'Партнёрская цена на весь ассортимент, а цену монтажа ставите вы. Рамы для ворот и калиток и аксессуары продаёте с наценкой.' },
+  { icon: 'ruler', title: 'Гибкий монтаж', text: 'Секции подстраиваются под неровные столбы и нестандартные пролёты. Ламели подрезаются ножницами прямо на объекте.' },
+  { icon: 'scissors', title: 'Ошибки исправляются на месте', text: 'Неточный замер не останавливает объект: большинство вопросов решается на месте, без отправки секций обратно на производство.' },
+  { icon: 'shield-check', title: 'Минимум рекламаций', text: 'Простой монтаж и прочная конструкция: работа без переделок и возвратов.' },
+  { icon: 'truck', title: 'Доставка прямо клиенту', text: 'Секции едут сразу на объект: без склада и самовывоза, монтаж начинается быстрее.' },
+  { icon: 'book-open', title: 'Материалы для продаж', text: 'Каталоги, образцы-брелоки с цветами и демонстрационные стенды разных размеров.' },
+  { icon: 'megaphone', title: 'Реклама ваших объектов', text: 'Ваши проекты и компания попадают в рекламные кампании MIRADEX.' },
+  { icon: 'graduation-cap', title: 'Обучение монтажу', text: 'Не работали с такими заборами? Дадим все детали, инструкции и видео.' },
+];
+
 export const instalar: Landing = {
   id: 'instalar',
   openModel: true,
+  // landing for ad traffic: the arguments come right after the promise (strategy 6.2), then the business picker
+  order: ['hero', 'drivers', ...defaultOrder.slice(1)],
+  drivers: {
+    title: 'Почему монтажники выбирают MIRADEX',
+    lead: 'Что ценят монтажные бригады, которые уже работают с нашими заборами.',
+    items: installerDrivers,
+  },
   meta: {
     title: 'Продавайте и устанавливайте MIRADEX · Сотрудничество для монтажников',
     description: 'Зарабатывайте на продаже и монтаже металлических ограждений MIRADEX и получайте местные заказы на установку. Обучение, документация и техподдержка.',

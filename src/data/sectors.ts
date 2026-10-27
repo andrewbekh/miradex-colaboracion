@@ -3,6 +3,8 @@
 // (logic, gains, ways), the industry video, and economics, support, steps, projects and FAQ of the `primary` format.
 // Ads for an audience lead straight here; the hub shows all of them in «Выберите свой бизнес».
 import type { ScenarioId } from './scenarios';
+import type { Feature } from './landings/types';
+import { installerDrivers } from './landings/instalar';
 
 export interface Sector {
   id: string;            // URL slug (Spanish, as the future site)
@@ -16,6 +18,8 @@ export interface Sector {
   primary: ScenarioId;   // format whose economics, support, steps and FAQ the page uses
   formats: [ScenarioId, string][]; // relevant formats + business id on that landing (opens it via ?type=)
   form: string;          // business type preselected in the lead form
+  /** «Почему MIRADEX выгоден вашему бизнесу»: own arguments; without them the page lists the gains of its formats */
+  why?: Feature[];
 }
 
 export const sectors: Sector[] = [
@@ -31,7 +35,7 @@ export const sectors: Sector[] = [
     title: 'Зарабатывайте на продаже и монтаже MIRADEX',
     lead: 'Продукт, система монтажа и местные заказы от MIRADEX в вашей зоне.',
     image: '/img/photos/atlas-wood-street.jpg', video: 3, primary: 'instalar',
-    formats: [['instalar', 'installers'], ['recomendar', 'installers']], form: 'Монтаж и установка',
+    formats: [['instalar', 'installers'], ['recomendar', 'installers']], form: 'Монтаж и установка', why: installerDrivers,
   },
   {
     id: 'puertas', name: 'Компании по воротам и автоматике', short: 'Ворота и автоматика', icon: 'door-open',
@@ -52,7 +56,7 @@ export const sectors: Sector[] = [
     title: 'Меньше ручного производства, больше объектов',
     lead: 'Готовая система ограждений под размер вместо изготовления на месте: вы зарабатываете на продаже и монтаже.',
     image: '/img/photos/simetrica-black.jpg', video: 3, primary: 'instalar',
-    formats: [['instalar', 'metal'], ['vender', 'metal']], form: 'Металлообработка',
+    formats: [['instalar', 'metal'], ['vender', 'metal']], form: 'Металлообработка', why: installerDrivers,
   },
   {
     id: 'constructoras', name: 'Строительные компании и подрядчики', short: 'Строительство и подряд', icon: 'hard-hat',
