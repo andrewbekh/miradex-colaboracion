@@ -20,8 +20,11 @@ const { sources, factors = [], principle, model, sourcesLabel = ui.eco.sources, 
   <ol class="eco__sources" role="list">
     {sources.map((s) => (
       <li class="eco__source">
-        <h3 class="eco__src-title">{s.title}</h3>
-        <p class="eco__src-text">{s.text}</p>
+        <span class="eco__check" aria-hidden="true"><Icon name="check" size={14} /></span>
+        <div>
+          <h3 class="eco__src-title">{s.title}</h3>
+          <p class="eco__src-text">{s.text}</p>
+        </div>
       </li>
     ))}
   </ol>
@@ -59,7 +62,9 @@ const { sources, factors = [], principle, model, sourcesLabel = ui.eco.sources, 
   .eco__card .eco__label { margin-bottom: var(--sp-5); }
   /* sources as one list in one card: plain rows, nothing that looks like a button */
   .eco__sources { display: grid; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-md); }
-  .eco__source { padding: var(--sp-5) var(--sp-6); }
+  /* green check circles, the same as «Чем выгодно» in the business panel */
+  .eco__source { display: grid; grid-template-columns: 24px 1fr; gap: var(--sp-4); align-items: start; padding: var(--sp-5) var(--sp-6); }
+  .eco__check { display: grid; place-items: center; width: 24px; height: 24px; margin-top: 1px; border-radius: 50%; background: var(--c-mint); color: var(--c-ink); }
   .eco__source + .eco__source { border-top: 1px solid var(--border); }
   .eco__src-title { font-size: 1.0625rem; margin-bottom: 6px; }
   .eco__src-text { color: var(--text-muted); }
