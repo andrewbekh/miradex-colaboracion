@@ -28,8 +28,6 @@ export interface Business {
   /** advantages for this business */
   gains: string[];
   ways: BusinessWay[];
-  /** what to prepare for the application (idea from the TPS partner page): shown under the panel and on industry pages */
-  send?: string[];
   /** film that speaks to this business (catalog in src/data/videos.ts) */
   video?: number;
   /** what this film gives this business; without it the panel shows the film title */
@@ -43,22 +41,18 @@ export interface Business {
 /** A film shown on the page with its audience and description. `points` are no longer shown (Nikita, 04.11.2026). */
 export interface VideoRow { num: number; audience: string; lead: string; points?: string[] }
 
-export interface Cta { title: string; text?: string; cta?: string }
-
 export type BlockKey =
-  | 'hero' | 'businesses' | 'drivers' | 'videos' | 'why' | 'ctaA' | 'ways' | 'economics' | 'model' | 'support'
-  | 'resp' | 'ctaB' | 'product' | 'fit' | 'steps' | 'projects' | 'ctaC' | 'other' | 'faq' | 'final';
+  | 'hero' | 'businesses' | 'drivers' | 'videos' | 'why' | 'economics' | 'support'
+  | 'resp' | 'product' | 'steps' | 'projects' | 'other' | 'faq' | 'final';
 
-/** One story per page, following strategy 6: promise → your business → film → how you can work → how you earn →
- *  the open model → what you get → why clients choose MIRADEX → how to start → projects → FAQ → form.
- *  'why', 'resp', 'fit', 'ctaA/B/C' and 'other' stay in the data and can be switched on per landing with `order`. */
+/** One story per page, by Nikita's structure of «Продавать»: interest → possibilities for this business → the economics →
+ *  product advantages → support → how to start → projects → objections → form.
+ *  'drivers', 'resp', 'why' and 'other' are switched on per landing with `order`. */
 export const defaultOrder: BlockKey[] = [
-  'hero', 'businesses', 'videos', 'ways', 'economics', 'model', 'support', 'product', 'steps', 'projects', 'faq', 'final',
+  'hero', 'businesses', 'videos', 'economics', 'product', 'support', 'steps', 'projects', 'faq', 'final',
 ];
 
 export interface Landing {
-  /** dealer formats explain the open national model (strategy 10, updated 20.10.2026) */
-  openModel?: boolean;
   id: ScenarioId;
   meta: { title: string; description: string };
   order?: BlockKey[];
@@ -72,22 +66,19 @@ export interface Landing {
   drivers?: { title: string; lead: string; items: Feature[] };
   videos: { title: string; lead: string; items: VideoRow[] };
   why?: { title?: string; text?: string };
-  ways?: { title: string; lead: string; items: Feature[]; cols?: 2 | 3 | 4; links: ScenarioId[]; linksTitle?: string };
   economics: {
     title: string; lead: string; sources: { title: string; text: string }[]; factors?: string[];
     sourcesLabel?: string; factorsLabel?: string; factorsIntro?: string; principle: string; model: { title: string; text: string; cta?: string };
   };
   support: { title: string; lead: string; groups: { icon: string; title: string; items: string[] }[] };
-  resp: { title: string; lead: string; miradex: string[]; partner: string[]; partnerTitle?: string; note?: string };
+  resp?: { title: string; lead: string; miradex: string[]; partner: string[]; partnerTitle?: string; note?: string };
   product: { title: string; lead: string };
-  fit: { title?: string; fit: string[]; notFit: string[] };
   steps: { title?: string; lead?: string; items: { title: string; text: string }[] };
   projects: {
     title: string; lead: string; items?: Feature[]; cols?: 2 | 3 | 4;
     gallery: { src: string; caption: string }[];
     reference?: { eyebrow: string; title: string; text: string; stats: { value: string; label: string }[]; link: { label: string; href: string } };
   };
-  ctaA: Cta; ctaB: Cta; ctaC: Cta;
   other?: { title: string; lead: string };
   faq: { q: string; a: string }[];
   final: { title: string; text: string; pointsTitle?: string; points?: string[] };

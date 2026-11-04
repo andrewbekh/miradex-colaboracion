@@ -1,7 +1,7 @@
 ---
 // Industry landing (strategy 6): one page per audience, understandable without the hub.
-// Order follows the strategy: promise → why it pays for this business → industry film → formats that fit →
-// the open national model (strategy 10, updated 20.10.2026) → economics → support → why clients like MIRADEX → how to start → projects → FAQ → form.
+// Order follows the strategy and Nikita's logic of «Продавать»: promise → why it pays for this business → industry film → formats that fit →
+// economics → what you can offer clients → support → how to start → projects → FAQ → form.
 // Content comes from src/data/sectors.ts and the scenario landings it points to.
 import Page from '../../../layouts/Page.astro';
 import Hero from '../../../components/Hero.astro';
@@ -20,11 +20,10 @@ import Faq from '../../../components/Faq.astro';
 import FinalForm from '../../../components/FinalForm.astro';
 import Icon from '../../../components/Icon.astro';
 import FeatureGrid from '../../../components/FeatureGrid.astro';
-import ModelPillars from '../../../components/ModelPillars.astro';
 import { sectors, type Sector } from '../../../data/sectors';
 import { landings } from '../../../data/landings';
 import { scenarioById } from '../../../data/scenarios';
-import { clientAdvantages, clientAdvantagesNote, finalPoints, modelPillars } from '../../../data/shared';
+import { clientAdvantages, clientAdvantagesNote, finalPoints } from '../../../data/shared';
 import { ui } from '../../../data/ui';
 
 export function getStaticPaths() {
@@ -48,20 +47,18 @@ const gains = formats.flatMap((f) => f.business.gains).filter((g) => {
   const key = g.toLowerCase().split(' ').slice(0, 2).join(' ');
   return !seen.has(key) && seen.add(key);
 }).slice(0, 6);
-// what to prepare: from the primary format's entry for this business
-const send = (formats.find((f) => f.scenario.id === sector.primary) ?? formats[0]).business.send;
 // the industry film, with its row text from whichever landing tells it
 const video = landings.flatMap((l) => l.videos.items).find((v) => v.num === sector.video);
 ---
 <Page
   title={`${sector.name}: сотрудничество с MIRADEX`}
-  description={`${sector.title}. ${sector.lead}`}
+  description={`${sector.title}. ${sector.lead.join(' ')}`}
   scenario={sector.primary}
   here={{ label: sector.name, short: sector.short, formats: sector.formats, scenario: sector.primary, business: sector.form }}
   cta={P.cta}
   ctaShort={P.ctaShort}
 >
-  <Hero crumb={{ label: sector.name }} title={sector.title} lead={sector.lead} scenario={sector.primary} business={sector.form} cta={P.cta} quickTitle={P.hero.quickTitle} quickText={P.hero.quickText} quickDone={P.hero.quickDone} image={sector.image} imageAlt={sector.name} note={send ? `${ui.biz.send} ${send.join(', ')}.` : undefined} />
+  <Hero crumb={{ label: sector.name }} title={sector.title} lead={sector.lead} scenario={sector.primary} business={sector.form} cta={P.cta} quickTitle={P.hero.quickTitle} quickText={P.hero.quickText} quickDone={P.hero.quickDone} image={sector.image} imageAlt={sector.name} note={P.hero.note} />
 
   <Section id="por-que" tone="tint" title={ui.sector.why} lead={sector.name}>
     {sector.why
@@ -81,34 +78,30 @@ const video = landings.flatMap((l) => l.videos.items).find((v) => v.num === sect
     <SectorFormats items={formats} />
   </Section>
 
-  <Section id="modelo" title={ui.model.title} lead={ui.model.lead}>
-    <ModelPillars items={modelPillars} />
-  </Section>
-
   <Section id="economia" title={P.economics.title} lead={P.economics.lead}>
     <Economics sources={P.economics.sources} factors={P.economics.factors} sourcesLabel={P.economics.sourcesLabel} factorsLabel={P.economics.factorsLabel} factorsIntro={P.economics.factorsIntro} principle={P.economics.principle} model={P.economics.model} scenario={sector.primary} />
   </Section>
 
-  <Section id="apoyo" tone="tint" title={P.support.title} lead={P.support.lead}>
-    <SupportGroups groups={P.support.groups} />
-    <SamplesStrip />
-  </Section>
-
-  <Section id="producto" title={ui.sector.product} lead={P.product.lead}>
+  <Section id="producto" tone="tint" title={P.product.title} lead={P.product.lead}>
     <FeatureGrid items={clientAdvantages} />
     <p class="note">{clientAdvantagesNote}</p>
     <div class="gap-top"><WarrantyBadges /></div>
     <div class="gap-top range">
       <h3 class="range__title">{ui.rangeTitle}</h3>
-      <CategoryCards />
+      <CategoryCards texts={sector.range} />
     </div>
+  </Section>
+
+  <Section id="apoyo" title={P.support.title} lead={P.support.lead}>
+    <SupportGroups groups={P.support.groups} />
+    <SamplesStrip />
   </Section>
 
   <Section id="inicio" tone="tint" title={P.steps.title ?? 'Как начинается сотрудничество'} lead={P.steps.lead}>
     <Steps steps={P.steps.items} />
   </Section>
 
-  <Section id="proyectos" title={ui.sector.projects} lead={P.projects.lead}>
+  <Section id="proyectos" title={P.projects.title} lead={P.projects.lead}>
     <div class="gap-bottom"><TpsStats /></div>
     <ProjectGallery />
   </Section>

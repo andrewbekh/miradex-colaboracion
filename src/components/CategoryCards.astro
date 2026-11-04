@@ -3,9 +3,9 @@ import { ui } from '../data/ui';
 // Product lines (miradex.bg directions). Photos are provisional until Spanish projects exist.
 import Icon from './Icon.astro';
 import { productLines } from '../data/nav';
-interface Props { linked?: boolean }
+interface Props { linked?: boolean; texts?: Record<string, string> }
 // not linked until the Spanish catalogue exists: a «Смотреть каталог» to nowhere reads as broken
-const { linked = false } = Astro.props;
+const { linked = false, texts = {} } = Astro.props;
 ---
 <ul class="cc" role="list">
   {productLines.map((p) => (
@@ -21,7 +21,7 @@ const { linked = false } = Astro.props;
         </div>
         <div class="cc__body">
           <h3 class="cc__title">{p.title}</h3>
-          <p class="cc__text">{p.text}</p>
+          <p class="cc__text">{texts[p.id] ?? p.text}</p>
           {linked && <span class="cc__more">{ui.cta.seeCatalog} <Icon name="arrow-up-right" size={16} /></span>}
         </div>
       </a>

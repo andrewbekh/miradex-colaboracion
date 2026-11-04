@@ -82,9 +82,7 @@ const swatches = ['mint', 'sky', 'blue'];
                 </div>
               )}
               <div class="bt__action">
-                {hint
-                  ? <p class="bt__send"><Icon name="clipboard-list" size={20} /><span>{hint}</span></p>
-                  : b.send && <p class="bt__send"><Icon name="clipboard-list" size={20} /><span><b>{ui.biz.send}</b> {b.send.join(', ')}.</span></p>}
+                {hint && <p class="bt__send"><Icon name="clipboard-list" size={20} /><span>{hint}</span></p>}
                 <button type="button" class="btn btn--primary bt__cta" data-open-form data-scenario={scenario} data-business={b.formType}>
                   <span>{cta}</span><Icon name="arrow-right" size={18} />
                 </button>
@@ -152,7 +150,6 @@ const swatches = ['mint', 'sky', 'blue'];
   .bt__video-text:hover .bt__video-title { text-decoration: underline; }
   .bt__action { display: grid; gap: var(--sp-4); }
   .bt__send { display: grid; grid-template-columns: 20px 1fr; gap: 10px; align-items: start; padding: var(--sp-4); border-radius: var(--radius-sm); background: var(--c-grey); font-size: var(--fs-small); }
-  .bt__send b { font-weight: var(--fw-medium); }
   .bt__cta { width: 100%; }
 
   /* tablet: chips above the panel */
