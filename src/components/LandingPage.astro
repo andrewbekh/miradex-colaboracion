@@ -1,5 +1,5 @@
 ---
-// One template for all scenario landings (strategy section 6). Blocks render in `landing.order`;
+// One template for all scenario landings (strategy section 6, structure of «Продавать» by Nikita). Blocks render in `landing.order`;
 // content sections alternate light and tinted backgrounds automatically.
 import Page from '../layouts/Page.astro';
 import Hero from './Hero.astro';
@@ -13,7 +13,8 @@ import Economics from './Economics.astro';
 import SupportGroups from './SupportGroups.astro';
 import SamplesStrip from './SamplesStrip.astro';
 import Responsibilities from './Responsibilities.astro';
-import Stats from './Stats.astro';
+import WarrantyBadges from './WarrantyBadges.astro';
+import TpsStats from './TpsStats.astro';
 import CategoryCards from './CategoryCards.astro';
 import FitList from './FitList.astro';
 import Steps from './Steps.astro';
@@ -25,7 +26,7 @@ import ModelPillars from './ModelPillars.astro';
 import Icon from './Icon.astro';
 import { defaultOrder, type Landing, type BlockKey } from '../data/landings/types';
 import { scenarioById } from '../data/scenarios';
-import { productStats, statsFootnote, finalPoints, modelPillars } from '../data/shared';
+import { clientAdvantages, clientAdvantagesNote, finalPoints, modelPillars } from '../data/shared';
 import { ui } from '../data/ui';
 
 interface Props { landing: Landing }
@@ -39,13 +40,13 @@ const tone: Partial<Record<BlockKey, 'light' | 'tint'>> = {};
 let n = 0;
 for (const k of order) if (sectionKeys.includes(k)) tone[k] = n++ % 2 === 0 ? 'tint' : 'light';
 ---
-<Page title={L.meta.title} description={L.meta.description} scenario={L.id} current={L.id}>
+<Page title={L.meta.title} description={L.meta.description} scenario={L.id} current={L.id} cta={L.cta} ctaShort={L.ctaShort}>
   {order.map((k) => {
     switch (k) {
       case 'hero':
-        return <Hero crumb={{ num: s.num, label: s.short, tone: s.tone }} title={L.hero.title} lead={L.hero.lead} scenario={L.id} image={L.hero.image} imageAlt={L.hero.imageAlt} note={L.hero.note} cta={L.hero.cta} />;
+        return <Hero crumb={{ num: s.num, label: s.short, tone: s.tone }} title={L.hero.title} lead={L.hero.lead} scenario={L.id} quickTitle={L.hero.quickTitle} quickText={L.hero.quickText} quickDone={L.hero.quickDone} image={L.hero.image} imageAlt={L.hero.imageAlt} note={L.hero.note} cta={L.cta ?? L.hero.cta} />;
       case 'businesses':
-        return <Section id="tipos" tone={tone.businesses} title={L.businesses.title} lead={L.businesses.lead}><BusinessTypes items={L.businesses.items} scenario={L.id} /></Section>;
+        return <Section id="tipos" tone={tone.businesses} title={L.businesses.title} lead={L.businesses.lead}><BusinessTypes items={L.businesses.items} scenario={L.id} hint={L.businesses.hint} cta={L.cta} /></Section>;
       case 'drivers':
         return L.drivers && <Section id="por-que" tone={tone.drivers} title={L.drivers.title} lead={L.drivers.lead}><FeatureGrid items={L.drivers.items} /></Section>;
       case 'videos':
@@ -56,14 +57,14 @@ for (const k of order) if (sectionKeys.includes(k)) tone[k] = n++ % 2 === 0 ? 't
         return <CtaBand title={L.ctaA.title} text={L.ctaA.text} cta={L.ctaA.cta} scenario={L.id} />;
       case 'ways':
         return (
-          <Section id="como-funciona" tone={tone.ways} title={L.ways.title} lead={L.ways.lead}>
+          L.ways && <Section id="como-funciona" tone={tone.ways} title={L.ways.title} lead={L.ways.lead}>
             <FeatureGrid items={L.ways.items} cols={L.ways.cols} />
           </Section>
         );
       case 'economics':
         return (
           <Section id="economia" tone={tone.economics} title={L.economics.title} lead={L.economics.lead}>
-            <Economics sources={L.economics.sources} factors={L.economics.factors} sourcesLabel={L.economics.sourcesLabel} factorsLabel={L.economics.factorsLabel} principle={L.economics.principle} model={L.economics.model} />
+            <Economics sources={L.economics.sources} factors={L.economics.factors} sourcesLabel={L.economics.sourcesLabel} factorsLabel={L.economics.factorsLabel} factorsIntro={L.economics.factorsIntro} principle={L.economics.principle} model={L.economics.model} scenario={L.id} />
           </Section>
         );
       case 'model':
@@ -81,17 +82,23 @@ for (const k of order) if (sectionKeys.includes(k)) tone[k] = n++ % 2 === 0 ? 't
       case 'product':
         return (
           <Section id="producto" tone={tone.product} title={L.product.title} lead={L.product.lead}>
-            <Stats stats={productStats} footnote={statsFootnote} />
-            <div class="gap-top"><CategoryCards /></div>
+            <FeatureGrid items={clientAdvantages} />
+            <p class="note">{clientAdvantagesNote}</p>
+            <div class="gap-top"><WarrantyBadges /></div>
+            <div class="gap-top range">
+              <h3 class="range__title">{ui.rangeTitle}</h3>
+              <CategoryCards />
+            </div>
           </Section>
         );
       case 'fit':
         return <Section id="para-quien" tone={tone.fit} title={L.fit.title ?? 'Вам подходит?'}><FitList fit={L.fit.fit} notFit={L.fit.notFit} /></Section>;
       case 'steps':
-        return <Section id="inicio" tone={tone.steps} title={L.steps.title ?? 'Как начинается сотрудничество'}><Steps steps={L.steps.items} /></Section>;
+        return <Section id="inicio" tone={tone.steps} title={L.steps.title ?? 'Как начинается сотрудничество'} lead={L.steps.lead}><Steps steps={L.steps.items} /></Section>;
       case 'projects':
         return (
           <Section id="proyectos" tone={tone.projects} title={L.projects.title} lead={L.projects.lead}>
+            <div class="gap-bottom"><TpsStats /></div>
             {L.projects.items && <div class="gap-bottom"><FeatureGrid items={L.projects.items} cols={L.projects.cols} /></div>}
             {L.projects.reference && (
               <article class="ref gap-bottom">
@@ -116,7 +123,7 @@ for (const k of order) if (sectionKeys.includes(k)) tone[k] = n++ % 2 === 0 ? 't
       case 'faq':
         return <Section id="faq" tone={tone.faq} title="Частые вопросы"><Faq items={L.faq} /></Section>;
       case 'final':
-        return <FinalForm title={L.final.title} text={L.final.text} scenario={L.id} points={finalPoints} />;
+        return <FinalForm title={L.final.title} text={L.final.text} scenario={L.id} points={L.final.points ?? finalPoints} pointsTitle={L.final.pointsTitle} cta={L.cta} />;
     }
   })}
 </Page>
@@ -124,6 +131,9 @@ for (const k of order) if (sectionKeys.includes(k)) tone[k] = n++ % 2 === 0 ? 't
 <style>
   .gap-top { margin-top: var(--stack-gap); }
   .gap-bottom { margin-bottom: var(--stack-gap); }
+  .note { margin-top: var(--sp-4); color: var(--text-muted); font-size: var(--fs-small); }
+  .range { display: grid; gap: var(--sp-5); }
+  .range__title { font-size: var(--fs-h3); }
   /* reference model card (Business MIRADEX): copy on the left, numbers on the right, above the gallery */
   .ref { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: var(--sp-6); align-items: center; padding: var(--sp-7); border-radius: var(--radius-md); background: var(--bg-accent); color: var(--text-on-accent); }
   .ref__copy { display: grid; gap: var(--sp-3); justify-items: start; }

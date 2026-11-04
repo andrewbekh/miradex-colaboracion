@@ -26,19 +26,35 @@ function setScenario(form: HTMLFormElement, value: string | undefined) {
   applyRole(form);
 }
 
-// Business type comes from the "Узнайте свой бизнес" block: preselect it if the option exists.
+// Business type comes from the business block of the page: preselect it if the option exists.
 function setBusiness(form: HTMLFormElement, value: string | undefined) {
   if (!value) return;
   const select = form.querySelector<HTMLSelectElement>('[data-business-select]');
   if (select && [...select.options].some((o) => o.value === value || o.text === value)) select.value = value;
+  const hidden = form.querySelector<HTMLInputElement>('[data-business-hidden]');
+  if (hidden) hidden.value = value;
 }
+
+// The business chosen in the block on this page (BusinessTypes.astro): every form opened or filled later knows it.
+const chosenBusiness = () => document.documentElement.dataset.mxBusiness;
+function applyChosenBusiness() {
+  const value = chosenBusiness();
+  document.querySelectorAll<HTMLFormElement>('[data-lead-form]').forEach((form) => {
+    const select = form.querySelector<HTMLSelectElement>('[data-business-select]');
+    // never overwrite what the visitor picked in this form themselves
+    if (select?.value && select.dataset.auto !== '1') return;
+    setBusiness(form, value);
+    if (select) select.dataset.auto = '1';
+  });
+}
+document.addEventListener('mx:business', applyChosenBusiness);
 
 function openModal(scenario?: string, business?: string, quiz?: string) {
   if (!modal) return;
   const form = modal.querySelector<HTMLFormElement>('[data-lead-form]');
   if (form) {
     setScenario(form, scenario);
-    setBusiness(form, business);
+    setBusiness(form, business ?? chosenBusiness());
     // answers from the hub quiz travel with the lead
     const q = form.querySelector<HTMLInputElement>('[data-quiz-answers]');
     if (q) q.value = quiz ?? '';
@@ -68,6 +84,13 @@ document.addEventListener('click', (e) => {
     return;
   }
   if ((e.target as HTMLElement).closest('[data-close-form]')) closeModal();
+  // a text link next to a film plays that film
+  const proxy = (e.target as HTMLElement).closest<HTMLElement>('[data-video-proxy]');
+  if (proxy) {
+    e.preventDefault();
+    document.getElementById(proxy.dataset.videoProxy!)?.querySelector<HTMLElement>('[data-video]')?.click();
+    return;
+  }
   const v = (e.target as HTMLElement).closest<HTMLElement>('[data-video]');
   // placeholder films: say so instead of a dead play button
   if (v?.classList.contains('video__frame')) {
@@ -114,9 +137,15 @@ function showError(el: HTMLInputElement | HTMLSelectElement, msg: string) {
   if (box) box.textContent = msg;
 }
 
-const utm = [...new URLSearchParams(location.search)].filter(([k]) => k.startsWith('utm_')).map(([k, v]) => `${k}=${v}`).join('&');
+// Ad source: kept for the whole visit, so it survives the way from the hub to a landing and to the form.
+let utm = [...new URLSearchParams(location.search)].filter(([k]) => k.startsWith('utm_') || k === 'gclid' || k === 'fbclid').map(([k, v]) => `${k}=${v}`).join('&');
+let referrer = document.referrer && !document.referrer.startsWith(location.origin) ? document.referrer : '';
 let watched = '';
-try { watched = sessionStorage.getItem('mx_video') ?? ''; } catch {}
+try {
+  if (utm) sessionStorage.setItem('mx_utm', utm); else utm = sessionStorage.getItem('mx_utm') ?? '';
+  if (referrer) sessionStorage.setItem('mx_referrer', referrer); else referrer = sessionStorage.getItem('mx_referrer') ?? '';
+  watched = sessionStorage.getItem('mx_video') ?? '';
+} catch {}
 
 document.querySelectorAll<HTMLFormElement>('[data-lead-form]').forEach((form) => {
   applyRole(form);
@@ -125,10 +154,15 @@ document.querySelectorAll<HTMLFormElement>('[data-lead-form]').forEach((form) =>
   });
   const utmInput = form.querySelector<HTMLInputElement>('[data-utm]');
   if (utmInput) utmInput.value = utm;
+  const refInput = form.querySelector<HTMLInputElement>('[data-referrer]');
+  if (refInput) refInput.value = referrer;
+  const typeSelect = form.querySelector<HTMLSelectElement>('[data-business-select]');
+  typeSelect?.addEventListener('change', () => { delete typeSelect.dataset.auto; });
   const vInput = form.querySelector<HTMLInputElement>('[data-video-watched]');
   if (vInput) vInput.value = watched;
 
-  const required = [...form.querySelectorAll<HTMLInputElement | HTMLSelectElement>('[required]')];
+  // required fields, plus an optional e-mail: when filled in, it must be valid
+  const required = [...form.querySelectorAll<HTMLInputElement | HTMLSelectElement>('[required], input[type="email"]')];
   required.forEach((el) => {
     el.addEventListener('blur', () => { if (el.getAttribute('aria-invalid') || el.value) showError(el, fieldError(el)); });
     el.addEventListener('change', () => { if (el.getAttribute('aria-invalid') === 'true') showError(el, fieldError(el)); });
@@ -171,3 +205,5 @@ document.querySelectorAll<HTMLFormElement>('[data-lead-form]').forEach((form) =>
     }
   });
 });
+
+applyChosenBusiness();

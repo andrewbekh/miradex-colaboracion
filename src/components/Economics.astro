@@ -1,5 +1,5 @@
 ---
-// "Economía de la colaboración": income sources, what defines the conditions, pricing principle.
+// «Экономика сотрудничества»: what the partner gains, what defines the conditions, pricing principle, and a way to ask for prices.
 // No coefficients or discount levels: strategy section 17 is internal.
 import { ui } from '../data/ui';
 import Icon from './Icon.astro';
@@ -12,8 +12,13 @@ interface Props {
   model?: { title: string; text: string };
   sourcesLabel?: string;
   factorsLabel?: string;
+  factorsIntro?: string;
+  scenario?: string;
 }
-const { sources, factors = [], principle, model, sourcesLabel = ui.eco.sources, factorsLabel = ui.eco.factors } = Astro.props;
+interface Model { title: string; text: string; cta?: string }
+const { sources, factors = [], principle, model, sourcesLabel = ui.eco.sources, factorsLabel = ui.eco.factors, factorsIntro, scenario } = Astro.props as Props & { model?: Model };
+// whole sentences go in one column, short words in two
+const longFactors = factors.some((f) => f.length > 32);
 ---
 <div class="eco">
   <p class="eco__label eyebrow eco__head">{sourcesLabel}</p>
@@ -33,7 +38,8 @@ const { sources, factors = [], principle, model, sourcesLabel = ui.eco.sources, 
       {factors.length > 0 && (
         <>
           <p class="eco__label eyebrow">{factorsLabel}</p>
-          <ul class="eco__factors" role="list">
+          {factorsIntro && <p class="eco__intro">{factorsIntro}</p>}
+          <ul class:list={['eco__factors', { 'eco__factors--long': longFactors }]} role="list">
             {factors.map((f) => <li>{f}</li>)}
           </ul>
         </>
@@ -46,6 +52,11 @@ const { sources, factors = [], principle, model, sourcesLabel = ui.eco.sources, 
         <div>
           <h3 class="eco__src-title">{model.title}</h3>
           <p>{model.text}</p>
+          {model.cta && (
+            <button type="button" class="btn btn--primary eco__cta" data-open-form data-scenario={scenario}>
+              <span>{model.cta}</span><Icon name="arrow-right" size={18} />
+            </button>
+          )}
         </div>
       </div>
     )}
@@ -73,6 +84,9 @@ const { sources, factors = [], principle, model, sourcesLabel = ui.eco.sources, 
   .eco__card .eco__label { color: var(--text-on-accent-muted); }
   /* plain list, not pills: pills read as filters you can click */
   .eco__factors { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px var(--sp-5); }
+  .eco__intro { margin-bottom: var(--sp-3); }
+  .eco__factors--long { grid-template-columns: minmax(0, 1fr); }
+  .eco__cta { margin-top: var(--sp-5); }
   .eco__factors li { position: relative; padding-left: 16px; font-size: var(--fs-body); }
   .eco__factors li::before { content: ''; position: absolute; left: 0; top: 0.6em; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
   .eco__principle { display: grid; grid-template-columns: 22px 1fr; gap: var(--sp-3); margin-top: var(--sp-6); padding-top: var(--sp-5); border-top: 1px solid rgb(255 255 255 / 0.4); }

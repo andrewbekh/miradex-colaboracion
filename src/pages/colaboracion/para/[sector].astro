@@ -11,7 +11,8 @@ import SectorFormats from '../../../components/SectorFormats.astro';
 import Economics from '../../../components/Economics.astro';
 import SupportGroups from '../../../components/SupportGroups.astro';
 import SamplesStrip from '../../../components/SamplesStrip.astro';
-import Stats from '../../../components/Stats.astro';
+import WarrantyBadges from '../../../components/WarrantyBadges.astro';
+import TpsStats from '../../../components/TpsStats.astro';
 import CategoryCards from '../../../components/CategoryCards.astro';
 import Steps from '../../../components/Steps.astro';
 import ProjectGallery from '../../../components/ProjectGallery.astro';
@@ -23,7 +24,7 @@ import ModelPillars from '../../../components/ModelPillars.astro';
 import { sectors, type Sector } from '../../../data/sectors';
 import { landings } from '../../../data/landings';
 import { scenarioById } from '../../../data/scenarios';
-import { productStats, statsFootnote, finalPoints, modelPillars } from '../../../data/shared';
+import { clientAdvantages, clientAdvantagesNote, finalPoints, modelPillars } from '../../../data/shared';
 import { ui } from '../../../data/ui';
 
 export function getStaticPaths() {
@@ -57,8 +58,10 @@ const video = landings.flatMap((l) => l.videos.items).find((v) => v.num === sect
   description={`${sector.title}. ${sector.lead}`}
   scenario={sector.primary}
   here={{ label: sector.name, short: sector.short, formats: sector.formats, scenario: sector.primary, business: sector.form }}
+  cta={P.cta}
+  ctaShort={P.ctaShort}
 >
-  <Hero crumb={{ label: sector.name }} title={sector.title} lead={sector.lead} scenario={sector.primary} image={sector.image} imageAlt={sector.name} note={send ? `${ui.biz.send} ${send.join(', ')}.` : undefined} />
+  <Hero crumb={{ label: sector.name }} title={sector.title} lead={sector.lead} scenario={sector.primary} business={sector.form} cta={P.cta} quickTitle={P.hero.quickTitle} quickText={P.hero.quickText} quickDone={P.hero.quickDone} image={sector.image} imageAlt={sector.name} note={send ? `${ui.biz.send} ${send.join(', ')}.` : undefined} />
 
   <Section id="por-que" tone="tint" title={ui.sector.why} lead={sector.name}>
     {sector.why
@@ -83,7 +86,7 @@ const video = landings.flatMap((l) => l.videos.items).find((v) => v.num === sect
   </Section>
 
   <Section id="economia" title={P.economics.title} lead={P.economics.lead}>
-    <Economics sources={P.economics.sources} factors={P.economics.factors} sourcesLabel={P.economics.sourcesLabel} factorsLabel={P.economics.factorsLabel} principle={P.economics.principle} model={P.economics.model} />
+    <Economics sources={P.economics.sources} factors={P.economics.factors} sourcesLabel={P.economics.sourcesLabel} factorsLabel={P.economics.factorsLabel} factorsIntro={P.economics.factorsIntro} principle={P.economics.principle} model={P.economics.model} scenario={sector.primary} />
   </Section>
 
   <Section id="apoyo" tone="tint" title={P.support.title} lead={P.support.lead}>
@@ -92,15 +95,21 @@ const video = landings.flatMap((l) => l.videos.items).find((v) => v.num === sect
   </Section>
 
   <Section id="producto" title={ui.sector.product} lead={P.product.lead}>
-    <Stats stats={productStats} footnote={statsFootnote} />
-    <div class="gap-top"><CategoryCards /></div>
+    <FeatureGrid items={clientAdvantages} />
+    <p class="note">{clientAdvantagesNote}</p>
+    <div class="gap-top"><WarrantyBadges /></div>
+    <div class="gap-top range">
+      <h3 class="range__title">{ui.rangeTitle}</h3>
+      <CategoryCards />
+    </div>
   </Section>
 
-  <Section id="inicio" tone="tint" title={P.steps.title ?? 'Как начинается сотрудничество'}>
+  <Section id="inicio" tone="tint" title={P.steps.title ?? 'Как начинается сотрудничество'} lead={P.steps.lead}>
     <Steps steps={P.steps.items} />
   </Section>
 
   <Section id="proyectos" title={ui.sector.projects} lead={P.projects.lead}>
+    <div class="gap-bottom"><TpsStats /></div>
     <ProjectGallery />
   </Section>
 
@@ -108,11 +117,15 @@ const video = landings.flatMap((l) => l.videos.items).find((v) => v.num === sect
     <Faq items={P.faq} />
   </Section>
 
-  <FinalForm title={P.final.title} text={P.final.text} scenario={sector.primary} business={sector.form} points={finalPoints} />
+  <FinalForm title={P.final.title} text={P.final.text} scenario={sector.primary} business={sector.form} points={P.final.points ?? finalPoints} pointsTitle={P.final.pointsTitle} cta={P.cta} />
 </Page>
 
 <style>
   .gap-top { margin-top: var(--stack-gap); }
+  .gap-bottom { margin-bottom: var(--stack-gap); }
+  .note { margin-top: var(--sp-4); color: var(--text-muted); font-size: var(--fs-small); }
+  .range { display: grid; gap: var(--sp-5); }
+  .range__title { font-size: var(--fs-h3); }
   .gain-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--grid-gap); }
   .gain-grid li { display: grid; grid-template-columns: 32px 1fr; gap: var(--sp-3); align-items: start; padding: var(--sp-5); border-radius: var(--radius-md); background: var(--c-white); font-size: var(--fs-body); font-weight: var(--fw-medium); line-height: 1.35; }
   .gain-grid__ic { display: grid; place-items: center; width: 32px; height: 32px; border-radius: var(--radius-sm); background: var(--c-mint); }

@@ -5,7 +5,18 @@ import type { ScenarioId } from '../scenarios';
 export interface Feature { icon: string; title: string; text: string }
 
 /** How this business can work with MIRADEX. `to` links to another landing when the way belongs to it. */
-export interface BusinessWay { title: string; text: string; to?: ScenarioId }
+export interface BusinessWay {
+  title: string;
+  text: string;
+  /** further paragraphs and the bold one-line summary, for ways that explain a mechanism (stores) */
+  more?: string[];
+  strong?: string;
+  to?: ScenarioId;
+  /** business id on the target landing, when it differs from this one (the link opens that panel) */
+  toType?: string;
+  /** link text when the format's short name does not fit */
+  linkLabel?: string;
+}
 
 /** A business type the visitor should recognise themselves in (strategy 3.x "Подходит для", section 7). */
 export interface Business {
@@ -21,12 +32,16 @@ export interface Business {
   send?: string[];
   /** film that speaks to this business (catalog in src/data/videos.ts) */
   video?: number;
+  /** what this film gives this business; without it the panel shows the film title */
+  videoCaption?: string;
+  /** long ways: gains on top, the ways as two cards side by side */
+  waysWide?: boolean;
   /** value preselected in the lead form (one of businessTypes in src/data/scenarios.ts) */
   formType: string;
 }
 
-/** A film shown on the page next to its text; rows alternate sides. */
-export interface VideoRow { num: number; audience: string; lead: string; points: string[] }
+/** A film shown on the page with its audience and description. `points` are no longer shown (Nikita, 04.11.2026). */
+export interface VideoRow { num: number; audience: string; lead: string; points?: string[] }
 
 export interface Cta { title: string; text?: string; cta?: string }
 
@@ -47,22 +62,26 @@ export interface Landing {
   id: ScenarioId;
   meta: { title: string; description: string };
   order?: BlockKey[];
+  /** one label for every main button of the page: first screen, business panel, economics, final form, page bar */
+  cta?: string;
+  ctaShort?: string;
   /** eyebrow: audience line, kept for meta and the Spanish version, not shown on the page (client feedback) */
-  hero: { eyebrow: string; title: string; lead: string; image: string; imageAlt: string; note: string; cta?: string };
-  businesses: { title: string; lead: string; items: Business[] };
+  hero: { eyebrow: string; title: string; lead: string | string[]; quickTitle?: string; quickText?: string; quickDone?: string; image: string; imageAlt: string; note: string; cta?: string };
+  /** hint: one line under the panel instead of the per-business «Для заявки пригодится» */
+  businesses: { title: string; lead: string; hint?: string; items: Business[] };
   drivers?: { title: string; lead: string; items: Feature[] };
   videos: { title: string; lead: string; items: VideoRow[] };
   why?: { title?: string; text?: string };
-  ways: { title: string; lead: string; items: Feature[]; cols?: 2 | 3 | 4; links: ScenarioId[]; linksTitle?: string };
+  ways?: { title: string; lead: string; items: Feature[]; cols?: 2 | 3 | 4; links: ScenarioId[]; linksTitle?: string };
   economics: {
     title: string; lead: string; sources: { title: string; text: string }[]; factors?: string[];
-    sourcesLabel?: string; factorsLabel?: string; principle: string; model: { title: string; text: string };
+    sourcesLabel?: string; factorsLabel?: string; factorsIntro?: string; principle: string; model: { title: string; text: string; cta?: string };
   };
   support: { title: string; lead: string; groups: { icon: string; title: string; items: string[] }[] };
   resp: { title: string; lead: string; miradex: string[]; partner: string[]; partnerTitle?: string; note?: string };
   product: { title: string; lead: string };
   fit: { title?: string; fit: string[]; notFit: string[] };
-  steps: { title?: string; items: { title: string; text: string }[] };
+  steps: { title?: string; lead?: string; items: { title: string; text: string }[] };
   projects: {
     title: string; lead: string; items?: Feature[]; cols?: 2 | 3 | 4;
     gallery: { src: string; caption: string }[];
@@ -71,5 +90,5 @@ export interface Landing {
   ctaA: Cta; ctaB: Cta; ctaC: Cta;
   other?: { title: string; lead: string };
   faq: { q: string; a: string }[];
-  final: { title: string; text: string };
+  final: { title: string; text: string; pointsTitle?: string; points?: string[] };
 }

@@ -11,7 +11,7 @@ import BusinessQuiz from '../../components/BusinessQuiz.astro';
 import SectorCards from '../../components/SectorCards.astro';
 import VideoPlaceholder from '../../components/VideoPlaceholder.astro';
 import ModelPillars from '../../components/ModelPillars.astro';
-import FactsStrip from '../../components/FactsStrip.astro';
+import TpsStats from '../../components/TpsStats.astro';
 import SplitFeature from '../../components/SplitFeature.astro';
 import CategoryCards from '../../components/CategoryCards.astro';
 import SupportGroups from '../../components/SupportGroups.astro';
@@ -57,9 +57,9 @@ const v1 = videos[1];
     </details>
   </Section>
 
-  <!-- 5 · Why MIRADEX: key numbers, then production, range and logistics as parts of one block -->
+  <!-- 5 · Why MIRADEX: production base numbers, then production, range and logistics as parts of one block -->
   <Section id="por-que" title={hub.why.title} lead={hub.why.lead}>
-    <FactsStrip facts={ui.hubFacts} />
+    <TpsStats />
 
     <div class="why-part">
       <h3 class="why-part__title">{hub.production.title}</h3>
@@ -75,7 +75,7 @@ const v1 = videos[1];
     <div class="why-part">
       <h3 class="why-part__title">{hub.logistics.title}</h3>
       <p class="why-part__lead">{hub.logistics.lead}</p>
-      <LogisticsTrack stages={hub.logistics.stages} total={hub.logistics.total} />
+      <LogisticsTrack stages={hub.logistics.stages} total={hub.logistics.total} caveat={hub.logistics.caveat} />
     </div>
   </Section>
 

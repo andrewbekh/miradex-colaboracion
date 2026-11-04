@@ -3,6 +3,7 @@
 // 1: the film full width, text under it · 2: two large · 3: three in a row ·
 // 4: two by two · 5: two large on top, three below. Phones: one film stacked, several scroll sideways.
 import VideoPlaceholder from './VideoPlaceholder.astro';
+import Icon from './Icon.astro';
 import type { VideoRow } from '../data/landings/types';
 import { videos } from '../data/videos';
 import { ui } from '../data/ui';
@@ -23,11 +24,9 @@ const single = items.length === 1;
             <h3 class="vr__title">{v.title}</h3>
             <p class="vr__lead">{row.lead}</p>
           </div>
-          {single && (
-            <ul class="vr__points" role="list">
-              {row.points.map((p) => <li><span class="vr__dot" aria-hidden="true"></span><span>{p}</span></li>)}
-            </ul>
-          )}
+          <a class="btn btn--mint btn--sm vr__watch" href={`#video-${v.num}`} data-video-proxy={`video-${v.num}`}>
+            <Icon name="play" size={16} /><span>{ui.video.watch}</span>
+          </a>
         </div>
       </li>
     );
@@ -41,13 +40,10 @@ const single = items.length === 1;
   .vr__for .eyebrow { padding: 4px 10px; border-radius: 999px; background: var(--c-mint); color: var(--c-ink); }
   .vr__title { font-size: var(--fs-h3); line-height: 1.25; }
   .vr__lead { color: var(--text-muted); }
-  .vr__points { display: grid; gap: 10px; }
-  .vr__points li { display: grid; grid-template-columns: 8px 1fr; gap: 12px; align-items: start; }
-  .vr__dot { width: 8px; height: 8px; margin-top: 0.55em; border-radius: 50%; background: var(--c-ink-muted); }
+  .vr__watch { justify-self: start; margin-top: var(--sp-2); }
 
-  /* one film: full width, text under it in two columns (what it is · what is inside) */
+  /* one film: full width, text under it */
   .vr--single .vr__item { display: grid; gap: var(--sp-6); }
-  .vr--single .vr__text { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--sp-5) clamp(24px, 4vw, 64px); }
 
   /* several films: a 6-column grid, spans set by the count */
   .vr--cards { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: var(--sp-7) var(--grid-gap); }
@@ -58,11 +54,10 @@ const single = items.length === 1;
   .vr--n2 .vr__title, .vr--n4 .vr__title, .vr--n5 .vr__item:nth-child(-n + 2) .vr__title { font-size: var(--fs-h3); }
 
   @media (max-width: 1023px) {
-    .vr--single .vr__text { grid-template-columns: minmax(0, 1fr); }
     .vr--cards .vr__item, .vr--n5 .vr__item:nth-child(-n + 2) { grid-column: span 3; }
   }
   @media (max-width: 767px) {
-    .vr--cards, .vr--cards.vr--n2 {
+    .vr.vr--cards {
       display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;
       margin-inline: calc(-1 * var(--gutter)); padding-inline: var(--gutter); scroll-padding-inline: var(--gutter);
     }

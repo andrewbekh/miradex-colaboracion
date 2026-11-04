@@ -6,12 +6,12 @@ import Footer from '../components/Footer.astro';
 import StickyBar from '../components/StickyBar.astro';
 
 import type { Here } from '../components/StickyBar.astro';
-interface Props { title: string; description?: string; scenario?: string; current?: string; here?: Here }
-const { title, description, scenario, current, here } = Astro.props;
+interface Props { title: string; description?: string; scenario?: string; current?: string; here?: Here; cta?: string; ctaShort?: string }
+const { title, description, scenario, current, here, cta, ctaShort } = Astro.props;
 ---
-<Base title={title} description={description} scenario={scenario}>
+<Base title={title} description={description} scenario={scenario} cta={cta}>
   <Header slot="header" current={current} />
-  <StickyBar slot="header" current={current} here={here} />
+  <StickyBar slot="header" current={current} here={here} cta={cta} ctaShort={ctaShort} />
   <slot />
   <Footer slot="footer" />
 </Base>

@@ -1,16 +1,17 @@
 ---
-// «Узнайте свой бизнес»: business types of this landing. The visitor picks their business and sees
+// Business block of a landing: the visitor picks their business and sees
 // its logic, advantages, ways to work (with links to other landings) and its film; the CTA preselects the type in the form.
 // Desktop ≥1200: list on the left, panel on the right. Tablet: chips above the panel. Mobile: accordion.
 // Deep link: ?type=<id> or #type-<id> opens that business (used by the hub).
 import Icon from './Icon.astro';
+import VideoPlaceholder from './VideoPlaceholder.astro';
 import type { Business } from '../data/landings/types';
 import { scenarioById, toneStyle, type ScenarioId } from '../data/scenarios';
 import { videos } from '../data/videos';
 import { ui } from '../data/ui';
 
-interface Props { items: Business[]; scenario: ScenarioId }
-const { items, scenario } = Astro.props;
+interface Props { items: Business[]; scenario: ScenarioId; hint?: string; cta?: string }
+const { items, scenario, hint, cta = ui.cta.apply } = Astro.props;
 const swatches = ['mint', 'sky', 'blue'];
 ---
 <div class="bt" data-bt>
@@ -38,7 +39,7 @@ const swatches = ['mint', 'sky', 'blue'];
             <h3 class="bt__title">{b.name}</h3>
             <p class="bt__logic">{b.logic}</p>
 
-            <div class="bt__cols">
+            <div class:list={['bt__cols', { 'bt__cols--stack': b.waysWide }]}>
               <div class="bt__gains">
                 <p class="bt__label">{ui.biz.gains}</p>
                 <ul role="list">
@@ -54,10 +55,12 @@ const swatches = ['mint', 'sky', 'blue'];
                       <li class="bt__way">
                         <p class="bt__way-title">{w.title}</p>
                         <p class="bt__way-text">{w.text}</p>
+                        {w.more?.map((p) => <p class="bt__way-text">{p}</p>)}
+                        {w.strong && <p class="bt__way-strong">{w.strong}</p>}
                         {target && (
-                          <a class="bt__way-link" href={`${target.href}?type=${b.id}`}>
+                          <a class="bt__way-link" href={`${target.href}?type=${w.toType ?? b.id}`}>
                             <span class="bt__way-num" style={toneStyle(target.tone)}>{target.num}</span>
-                            <span>{target.short}</span>
+                            <span>{w.linkLabel ?? target.short}</span>
                             <Icon name="arrow-right" size={16} />
                           </a>
                         )}
@@ -68,20 +71,24 @@ const swatches = ['mint', 'sky', 'blue'];
               </div>
             </div>
 
-            {b.send && (
-              <p class="bt__send"><Icon name="clipboard-list" size={20} /><span><b>{ui.biz.send}</b> {b.send.join(', ')}.</span></p>
-            )}
-
-            <div class="bt__foot">
+            <div class:list={['bt__foot', { 'bt__foot--solo': !v }]}>
               {v && (
-                <a class="bt__video" href={`#video-${v.num}`} data-video={v.num}>
-                  <span class="bt__video-thumb"><img src={v.poster} alt="" loading="lazy" /><span class="bt__video-play"><Icon name="play" size={14} /></span></span>
-                  <span class="bt__video-text"><span class="bt__video-meta">{ui.video.watch}</span><span class="bt__video-title">{v.title}</span></span>
-                </a>
+                <div class="bt__video">
+                  <VideoPlaceholder num={v.num} title={v.title} poster={v.poster} id={`bt-video-${b.id}`} />
+                  <a class="bt__video-text" href={`#bt-video-${b.id}`} data-video-proxy={`bt-video-${b.id}`}>
+                    <span class="bt__video-meta">{ui.video.watch}</span>
+                    <span class="bt__video-title">{b.videoCaption ?? v.title}</span>
+                  </a>
+                </div>
               )}
-              <button type="button" class="btn btn--primary bt__cta" data-open-form data-scenario={scenario} data-business={b.formType}>
-                <span>{ui.cta.apply}</span><Icon name="arrow-right" size={18} />
-              </button>
+              <div class="bt__action">
+                {hint
+                  ? <p class="bt__send"><Icon name="clipboard-list" size={20} /><span>{hint}</span></p>
+                  : b.send && <p class="bt__send"><Icon name="clipboard-list" size={20} /><span><b>{ui.biz.send}</b> {b.send.join(', ')}.</span></p>}
+                <button type="button" class="btn btn--primary bt__cta" data-open-form data-scenario={scenario} data-business={b.formType}>
+                  <span>{cta}</span><Icon name="arrow-right" size={18} />
+                </button>
+              </div>
             </div>
           </div>
         </section>
@@ -122,23 +129,31 @@ const swatches = ['mint', 'sky', 'blue'];
   .bt__way { padding: var(--sp-4); border-radius: var(--radius-md); background: var(--bg-tint); }
   .bt__way-title { font-weight: var(--fw-medium); }
   .bt__way-text { margin-top: 2px; color: var(--text-muted); font-size: var(--fs-small); }
+  .bt__way-text + .bt__way-text { margin-top: var(--sp-2); }
+  .bt__way-strong { margin-top: var(--sp-3); font-size: var(--fs-small); font-weight: var(--fw-medium); }
   .bt__way-link { display: inline-flex; align-items: center; gap: 8px; margin-top: var(--sp-3); color: var(--c-ink); text-decoration: none; font-size: var(--fs-small); font-weight: var(--fw-medium); }
   .bt__way-link:hover { text-decoration: underline; }
   .bt__way-num { display: grid; place-items: center; width: 22px; height: 22px; border-radius: var(--radius-xs); font-size: 11px; }
 
-  .bt__send { display: grid; grid-template-columns: 20px 1fr; gap: 10px; align-items: start; margin-top: var(--sp-6); padding: var(--sp-4); border-radius: var(--radius-sm); background: var(--c-grey); font-size: var(--fs-small); }
+  /* long ways (stores): gains on top, the two ways as cards side by side */
+  .bt__cols--stack { grid-template-columns: minmax(0, 1fr); gap: var(--sp-6); }
+  .bt__cols--stack .bt__ways ul { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; }
+
+  /* film at the width of the left column, the action next to it */
+  .bt__foot { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-7); align-items: end; margin-top: var(--sp-7); padding-top: var(--sp-6); border-top: 1px solid var(--border); }
+  .bt__foot--solo { grid-template-columns: minmax(0, 1fr); }
+  .bt__video { display: grid; gap: var(--sp-3); min-width: 0; }
+  .bt__video :global(.video__frame) { border-radius: var(--radius-md); }
+  .bt__video :global(.video__play) { width: 48px; border-radius: var(--radius-sm); }
+  .bt__video :global(.video__play svg) { width: 22px; height: 22px; margin-left: 3px; }
+  .bt__video-text { display: grid; gap: 2px; color: var(--c-ink); text-decoration: none; }
+  .bt__video-meta { font-size: var(--fs-micro); font-weight: var(--fw-medium); letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--text-muted); }
+  .bt__video-title { font-size: 1rem; font-weight: var(--fw-medium); line-height: 1.3; }
+  .bt__video-text:hover .bt__video-title { text-decoration: underline; }
+  .bt__action { display: grid; gap: var(--sp-4); }
+  .bt__send { display: grid; grid-template-columns: 20px 1fr; gap: 10px; align-items: start; padding: var(--sp-4); border-radius: var(--radius-sm); background: var(--c-grey); font-size: var(--fs-small); }
   .bt__send b { font-weight: var(--fw-medium); }
-  .bt__send + .bt__foot { margin-top: var(--sp-5); }
-  .bt__foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--sp-4); margin-top: var(--sp-7); padding-top: var(--sp-5); border-top: 1px solid var(--border); }
-  .bt__video { display: inline-flex; align-items: center; gap: 12px; color: var(--c-ink); text-decoration: none; max-width: 420px; }
-  .bt__video-thumb { position: relative; flex: none; width: 88px; height: 56px; border-radius: var(--radius-sm); overflow: hidden; }
-  .bt__video-thumb img { width: 100%; height: 100%; object-fit: cover; }
-  .bt__video-play { position: absolute; inset: 0; margin: auto; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--c-blue); color: var(--c-white); }
-  .bt__video-play :global(svg) { fill: currentColor; margin-left: 2px; }
-  .bt__video-text { display: grid; gap: 2px; }
-  .bt__video-meta { font-size: var(--fs-micro); color: var(--text-muted); }
-  .bt__video-title { font-size: var(--fs-small); font-weight: var(--fw-medium); line-height: 1.3; }
-  .bt__video:hover .bt__video-title { text-decoration: underline; }
+  .bt__cta { width: 100%; }
 
   /* tablet: chips above the panel */
   @media (max-width: 1199px) {
@@ -163,8 +178,8 @@ const swatches = ['mint', 'sky', 'blue'];
     .bt__title { display: none; }
     .bt__logic { margin-top: 0; font-size: var(--fs-body); font-weight: var(--fw-regular); }
     .bt__cols { grid-template-columns: 1fr; gap: var(--sp-5); margin-top: var(--sp-5); }
-    .bt__foot { margin-top: var(--sp-5); }
-    .bt__cta { width: 100%; }
+    .bt__cols--stack .bt__ways ul { grid-template-columns: minmax(0, 1fr); }
+    .bt__foot { grid-template-columns: minmax(0, 1fr); gap: var(--sp-5); margin-top: var(--sp-5); padding-top: var(--sp-5); }
   }
 </style>
 
@@ -172,7 +187,15 @@ const swatches = ['mint', 'sky', 'blue'];
   document.querySelectorAll<HTMLElement>('[data-bt]').forEach((root) => {
     const tabs = [...root.querySelectorAll<HTMLButtonElement>('[data-bt-tab]')];
     const panels = [...root.querySelectorAll<HTMLElement>('[data-bt-panel]')];
+    // the chosen business travels with every form on the page (src/scripts/lead-form.ts)
+    const remember = (id: string) => {
+      const value = root.querySelector<HTMLElement>(`[data-bt-panel="${id}"] [data-business]`)?.dataset.business;
+      if (!value) return;
+      document.documentElement.dataset.mxBusiness = value;
+      document.dispatchEvent(new CustomEvent('mx:business'));
+    };
     const activate = (id: string, focus = false) => {
+      remember(id);
       tabs.forEach((t) => { const on = t.dataset.btTab === id; t.classList.toggle('is-active', on); t.setAttribute('aria-selected', String(on)); if (on && focus) t.focus(); });
       panels.forEach((p) => { const on = p.dataset.btPanel === id; p.classList.toggle('is-active', on); p.classList.toggle('is-open', on); p.querySelector('[data-bt-acc]')?.setAttribute('aria-expanded', String(on)); });
     };
@@ -188,6 +211,7 @@ const swatches = ['mint', 'sky', 'blue'];
       const p = b.closest<HTMLElement>('[data-bt-panel]')!;
       const open = !p.classList.contains('is-open');
       p.classList.toggle('is-open', open); b.setAttribute('aria-expanded', String(open));
+      if (open) remember(p.dataset.btPanel!);
     }));
     // deep link from the hub or another landing
     const want = new URLSearchParams(location.search).get('type') || (location.hash.startsWith('#type-') ? location.hash.slice(6) : '');

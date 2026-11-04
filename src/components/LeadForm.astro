@@ -14,15 +14,15 @@ interface Props {
   lockScenario?: boolean;   // send scenario as hidden field instead of the role picker
   layout?: 'wide' | 'compact';
   business?: string;        // preselected business type (industry pages)
+  cta?: string;             // the page's main button label
 }
-const { uid, scenario = '', lockScenario = false, layout = 'wide', business = '' } = Astro.props;
+const { uid, scenario = '', lockScenario = false, layout = 'wide', business = '', cta = ui.form.submit } = Astro.props;
 const id = (n: string) => `${uid}-${n}`;
 const current = scenario || 'no-se';
 
 // «Пока не знаю» has no number tile: a «?» or an icon there looked broken
 const roles = [...scenarios.map((s) => ({ id: s.id, num: s.num, label: s.short })), { id: 'no-se', num: '', label: ui.form.notSure }];
 
-const profile = ui.form.profileOpts;
 const install = ui.form.installOpts;
 const crew = ui.form.crewOpts;
 const projectTypes = ui.form.projectTypeOpts;
@@ -32,7 +32,6 @@ const businessPlan = ui.form.planOpts;
 // Working ranges in € per year (as on the TPS partner page); the client confirms them for Spain, see docs/TODO.md
 const volumes = ui.form.volumeOpts;
 const products = ui.form.productsOpts;
-const heard = ui.form.heardOpts;
 
 /** field visible only for these roles */
 const forRoles = (...r: string[]) => ({ 'data-for': r.join(' ') });
@@ -40,6 +39,7 @@ const forRoles = (...r: string[]) => ({ 'data-for': r.join(' ') });
 <form class:list={['lf', `lf--${layout}`]} data-lead-form action={site.formEndpoint ?? '#'} method="post" novalidate>
   <input type="hidden" name="landing" value={Astro.url.pathname} />
   <input type="hidden" name="utm" value="" data-utm />
+  <input type="hidden" name="referrer" value="" data-referrer />
   <input type="hidden" name="video_watched" value="" data-video-watched />
   <input type="hidden" name="quiz_answers" value="" data-quiz-answers />
   {lockScenario && <input type="hidden" name="scenario" value={current} data-scenario-fixed />}
@@ -60,12 +60,12 @@ const forRoles = (...r: string[]) => ({ 'data-for': r.join(' ') });
 
   <div class="lf__grid">
     <div class="lf__field">
-      <label for={id('name')}>{ui.form.name}</label>
+      <label for={id('name')}>{ui.form.name} <span class="lf__req" aria-hidden="true">*</span></label>
       <input id={id('name')} name="name" type="text" autocomplete="name" required />
       <p class="lf__err" aria-live="polite"></p>
     </div>
     <div class="lf__field">
-      <label for={id('phone')}>{ui.form.phone}</label>
+      <label for={id('phone')}>{ui.form.phone} <span class="lf__req" aria-hidden="true">*</span></label>
       <div class="lf__phone">
         <span aria-hidden="true">+34</span>
         <input id={id('phone')} name="phone" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="600 000 000" data-phone-es required />
@@ -74,11 +74,11 @@ const forRoles = (...r: string[]) => ({ 'data-for': r.join(' ') });
     </div>
     <div class="lf__field">
       <label for={id('email')}>{ui.form.email}</label>
-      <input id={id('email')} name="email" type="email" autocomplete="email" placeholder={ui.form.emailPh} required />
+      <input id={id('email')} name="email" type="email" autocomplete="email" placeholder={ui.form.emailPh} />
       <p class="lf__err" aria-live="polite"></p>
     </div>
     <div class="lf__field lf__field--2">
-      <label for={id('type')}>{ui.form.type}</label>
+      <label for={id('type')}>{ui.form.type} <span class="lf__req" aria-hidden="true">*</span></label>
       <select id={id('type')} name="business_type" required data-business-select>
         <option value="" selected={!business} disabled>{ui.form.choose}</option>
         {businessTypes.map((t) => <option selected={t === business}>{t}</option>)}
@@ -87,41 +87,42 @@ const forRoles = (...r: string[]) => ({ 'data-for': r.join(' ') });
     </div>
     <div class="lf__field">
       <label for={id('city')}>{ui.form.city}</label>
-      <input id={id('city')} name="city" type="text" autocomplete="address-level2" placeholder={ui.form.cityPh} required />
+      <input id={id('city')} name="city" type="text" autocomplete="address-level2" placeholder={ui.form.cityPh} />
       <p class="lf__err" aria-live="polite"></p>
     </div>
   </div>
 
-  <!-- Optional details, folded: website + the fields that matter for the chosen role -->
+  <!-- Optional details, folded: never required. Source, campaign and business type reach the CRM on their own (hidden fields) -->
   <details class="lf__more">
-    <summary class="lf__more-sum"><span>{ui.form.more} <span class="lf__opt">{ui.form.optional}</span></span><Icon name="chevron-down" size={18} class="lf__more-chev" /></summary>
+    <summary class="lf__more-sum"><span>{ui.form.more} <span class="lf__opt">({ui.form.optional})</span></span><Icon name="chevron-down" size={18} class="lf__more-chev" /></summary>
     <div class="lf__grid lf__grid--more">
       <div class="lf__field lf__field--full">
         <label for={id('web')}>{ui.form.web}</label>
         <input id={id('web')} name="website" type="text" inputmode="url" autocomplete="url" placeholder="www.company.es" />
       </div>
 
-      <!-- Every role: products of interest and how they found us (CRM: lead source, strategy 12) -->
       <div class="lf__field lf__field--full">
         <span class="lf__label" id={id('products-l')}>{ui.form.products} <span class="lf__opt">{ui.form.several}</span></span>
         <div class="lf__chips" role="group" aria-labelledby={id('products-l')}>
           {products.map((p) => <label class="chip"><input type="checkbox" name="products" value={p} /><span>{p}</span></label>)}
         </div>
       </div>
-      <div class="lf__field">
-        <label for={id('heard')}>{ui.form.heard}</label>
-        <select id={id('heard')} name="heard_from">
-          <option value="" selected>{ui.form.choose}</option>
-          {heard.map((h) => <option>{h}</option>)}
-        </select>
+
+      <!-- Sell / not sure: only sell or also install -->
+      <div class="lf__field lf__field--full" {...forRoles('vender', 'no-se')}>
+        <span class="lf__label" id={id('install-l')}>{ui.form.install}</span>
+        <div class="lf__chips" role="radiogroup" aria-labelledby={id('install-l')}>
+          {install.map((p) => <label class="chip"><input type="radio" name="installation" value={p} /><span>{p}</span></label>)}
+        </div>
       </div>
 
-      <!-- Sell / business / not sure: business profile -->
-      <div class="lf__field lf__field--full" {...forRoles('vender', 'negocio', 'no-se')}>
-        <span class="lf__label" id={id('profile-l')}>{ui.form.profile} <span class="lf__opt">{ui.form.several}</span></span>
-        <div class="lf__chips" role="group" aria-labelledby={id('profile-l')}>
-          {profile.map((p) => <label class="chip"><input type="checkbox" name="profile" value={p} /><span>{p}</span></label>)}
-        </div>
+      <!-- Volume: sellers, installers, not sure -->
+      <div class="lf__field lf__field--full" {...forRoles('vender', 'instalar', 'no-se')}>
+        <label for={id('volume')}>{ui.form.volume}</label>
+        <select id={id('volume')} name="volume">
+          <option value="" selected>{ui.form.choose}</option>
+          {volumes.map((v) => <option>{v}</option>)}
+        </select>
       </div>
 
       <!-- Business MIRADEX: plan and budget (CRM, section 12) -->
@@ -134,14 +135,6 @@ const forRoles = (...r: string[]) => ({ 'data-for': r.join(' ') });
       <div class="lf__field" {...forRoles('negocio')}>
         <label for={id('budget')}>{ui.form.budget}</label>
         <input id={id('budget')} name="launch_budget" type="text" placeholder={ui.form.budgetPh} />
-      </div>
-
-      <!-- Sell / not sure: installation -->
-      <div class="lf__field" {...forRoles('vender', 'no-se')}>
-        <span class="lf__label" id={id('install-l')}>{ui.form.install}</span>
-        <div class="lf__chips" role="radiogroup" aria-labelledby={id('install-l')}>
-          {install.map((p) => <label class="chip"><input type="radio" name="installation" value={p} /><span>{p}</span></label>)}
-        </div>
       </div>
 
       <!-- Sell and install: zone and crew (installation network, section 11) -->
@@ -184,13 +177,9 @@ const forRoles = (...r: string[]) => ({ 'data-for': r.join(' ') });
         </div>
       </div>
 
-      <!-- Volume: sellers, installers, not sure -->
-      <div class="lf__field" {...forRoles('vender', 'instalar', 'no-se')}>
-        <label for={id('volume')}>{ui.form.volume}</label>
-        <select id={id('volume')} name="volume">
-          <option value="" selected>{ui.form.choose}</option>
-          {volumes.map((v) => <option>{v}</option>)}
-        </select>
+      <div class="lf__field lf__field--full">
+        <label for={id('comment')}>{ui.form.comment}</label>
+        <textarea id={id('comment')} name="comment" rows="3"></textarea>
       </div>
     </div>
   </details>
@@ -200,11 +189,11 @@ const forRoles = (...r: string[]) => ({ 'data-for': r.join(' ') });
       <input type="checkbox" name="consent" required />
       <span>{ui.form.consent} <a href={site.privacyUrl}>{ui.form.consentLink}</a> {ui.form.consentTail}</span>
     </label>
-    <button type="submit" class="btn btn--primary lf__send">
-      <span>{ui.form.submit}</span><Icon name="arrow-right" size={18} />
-    </button>
     <p class="lf__err lf__err--consent" aria-live="polite"></p>
-    <p class="lf__note">{site.responsePromise} {ui.form.talkNow} <a href={whatsappHref()}>{ui.form.writeWa}</a></p>
+    <button type="submit" class="btn btn--primary lf__send">
+      <span>{cta}</span><Icon name="arrow-right" size={18} />
+    </button>
+    <p class="lf__note">{ui.form.after}{layout === 'compact' && <> {ui.form.talkNow} <a href={whatsappHref()}>{ui.form.writeWa}</a></>}</p>
   </div>
 
   <div class="lf__done" hidden tabindex="-1">
@@ -246,19 +235,21 @@ const forRoles = (...r: string[]) => ({ 'data-for': r.join(' ') });
   .lf__field--full { grid-column: 1 / -1; }
   .lf label, .lf__label { font-size: var(--fs-micro); font-weight: var(--fw-medium); }
   .lf__opt { font-weight: var(--fw-regular); color: var(--text-muted); }
-  .lf input[type='text'], .lf input[type='email'], .lf input[type='tel'], .lf select {
+  .lf__req { color: var(--text-muted); font-weight: var(--fw-regular); }
+  .lf input[type='text'], .lf input[type='email'], .lf input[type='tel'], .lf select, .lf textarea {
     width: 100%; height: 46px; padding: 0 12px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
     background: var(--c-white); font-size: 1rem; color: var(--text);
     transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
   }
+  .lf textarea { height: auto; min-height: 88px; padding: 10px 12px; resize: vertical; font-family: inherit; line-height: 1.4; }
   .lf select {
     appearance: none; padding-right: 36px; text-overflow: ellipsis;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%23353535' stroke-width='1.6'%3E%3Cpath d='m4 6 4 4 4-4'/%3E%3C/svg%3E");
     background-repeat: no-repeat; background-position: right 12px center;
   }
   .lf input::placeholder { color: #8a8a8a; }
-  .lf input:hover, .lf select:hover { border-color: var(--c-ink-muted); }
-  .lf input:focus, .lf select:focus { outline: none; border-color: var(--c-blue); box-shadow: 0 0 0 3px rgb(122 155 255 / 0.35); }
+  .lf input:hover, .lf select:hover, .lf textarea:hover { border-color: var(--c-ink-muted); }
+  .lf input:focus, .lf select:focus, .lf textarea:focus { outline: none; border-color: var(--c-blue); box-shadow: 0 0 0 3px rgb(122 155 255 / 0.35); }
   .lf [aria-invalid='true'] { border-color: var(--danger) !important; }
   .lf__phone { position: relative; }
   .lf__phone span { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; }
@@ -287,14 +278,16 @@ const forRoles = (...r: string[]) => ({ 'data-for': r.join(' ') });
   .chip input:checked + span { background: var(--c-mint); border-color: var(--c-mint); font-weight: var(--fw-medium); }
   .chip input:focus-visible + span { outline: 2px solid var(--focus); outline-offset: 2px; }
 
-  /* consent and send in one row */
-  .lf__footer { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px var(--sp-5); align-items: center; }
+  /* consent on its own row (the button label is long), then what happens next + send */
+  .lf__footer { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--sp-3) var(--sp-5); align-items: center; }
+  .lf__consent { grid-column: 1 / -1; }
   .lf__consent { display: grid !important; grid-template-columns: 20px 1fr; gap: 8px; font-weight: var(--fw-regular) !important; color: var(--text-muted); font-size: var(--fs-micro) !important; line-height: 1.45; cursor: pointer; }
   .lf__consent input { width: 18px; height: 18px; margin: 1px 0 0; accent-color: var(--c-blue); }
   .lf__consent a { color: var(--link); }
   .lf__send { --btn-h: 52px; }
   .lf__err--consent { grid-column: 1 / -1; margin-top: -6px; }
-  .lf__note { grid-column: 1 / -1; font-size: var(--fs-micro); color: var(--text-muted); }
+  .lf__send { grid-column: 2; grid-row: 3; }
+  .lf__note { grid-column: 1; grid-row: 3; font-size: var(--fs-micro); color: var(--text-muted); }
   .lf__note a { color: var(--link); }
 
   .lf__done { position: absolute; inset: 0; border-radius: inherit; display: grid; align-content: center; justify-items: start; gap: var(--sp-4); padding: var(--sp-6); background: var(--c-white); }
@@ -309,6 +302,7 @@ const forRoles = (...r: string[]) => ({ 'data-for': r.join(' ') });
     /* name + phone side by side, the rest full width */
     .lf__grid > .lf__field:nth-child(n + 3) { grid-column: 1 / -1; }
     .lf__footer { grid-template-columns: 1fr; }
-    .lf__send { width: 100%; }
+    .lf__send { width: 100%; grid-column: 1; grid-row: auto; }
+    .lf__note { grid-column: 1; grid-row: auto; }
   }
 </style>

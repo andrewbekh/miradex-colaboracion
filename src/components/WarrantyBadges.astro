@@ -1,0 +1,55 @@
+---
+// Warranty seals from the MIRADEX catalogue, drawn in the brand colours so the text can be translated.
+// «до» is required: terms depend on the coating (client, 04.11.2026). Text rule: white on blue and sky, ink on mint.
+// Three in a row; on phones two on top and one below, as in the catalogue.
+import { warrantyBadges, warrantyNote } from '../data/shared';
+
+// scalloped edge of the seal, in a 200 × 200 box
+const n = 40;
+const pt = (r: number, a: number) => `${(100 + r * Math.cos(a)).toFixed(2)} ${(100 + r * Math.sin(a)).toFixed(2)}`;
+const edge = Array.from({ length: n }, (_, i) => {
+  const a = (i / n) * 2 * Math.PI;
+  const b = ((i + 0.5) / n) * 2 * Math.PI;
+  const c = ((i + 1) / n) * 2 * Math.PI;
+  return `${i === 0 ? `M${pt(95, a)}` : ''}Q${pt(102, b)} ${pt(95, c)}`;
+}).join('') + 'Z';
+---
+<div class="wb">
+  <ul class="wb__row" role="list">
+    {warrantyBadges.map((b) => (
+      <li class={`wb__item wb__item--${b.tone}`}>
+        <svg class="wb__seal" viewBox="0 0 200 200" aria-hidden="true">
+          <path class="wb__edge" d={edge} />
+          <circle class="wb__fill" cx="100" cy="100" r="85" />
+          <path class="wb__band" d="M18.6 124a85 85 0 0 0 162.8 0Z" />
+          <circle class="wb__ring" cx="100" cy="100" r="78" />
+        </svg>
+        <p class="wb__text">
+          <span class="wb__years"><span class="wb__to">до</span> <span class="wb__num">{b.value}</span> <span class="wb__unit">лет</span></span>
+          <span class="wb__label">{b.label}</span>
+        </p>
+      </li>
+    ))}
+  </ul>
+  <p class="wb__note">{warrantyNote}</p>
+</div>
+
+<style>
+  .wb { display: grid; gap: var(--sp-4); justify-items: center; }
+  .wb__row { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--sp-5) clamp(16px, 1rem + 2vw, 56px); }
+  .wb__item { position: relative; width: clamp(150px, 16vw, 208px); aspect-ratio: 1; container-type: inline-size; }
+  .wb__seal { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .wb__item--sky { --fill: var(--c-sky); --deep: #55b5ef; --on: var(--c-white); }
+  .wb__item--blue { --fill: var(--c-blue); --deep: #5f80e8; --on: var(--c-white); }
+  .wb__item--mint { --fill: var(--c-mint); --deep: var(--c-mint-strong); --on: var(--c-ink); }
+  .wb__edge { fill: var(--deep); }
+  .wb__fill { fill: var(--fill); }
+  .wb__band { fill: var(--deep); }
+  .wb__ring { fill: none; stroke: var(--c-white); stroke-width: 2; }
+  .wb__text { position: absolute; inset: 0; display: grid; grid-template-rows: 62% 38%; justify-items: center; color: var(--on); text-align: center; font-weight: var(--fw-medium); line-height: 1; }
+  .wb__years { align-self: end; padding-bottom: 5cqw; white-space: nowrap; }
+  .wb__to, .wb__unit { font-size: 9cqw; }
+  .wb__num { font-size: 26cqw; letter-spacing: -0.01em; }
+  .wb__label { width: 66%; padding-top: 3.5cqw; font-size: max(10.5px, 6.2cqw); line-height: 1.15; letter-spacing: 0.03em; text-transform: uppercase; text-wrap: balance; }
+  .wb__note { color: var(--text-muted); font-size: var(--fs-small); text-align: center; }
+</style>

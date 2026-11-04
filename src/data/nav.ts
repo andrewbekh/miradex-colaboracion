@@ -9,25 +9,30 @@ export const mainNav = [
   { label: 'О нас', href: '#', hasMenu: true },
 ];
 
-/** Product directions (miradex.bg: Метални огради, Метални облицовки, Системи за огради). */
-export const productLines = [
+/** Product directions: one approved text for all pages (Nikita, 04.11.2026). Industry pages may adapt `text`, never the names or facts.
+ *  `images`: two photos side by side, because the cladding card shows two groups of materials; no src = grey placeholder.
+ *  The gate photo and the SENA photo (from Nikita's document) are provisional, see docs/TODO.md. */
+export const productLines: { id: string; title: string; text: string; images: { src?: string; alt: string; label?: string; labelMore?: string }[] }[] = [
   {
     id: 'vallas',
-    title: 'Металлические заборы',
-    text: 'Жалюзи, ромб, ранчо и штакетник: Atlas, Sigma, Piramida, Gamma, Romb, Terra, Tisa, Simetrica.',
-    img: '/img/photos/atlas-wood-house.jpg',
+    title: 'Металлические ограждения',
+    text: 'Жалюзи, ромб, ранчо и штакетник. Более 10 моделей, индивидуальные размеры и свыше 25 цветовых решений.',
+    images: [{ src: '/img/photos/atlas-wood-house.jpg', alt: 'Металлическое ограждение Atlas у частного дома' }],
   },
   {
     id: 'revestimientos',
     title: 'Металлическая облицовка',
-    text: 'Фасадный сайдинг Saturn, Jupiter и Venus в тех же цветах, что и забор.',
-    img: '/img/photos/jupiter-facade-house.jpg',
+    text: 'Фасадный сайдинг Saturn, Jupiter и Venus, а также декоративные металлические рейки SENA для фасадов, стен и потолков.',
+    images: [
+      { src: '/img/photos/jupiter-facade-house.jpg', alt: 'Фасад дома с сайдингом Jupiter', label: 'Фасад', labelMore: ': Saturn, Jupiter, Venus' },
+      { src: '/img/photos/sena-interior.jpg', alt: 'Интерьер с декоративными рейками SENA', label: 'Интерьер', labelMore: ': рейки SENA' },
+    ],
   },
   {
     id: 'sistemas',
-    title: 'Системы для заборов',
-    text: 'Бетонные блоки, столбы и конструкции для готового ограждения.',
-    img: '/img/photos/atlas-wood-street.jpg',
+    title: 'Системы для ограждений',
+    text: 'Столбы, крепёжные элементы, ворота, калитки и сопутствующие конструкции для оформления объекта в едином архитектурном стиле.',
+    images: [{ src: '/img/photos/gate-wood.jpg', alt: 'Ворота MIRADEX' }],
   },
 ];
 

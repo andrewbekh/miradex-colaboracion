@@ -4,8 +4,8 @@ import FormModal from '../components/FormModal.astro';
 import ToTop from '../components/ToTop.astro';
 import { site } from '../data/site';
 
-interface Props { title: string; description?: string; scenario?: string; noindex?: boolean }
-const { title, description = '', scenario = '', noindex = false } = Astro.props;
+interface Props { title: string; description?: string; scenario?: string; noindex?: boolean; cta?: string }
+const { title, description = '', scenario = '', noindex = false, cta } = Astro.props;
 ---
 <!doctype html>
 <html lang={site.lang}>
@@ -27,7 +27,7 @@ const { title, description = '', scenario = '', noindex = false } = Astro.props;
       <slot />
     </main>
     <slot name="footer" />
-    <FormModal scenario={scenario} />
+    <FormModal scenario={scenario} cta={cta} />
     <ToTop />
     <script>
       import '../scripts/lead-form.ts';

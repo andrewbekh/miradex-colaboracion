@@ -5,8 +5,8 @@ import { ui } from '../data/ui';
 import LeadForm from './LeadForm.astro';
 import Icon from './Icon.astro';
 
-interface Props { scenario?: string }
-const { scenario = '' } = Astro.props;
+interface Props { scenario?: string; cta?: string }
+const { scenario = '', cta } = Astro.props;
 ---
 <dialog class="fm" id="lead-modal" aria-labelledby="lead-modal-title" data-default-scenario={scenario}>
   <div class="fm__panel" tabindex="-1" autofocus>
@@ -20,7 +20,7 @@ const { scenario = '' } = Astro.props;
       </div>
     </div>
     <div class="fm__body">
-      <LeadForm uid="modal" scenario={scenario} layout="compact" />
+      <LeadForm uid="modal" scenario={scenario} layout="compact" cta={cta} />
     </div>
   </div>
 </dialog>

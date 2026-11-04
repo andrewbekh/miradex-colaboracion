@@ -10,7 +10,13 @@ import { toneStyle, type Tone } from '../data/scenarios';
 
 interface Props {
   title: string;
-  lead: string;
+  lead: string | string[];
+  /** heading and one line of the quick form; the format's own, or the common one */
+  quickTitle?: string;
+  quickText?: string;
+  quickDone?: string;
+  /** industry pages: the business type travels with the quick application */
+  business?: string;
   scenario?: string;
   image: string;
   imageAlt?: string;
@@ -20,7 +26,8 @@ interface Props {
   /** breadcrumb back to the hub: a format shows its number, an industry page only its name */
   crumb?: { num?: string; label: string; tone?: string };
 }
-const { title, lead, scenario, image, imageAlt = '', note, cta = ui.cta.apply, facts = true, crumb } = Astro.props;
+const { title, lead, quickTitle = ui.quick.title, quickText, quickDone, business, scenario, image, imageAlt = '', note, cta = ui.cta.apply, facts = true, crumb } = Astro.props;
+const leads = Array.isArray(lead) ? lead : [lead];
 ---
 <section class="hero">
   <div class="container">
@@ -34,11 +41,11 @@ const { title, lead, scenario, image, imageAlt = '', note, cta = ui.cta.apply, f
           </nav>
         )}
         <h1 class="h-display hero__title" set:html={title} />
-        <p class="lead hero__lead">{lead}</p>
+        {leads.map((p) => <p class="lead hero__lead">{p}</p>)}
         <!-- same short application as on the hub: heading outside, mint plate -->
         <div class="hero__quick" data-sbar-after>
-          <h2 class="hero__qlabel" id="hero-quick">{ui.quick.title}</h2>
-          <QuickForm uid="hero-quick" labelledby="hero-quick" scenario={scenario} cta={cta} />
+          <h2 class="hero__qlabel" id="hero-quick">{quickTitle}</h2>
+          <QuickForm uid="hero-quick" labelledby="hero-quick" scenario={scenario} business={business} text={quickText} doneText={quickDone} cta={cta} />
           {note && <p class="hero__note">{note}</p>}
         </div>
       </div>

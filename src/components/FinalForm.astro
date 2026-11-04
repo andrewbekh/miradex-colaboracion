@@ -6,28 +6,35 @@ import LeadForm from './LeadForm.astro';
 import Icon from './Icon.astro';
 import { site, whatsappHref } from '../data/site';
 
-interface Props { title: string; text: string; scenario?: string; lockScenario?: boolean; points?: string[]; business?: string }
-const { title, text, scenario = '', lockScenario = false, points = [], business = '' } = Astro.props;
+interface Props { title: string; text: string; scenario?: string; lockScenario?: boolean; points?: string[]; pointsTitle?: string; business?: string; cta?: string }
+const { title, text, scenario = '', lockScenario = false, points = [], pointsTitle, business = '', cta } = Astro.props;
 ---
 <section class="ff" id="solicitud">
   <div class="container ff__inner">
     <div class="ff__aside">
       <SectionHeading title={title} lead={text} tone="inverse" />
       {points.length > 0 && (
-        <ul class="ff__points" role="list">
-          {points.map((p) => <li><Icon name="check" size={20} /><span>{p}</span></li>)}
-        </ul>
+        <div class="ff__benefits">
+          {pointsTitle && <p class="ff__label">{pointsTitle}</p>}
+          <ul class="ff__points" role="list">
+            {points.map((p) => <li><Icon name="check" size={20} /><span>{p}</span></li>)}
+          </ul>
+        </div>
       )}
-      <div class="ff__contacts">
-        <a class="btn btn--mint" href={whatsappHref()}><Icon name="whatsapp" size={18} /><span>{ui.cta.whatsapp}</span></a>
-        <p class="ff__mail">
-          <a href={`mailto:${site.contacts.email}`}>{site.contacts.email}</a><br />
-          <span>{site.contacts.phone}</span>
-        </p>
+      <div class="ff__now">
+        <p class="ff__now-title">{ui.form.talkNow}</p>
+        <p class="ff__now-text">{ui.form.talkText}</p>
+        <div class="ff__contacts">
+          <a class="btn btn--mint" href={whatsappHref()}><Icon name="whatsapp" size={18} /><span>{ui.cta.whatsapp}</span></a>
+          <p class="ff__mail">
+            <a href={`mailto:${site.contacts.email}`}>{site.contacts.email}</a><br />
+            <span>{site.contacts.phone}</span>
+          </p>
+        </div>
       </div>
     </div>
     <div class="ff__panel">
-      <LeadForm uid="final" scenario={scenario} lockScenario={lockScenario} business={business} />
+      <LeadForm uid="final" scenario={scenario} lockScenario={lockScenario} business={business} cta={cta} />
     </div>
   </div>
 </section>
@@ -36,7 +43,12 @@ const { title, text, scenario = '', lockScenario = false, points = [], business 
   .ff { background: var(--bg-accent); color: var(--text-on-accent); padding-block: var(--section-y); }
   .ff__inner { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 5vw, 96px); align-items: start; }
   .ff__aside { display: grid; gap: var(--sp-7); position: sticky; top: calc(var(--header-h) + 24px); }
+  .ff__benefits { display: grid; gap: var(--sp-4); }
+  .ff__label { font-size: var(--fs-micro); font-weight: var(--fw-medium); letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--text-on-accent-muted); }
   .ff__points { display: grid; gap: var(--sp-3); }
+  .ff__now { display: grid; gap: var(--sp-2); }
+  .ff__now-title { font-weight: var(--fw-medium); }
+  .ff__now-text { color: var(--text-on-accent-muted); font-size: var(--fs-small); margin-bottom: var(--sp-3); }
   .ff__points li { display: grid; grid-template-columns: 24px 1fr; gap: var(--sp-3); color: var(--text-on-accent-muted); }
   .ff__points :global(svg) { color: var(--c-mint); }
   .ff__contacts { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-4); }

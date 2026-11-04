@@ -1,9 +1,9 @@
 ---
 // Order to site timeline (video scripts nº3 and nº4): production 3-5 days, delivery 5-10, up to 15 working days.
 import Icon from './Icon.astro';
-interface Stage { title: string; time: string; text: string; weight: number; tone: 'blue' | 'sky' | 'mint' | 'ink' }
-interface Props { stages: Stage[]; total: string; notes?: { icon: string; text: string }[] }
-const { stages, total, notes = [] } = Astro.props;
+interface Stage { title: string; time: string; text: string; weight: number; tone: 'blue' | 'sky' | 'mint' | 'grey' }
+interface Props { stages: Stage[]; total: string; caveat?: string; notes?: { icon: string; text: string }[] }
+const { stages, total, caveat, notes = [] } = Astro.props;
 ---
 <div class="lt">
   <div class="lt__track" role="list">
@@ -15,7 +15,10 @@ const { stages, total, notes = [] } = Astro.props;
       </div>
     ))}
   </div>
-  <p class="lt__total"><Icon name="clock" size={20} /><span>{total}</span></p>
+  <div class="lt__sum">
+    <p class="lt__total"><Icon name="clock" size={20} /><span>{total}</span></p>
+    {caveat && <p class="lt__caveat">{caveat}</p>}
+  </div>
   {notes.length > 0 && (
     <ul class="lt__notes" role="list">
       {notes.map((n, i) => <li><span class={`lt__ic lt__ic--${['blue', 'sky', 'mint', 'blue'][i % 4]}`}><Icon name={n.icon} size={24} /></span><span set:html={n.text} /></li>)}
@@ -33,8 +36,10 @@ const { stages, total, notes = [] } = Astro.props;
   .lt__bar--mint { background: var(--c-mint); }
   .lt__bar--grey { background: var(--c-grey); color: var(--c-ink); }
   .lt__time { font-weight: var(--fw-medium); font-size: var(--fs-small); letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap; }
-  .lt__title { font-size: 1.0625rem; }
+  .lt__title { font-size: 1.0625rem; padding-right: var(--sp-3); }
   .lt__text { color: var(--text-muted); font-size: var(--fs-small); max-width: 32ch; }
+  .lt__sum { display: grid; gap: var(--sp-3); justify-items: start; }
+  .lt__caveat { color: var(--text-muted); font-size: var(--fs-small); max-width: 72ch; }
   .lt__total { display: inline-flex; align-items: center; gap: 10px; justify-self: start; padding: 10px 16px; border-radius: var(--radius-sm); background: var(--c-blue); color: var(--c-white); font-weight: var(--fw-medium); }
   .lt__notes { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--grid-gap); }
   .lt__notes li { display: grid; grid-template-columns: 48px 1fr; align-items: center; gap: var(--sp-4); padding: var(--sp-5); border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--bg); color: var(--text); }

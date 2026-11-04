@@ -1,6 +1,6 @@
 ---
 import { ui } from '../data/ui';
-// Proof strip (reference: "Работаем по всей Европе. Европейский бренд, сталь из Южной Кореи. 1000+ проектов в ЕС").
+// Proof strip (reference: "Работаем по всей Европе. Европейский бренд, сталь из Южной Кореи").
 interface Fact { value: string; label: string }
 interface Props { facts?: Fact[]; tone?: 'light' | 'dark' }
 const {
@@ -8,7 +8,7 @@ const {
   tone = 'light',
 } = Astro.props;
 ---
-<dl class:list={['facts', `facts--${tone}`]}>
+<dl class:list={['facts', `facts--${tone}`, { 'facts--three': facts.length === 3 }]}>
   {facts.map((f) => (
     <div class="facts__item">
       <dt class="facts__value">{f.value}</dt>
@@ -27,15 +27,20 @@ const {
   .facts--dark .facts__item + .facts__item { border-color: rgb(255 255 255 / 0.16); }
   .facts--dark .facts__label { color: var(--text-on-accent-muted); }
 
+  .facts--three { grid-template-columns: repeat(3, 1fr); }
+
   @media (max-width: 1199px) {
-    .facts { grid-template-columns: repeat(2, 1fr); }
-    .facts .facts__item:nth-child(3) { padding-left: 0; border-left: 0; }
-    .facts .facts__item:nth-child(n + 3) { border-top: 1px solid var(--border); }
+    .facts:not(.facts--three) { grid-template-columns: repeat(2, 1fr); }
+    .facts:not(.facts--three) .facts__item:nth-child(3) { padding-left: 0; border-left: 0; }
+    .facts:not(.facts--three) .facts__item:nth-child(n + 3) { border-top: 1px solid var(--border); }
     .facts--dark.facts .facts__item:nth-child(n + 3) { border-color: rgb(255 255 255 / 0.16); }
   }
   @media (max-width: 767px) {
     .facts__item { padding-block: var(--sp-5); }
-    .facts .facts__item:nth-child(even) { padding-left: var(--sp-4); }
-    .facts .facts__item:nth-child(3) { padding-left: 0; }
+    .facts:not(.facts--three) .facts__item:nth-child(even) { padding-left: var(--sp-4); }
+    .facts:not(.facts--three) .facts__item:nth-child(3) { padding-left: 0; }
+    .facts--three { grid-template-columns: 1fr; }
+    .facts--three .facts__item, .facts--three .facts__item + .facts__item { padding-left: 0; border-left: 0; }
+    .facts--three .facts__item + .facts__item { border-top: 1px solid var(--border); }
   }
 </style>

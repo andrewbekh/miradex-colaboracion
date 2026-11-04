@@ -1,7 +1,7 @@
 ---
 // Page bar that slides in once the first screen is scrolled past, on the hub and on every landing
 // (Leroy Merlin pattern): where you are + chevron to switch to another format, back to the hub on landings,
-// and «Оставить заявку». Desktop and tablet: docked under the header. Mobile: fixed at the bottom of the screen.
+// and the page's main button. Desktop and tablet: docked under the header. Mobile: fixed at the bottom of the screen.
 // The bar is brand blue with everything on it inverted: white text, mint button (client rule for blue).
 // The first screen marks its end with [data-sbar-after]; without it the bar appears after 600px.
 import Icon from './Icon.astro';
@@ -12,8 +12,8 @@ import { scenarios, scenarioById, toneStyle } from '../data/scenarios';
 /** here: an industry page. The bar names it in words, the list shows only the formats that fit this business
  *  (each opens with the business preselected) plus links to all formats and to the other business types. */
 export interface Here { label: string; short: string; formats: [string, string][]; scenario: string; business: string }
-interface Props { current?: string; here?: Here }
-const { current, here } = Astro.props;
+interface Props { current?: string; here?: Here; cta?: string; ctaShort?: string }
+const { current, here, cta = ui.cta.apply, ctaShort = ui.cta.applyShort } = Astro.props;
 const list = here
   ? here.formats.map(([sid, bid]) => ({ s: scenarioById(sid)!, href: `${scenarioById(sid)!.href}?type=${bid}` }))
   : scenarios.map((s) => ({ s, href: s.href }));
@@ -23,7 +23,7 @@ const sc = scenarioById(current);
 ---
 {show && (
   <div class="sb on-blue" data-sbar aria-hidden="true" inert>
-    <div class="container sb__in">
+    <div class:list={['container', 'sb__in', { 'sb__in--long': ctaShort.length > 8 }]}>
       {(sc || here) && (
         <a class="sb__back" href={site.hubPath} aria-label={ui.sbar.back}>
           <Icon name="arrow-left" size={18} /><span class="sb__back-text">{site.navLabel}</span>
@@ -63,7 +63,7 @@ const sc = scenarioById(current);
         </div>
       </div>
       <button type="button" class="btn btn--primary sb__cta" data-open-form data-scenario={sc?.id ?? here?.scenario ?? 'no-se'} data-business={here?.business}>
-        <span class="sb__cta-long">{ui.cta.apply}</span><span class="sb__cta-short">{ui.cta.applyShort}</span>
+        <span class="sb__cta-long">{cta}</span><span class="sb__cta-short">{ctaShort}</span>
       </button>
     </div>
   </div>
@@ -127,6 +127,13 @@ const sc = scenarioById(current);
 
   @media (max-width: 1199px) {
     .sb__here { display: none; }
+    .sb__long { display: none; }
+    .sb__short { display: inline; }
+  }
+  /* the long button label needs the room on tablets */
+  @media (max-width: 1023px) {
+    .sb__back { width: 44px; padding: 0; justify-content: center; }
+    .sb__back-text { display: none; }
   }
   /* mobile: thumb-reach bar at the bottom, the list opens upwards */
   @media (max-width: 767px) {
@@ -145,7 +152,12 @@ const sc = scenarioById(current);
     .sb__cta { --btn-h: 44px; padding: 0 16px; }
     .sb__cta-long { display: none; }
     .sb__cta-short { display: inline; }
+    /* a long button label: the name of the format stays readable, the number goes */
+    .sb__in--long .sb__switch .sb__num { display: none; }
+    .sb__in--long .sb__cta { padding: 0 12px; font-size: var(--fs-micro); letter-spacing: 0.04em; }
   }
+  /* the narrowest phones: the way back is in the list that opens from the name */
+  @media (max-width: 380px) { .sb__in--long .sb__back { display: none; } }
 </style>
 
 <script>
