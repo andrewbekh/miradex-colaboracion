@@ -8,7 +8,7 @@ let lastTrigger: HTMLElement | null = null;
 // Hidden fields are disabled so they are not sent.
 function applyRole(form: HTMLFormElement) {
   const role =
-    form.querySelector<HTMLInputElement>('[data-scenario-radio]:checked')?.value ??
+    form.querySelector<HTMLSelectElement>('[data-scenario-select]')?.value ??
     form.querySelector<HTMLInputElement>('[data-scenario-fixed]')?.value ??
     'no-se';
   form.querySelectorAll<HTMLElement>('[data-for]').forEach((field) => {
@@ -21,8 +21,8 @@ function applyRole(form: HTMLFormElement) {
 function setScenario(form: HTMLFormElement, value: string | undefined) {
   const fallback = modal?.dataset.defaultScenario || 'no-se';
   const v = value || fallback;
-  const radio = form.querySelector<HTMLInputElement>(`[data-scenario-radio][value="${v}"]`);
-  if (radio) radio.checked = true;
+  const select = form.querySelector<HTMLSelectElement>('[data-scenario-select]');
+  if (select && [...select.options].some((o) => o.value === v)) select.value = v;
   applyRole(form);
 }
 
@@ -150,7 +150,7 @@ try {
 document.querySelectorAll<HTMLFormElement>('[data-lead-form]').forEach((form) => {
   applyRole(form);
   form.addEventListener('change', (e) => {
-    if ((e.target as HTMLElement).matches('[data-scenario-radio]')) applyRole(form);
+    if ((e.target as HTMLElement).matches('[data-scenario-select]')) applyRole(form);
   });
   const utmInput = form.querySelector<HTMLInputElement>('[data-utm]');
   if (utmInput) utmInput.value = utm;

@@ -17,5 +17,5 @@ await new Promise((r) => setTimeout(r, 400));
 await p.screenshot({ path: 'shots/quiz-picked-1440.png' });
 await click('[data-quiz-cta]');
 await new Promise((r) => setTimeout(r, 300));
-console.log('modal:', await p.$eval('#lead-modal [data-scenario-radio]:checked', (s) => s.value), '|', await p.$eval('#lead-modal [data-business-select]', (s) => s.value), '|', await p.$eval('#lead-modal [data-quiz-answers]', (s) => s.value));
+console.log('modal:', await p.$eval('#lead-modal [data-scenario-select]', (s) => s.value), '|', await p.$eval('#lead-modal [data-business-select]', (s) => s.value), '|', await p.$eval('#lead-modal [data-quiz-answers]', (s) => s.value));
 await b.close();

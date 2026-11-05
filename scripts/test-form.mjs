@@ -24,11 +24,11 @@ console.log('success visible:', await p.$eval(`${f} .lf__done`, (e) => !e.hidden
 console.log('payload:', logs.find((l) => l.includes('MIRADEX lead')));
 // modal scenario preselect
 await p.evaluate(() => document.querySelector('[data-open-form][data-scenario="no-se"]').click());
-console.log('modal open:', await p.$eval('#lead-modal', (d) => d.open), 'scenario:', await p.$eval('#lead-modal [data-scenario-radio]:checked', (s) => s.value));
+console.log('modal open:', await p.$eval('#lead-modal', (d) => d.open), 'scenario:', await p.$eval('#lead-modal [data-scenario-select]', (s) => s.value));
 // role switch: installer shows zone, crew and volume; the sell question is hidden
-await p.evaluate(() => document.querySelector('#lead-modal .role input[value="instalar"]').click());
+await p.evaluate(() => { const s = document.querySelector('#lead-modal [data-scenario-select]'); s.value = 'instalar'; s.dispatchEvent(new Event('change', { bubbles: true })); });
 const vis = await p.$$eval('#lead-modal [data-for]', (els) => els.filter((e) => !e.hidden).map((e) => e.querySelector('input,select')?.name));
 console.log('instalar fields:', vis.join(','));
-await p.evaluate(() => document.querySelector('#lead-modal .role input[value="proyectos"]').click());
+await p.evaluate(() => { const s = document.querySelector('#lead-modal [data-scenario-select]'); s.value = 'proyectos'; s.dispatchEvent(new Event('change', { bubbles: true })); });
 console.log('proyectos fields:', (await p.$$eval('#lead-modal [data-for]', (els) => els.filter((e) => !e.hidden).map((e) => e.querySelector('input,select')?.name))).join(','));
 await b.close();

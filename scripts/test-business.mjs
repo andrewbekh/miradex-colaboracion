@@ -12,7 +12,7 @@ await p.evaluate(() => document.querySelector('[data-bt-tab="stores"]').click())
 console.log('final form after choosing stores:', await p.$eval('#solicitud [data-business-select]', (e) => e.value));
 console.log('quick form after choosing stores:', await p.$eval('.hero [data-business-hidden]', (e) => e.value));
 await p.evaluate(() => document.querySelector('[data-sbar] [data-open-form]').click());
-console.log('popup from the page bar:', await p.$eval('#lead-modal [data-business-select]', (e) => e.value), '/', await p.$eval('#lead-modal [data-scenario-radio]:checked', (e) => e.value));
+console.log('popup from the page bar:', await p.$eval('#lead-modal [data-business-select]', (e) => e.value), '/', await p.$eval('#lead-modal [data-scenario-select]', (e) => e.value));
 await p.evaluate(() => document.querySelector('#lead-modal').close());
 const labels = await p.$$eval('.hero button[type=submit], .bt__panel.is-active .bt__cta, .eco__cta, #solicitud .lf__send, #lead-modal .lf__send, .sb__cta-long', (els) => els.map((e) => e.textContent.trim()));
 console.log('main buttons:', [...new Set(labels)].join(' | '), `(${labels.length})`);

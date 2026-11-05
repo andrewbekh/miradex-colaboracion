@@ -20,8 +20,7 @@ const { uid, scenario = '', lockScenario = false, layout = 'wide', business = ''
 const id = (n: string) => `${uid}-${n}`;
 const current = scenario || 'no-se';
 
-// «Пока не знаю» has no number tile: a «?» or an icon there looked broken
-const roles = [...scenarios.map((s) => ({ id: s.id, num: s.num, label: s.short })), { id: 'no-se', num: '', label: ui.form.notSure }];
+const roles = [...scenarios.map((s) => ({ id: s.id, label: s.short })), { id: 'no-se', label: ui.form.notSure }];
 
 const install = ui.form.installOpts;
 const crew = ui.form.crewOpts;
@@ -44,27 +43,21 @@ const forRoles = (...r: string[]) => ({ 'data-for': r.join(' ') });
   <input type="hidden" name="quiz_answers" value="" data-quiz-answers />
   {lockScenario && <input type="hidden" name="scenario" value={current} data-scenario-fixed />}
 
-  {!lockScenario && (
-    <fieldset class="lf__set">
-      <legend class="lf__label lf__legend">{ui.form.step1}</legend>
-      <div class="lf__roles" role="radiogroup">
-        {roles.map((r) => (
-          <label class="role">
-            <input type="radio" name="scenario" value={r.id} checked={r.id === current} data-scenario-radio />
-            <span class:list={['role__box', { 'role__box--plain': !r.num }]}>{r.num && <span class="role__num">{r.num}</span>}<span class="role__label">{r.label}</span></span>
-          </label>
-        ))}
-      </div>
-    </fieldset>
-  )}
-
   <div class="lf__grid">
-    <div class="lf__field">
+    {!lockScenario && (
+      <div class="lf__field lf__field--full">
+        <label for={id('format')}>{ui.form.step1}</label>
+        <select id={id('format')} name="scenario" data-scenario-select>
+          {roles.map((r) => <option value={r.id} selected={r.id === current}>{r.label}</option>)}
+        </select>
+      </div>
+    )}
+    <div class="lf__field lf__field--pair">
       <label for={id('name')}>{ui.form.name} <span class="lf__req" aria-hidden="true">*</span></label>
       <input id={id('name')} name="name" type="text" autocomplete="name" required />
       <p class="lf__err" aria-live="polite"></p>
     </div>
-    <div class="lf__field">
+    <div class="lf__field lf__field--pair">
       <label for={id('phone')}>{ui.form.phone} <span class="lf__req" aria-hidden="true">*</span></label>
       <div class="lf__phone">
         <span aria-hidden="true">+34</span>
@@ -206,24 +199,6 @@ const forRoles = (...r: string[]) => ({ 'data-for': r.join(' ') });
 
 <style>
   .lf { position: relative; display: grid; gap: var(--sp-5); border-radius: inherit; }
-  .lf__set { display: grid; gap: 8px; }
-  .lf__legend { padding: 0; margin-bottom: 8px; }
-
-  /* role picker: compact tiles, 3 per row */
-  .lf__roles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
-  .role { position: relative; cursor: pointer; display: flex; }
-  .role input { position: absolute; opacity: 0; inset: 0; cursor: pointer; margin: 0; }
-  .role__box {
-    display: flex; align-items: center; gap: 8px; width: 100%; min-height: 44px; padding: 6px 10px 6px 6px; border: 1px solid var(--border); border-radius: var(--radius-sm);
-    background: var(--c-white); font-size: var(--fs-micro); font-weight: var(--fw-medium); line-height: 1.2;
-    transition: background-color var(--dur) var(--ease), border-color var(--dur) var(--ease);
-  }
-  .role__box--plain { padding-left: 14px; }
-  .role__num { display: grid; place-items: center; flex: none; width: 28px; height: 28px; border-radius: var(--radius-xs); background: var(--c-grey); font-size: 11px; }
-  .role:hover .role__box { border-color: var(--c-blue); }
-  .role input:checked + .role__box { background: var(--c-blue); border-color: var(--c-blue); color: var(--c-white); }
-  .role input:checked + .role__box .role__num { background: var(--c-white); color: var(--c-ink); }
-  .role input:focus-visible + .role__box { outline: 2px solid var(--focus); outline-offset: 2px; }
 
   /* fields: 3 per row; business type takes two */
   .lf__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
@@ -297,10 +272,9 @@ const forRoles = (...r: string[]) => ({ 'data-for': r.join(' ') });
   .lf__done p:not(.lf__done-title) { color: var(--text-muted); max-width: 48ch; }
 
   @media (max-width: 767px) {
-    .lf__roles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .lf__grid--more { grid-template-columns: 1fr; }
     /* name + phone side by side, the rest full width */
-    .lf__grid > .lf__field:nth-child(n + 3) { grid-column: 1 / -1; }
+    .lf__grid > .lf__field:not(.lf__field--pair) { grid-column: 1 / -1; }
     .lf__footer { grid-template-columns: 1fr; }
     .lf__send { width: 100%; grid-column: 1; grid-row: auto; }
     .lf__note { grid-column: 1; grid-row: auto; }
