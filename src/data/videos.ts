@@ -7,7 +7,7 @@ const v = (num: number, title: string, duration: string, poster: string): Video 
 export const videos: Record<number, Video> = {
   1: v(1, 'MIRADEX для бизнеса: возможности сотрудничества', '3:10-3:30', 'atlas-mountain'),
   2: v(2, 'Постройте свой бизнес с MIRADEX', '3:00-3:20', 'atlas-villas'),
-  3: v(3, 'Строительные и монтажные компании: больше возможностей заработать', '2:50-3:10', 'tisa-wood-stone'),
+  3: v(3, 'Строительные и монтажные компании: больше возможностей заработать', '2:50-3:10', 'install-hands'),
   4: v(4, 'Добавьте MIRADEX в свой ассортимент', '3:00-3:15', 'sigma-red-house'),
   5: v(5, 'Зарабатывайте больше с существующих клиентов', '2:50-3:05', 'gate-wood'),
   6: v(6, 'MIRADEX для строительных компаний и застройщиков', '3:00-3:15', 'romb-pro-house'),

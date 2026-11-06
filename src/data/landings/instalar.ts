@@ -49,8 +49,8 @@ export const instalar: Landing = {
     quickTitle: 'Получите условия для вашей монтажной команды',
     quickText: 'Оставьте контакты: мы свяжемся с вами в течение 24 часов.',
     quickDone: 'Мы свяжемся с вами в течение 24 часов.',
-    image: '/img/photos/atlas-wood-street.jpg',
-    imageAlt: 'Ограждение Atlas на улице',
+    image: '/img/photos/installer-fence.jpg',
+    imageAlt: 'Монтажник устанавливает ограждение',
     note: 'Продавайте MIRADEX по всей Испании, а монтаж выполняйте в своей зоне работы.',
   },
   businesses: {

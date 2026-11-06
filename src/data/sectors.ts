@@ -36,7 +36,7 @@ export const sectors: Sector[] = [
     id: 'instaladores', name: 'Монтажные компании и установщики', short: 'Монтаж и бригады', icon: 'wrench',
     title: 'Зарабатывайте на продаже и монтаже MIRADEX',
     lead: ['Зарабатывайте на продаже продукции и её монтаже. Получайте дополнительные местные заказы от MIRADEX и загружайте свою бригаду новыми объектами.', 'Партнёрские цены, обучение монтажу и техническая поддержка на первых объектах.'],
-    image: '/img/photos/atlas-wood-street.jpg', video: 3, primary: 'instalar',
+    image: '/img/photos/installer-fence.jpg', video: 3, primary: 'instalar',
     formats: [['instalar', 'installers'], ['recomendar', 'installers']], form: 'Монтаж и установка', why: installerDrivers,
   },
   {
@@ -59,7 +59,7 @@ export const sectors: Sector[] = [
     id: 'metalisteria', name: 'Металлообрабатывающие компании', short: 'Металлообработка', icon: 'hammer',
     title: 'Меньше ручного производства, больше объектов',
     lead: ['Используйте готовые металлические ограждения MIRADEX вместо трудоёмкого самостоятельного изготовления.', 'Производство по индивидуальным размерам без расширения собственных мощностей: зарабатывайте на продаже и монтаже.'],
-    image: '/img/photos/simetrica-black.jpg', video: 3, primary: 'instalar',
+    image: '/img/photos/coil-worker.jpg', video: 3, primary: 'instalar',
     formats: [['instalar', 'metal'], ['vender', 'metal']], form: 'Металлообработка', why: installerDrivers,
   },
   {
@@ -110,7 +110,7 @@ export const sectors: Sector[] = [
     id: 'distribuidores', name: 'Дистрибьюторы и оптовые компании', short: 'Дистрибуция и опт', icon: 'warehouse',
     title: 'Новая товарная категория и объёмные закупки',
     lead: ['Расширяйте ассортимент современных металлических ограждений и увеличивайте продажи через существующую клиентскую и дилерскую сеть.', 'Индивидуальные партнёрские цены с учётом объёмов и производство под заказ без складских запасов.'],
-    image: '/img/photos/romb-mini-street.jpg', video: 4, primary: 'vender',
+    image: '/img/photos/factory-coils.jpg', video: 4, primary: 'vender',
     formats: [['vender', 'distributors'], ['negocio', 'dealers']], form: 'Дистрибьютор или опт',
   },
   {
