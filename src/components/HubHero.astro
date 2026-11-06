@@ -1,15 +1,15 @@
 ---
 // Hub first screen on white. Left: the offer and the main action, «how do you want to work with MIRADEX»
 // (5 answers, each opens its format; Business MIRADEX full width as the priority format), then a compact
-// short application as the secondary action. Right: a photo on half of the screen,
-// flush with the header and the right edge, cropped by the hero height. Under 1200px the photo is a strip on top.
+// short application as the secondary action. Right: the team photo with margins on a grey panel, so nobody is cropped;
+// the panel is flush with the header and the right edge. Under 1200px the panel is on top, on phones it is hidden.
 import QuickForm from './QuickForm.astro';
 import Icon from './Icon.astro';
 import { ui } from '../data/ui';
 import { scenarios, toneStyle } from '../data/scenarios';
 
-interface Props { title: string; lead: string; image: string }
-const { title, lead, image } = Astro.props;
+interface Props { title: string; lead: string; image: string; imageAlt?: string }
+const { title, lead, image, imageAlt = '' } = Astro.props;
 ---
 <section class="hx">
   <div class="container hx__in">
@@ -41,14 +41,14 @@ const { title, lead, image } = Astro.props;
     </div>
 
     <div class="hx__photo">
-      <img src={image} alt="" fetchpriority="high" />
+      <img src={image} alt={imageAlt} fetchpriority="high" />
     </div>
   </div>
 </section>
 
 <style>
   .hx { overflow: clip; }
-  .hx__in { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(32px, 4vw, 64px); }
+  .hx__in { display: grid; grid-template-columns: minmax(0, 13fr) minmax(0, 11fr); gap: clamp(32px, 4vw, 64px); }
   .hx__copy { display: grid; gap: clamp(24px, 1rem + 1.5vw, 36px); align-content: start; padding-block: clamp(32px, 1rem + 2.5vw, 56px) clamp(40px, 1rem + 3vw, 64px); }
   .hx__head { display: grid; gap: var(--sp-4); }
   .hx__title { max-width: 16ch; }
@@ -73,18 +73,18 @@ const { title, lead, image } = Astro.props;
   .hx__sub { display: block; margin-top: 2px; font-size: var(--fs-micro); font-weight: var(--fw-regular); color: var(--text-muted); }
   .hx__quick { margin-top: calc(var(--sp-2) * -1); }
 
-  /* photo: from the header down, to the right edge of the window */
-  .hx__photo { position: relative; overflow: hidden; margin-right: calc(-1 * max(var(--gutter), (100vw - var(--container)) / 2)); background: var(--c-grey); }
-  .hx__photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  /* panel: from the header down, to the right edge of the window; the photo keeps its proportions inside */
+  .hx__photo { display: grid; place-items: center; padding: clamp(24px, 2.5vw, 40px); margin-right: calc(-1 * max(var(--gutter), (100vw - var(--container)) / 2)); background: var(--c-grey); }
+  .hx__photo img { width: 100%; height: auto; border-radius: var(--radius-lg); }
 
   @media (max-width: 1199px) {
     .hx__in { grid-template-columns: 1fr; gap: 0; }
-    .hx__photo { order: -1; aspect-ratio: 16 / 7; margin-inline: calc(-1 * var(--gutter)); }
+    .hx__photo { order: -1; margin-inline: calc(-1 * var(--gutter)); }
+    .hx__photo img { max-width: 560px; }
   }
   @media (max-width: 767px) {
     .hx__photo { display: none; }
     .hx__list { grid-template-columns: 1fr; }
     .hx__fmt { min-height: 52px; }
-    .hx__photo { aspect-ratio: 16 / 9; }
   }
 </style>
