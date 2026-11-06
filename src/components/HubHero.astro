@@ -1,8 +1,8 @@
 ---
 // Hub first screen on white. Left: the offer and the main action, «how do you want to work with MIRADEX»
 // (5 answers, each opens its format; Business MIRADEX full width as the priority format), then a compact
-// short application as the secondary action. Right: the team photo with margins on a grey panel, so nobody is cropped;
-// the panel is flush with the header and the right edge. Under 1200px the panel is on top, on phones it is hidden.
+// short application as the secondary action. Right: the team photo in its own proportions on white, so nobody is cropped.
+// Under 1200px the photo is on top, on phones it is hidden.
 import QuickForm from './QuickForm.astro';
 import Icon from './Icon.astro';
 import { ui } from '../data/ui';
@@ -73,13 +73,13 @@ const { title, lead, image, imageAlt = '' } = Astro.props;
   .hx__sub { display: block; margin-top: 2px; font-size: var(--fs-micro); font-weight: var(--fw-regular); color: var(--text-muted); }
   .hx__quick { margin-top: calc(var(--sp-2) * -1); }
 
-  /* panel: from the header down, to the right edge of the window; the photo keeps its proportions inside */
-  .hx__photo { display: grid; place-items: center; padding: clamp(24px, 2.5vw, 40px); margin-right: calc(-1 * max(var(--gutter), (100vw - var(--container)) / 2)); background: var(--c-grey); }
+  /* the photo keeps its proportions, centred against the text */
+  .hx__photo { display: grid; place-items: center; }
   .hx__photo img { width: 100%; height: auto; border-radius: var(--radius-lg); }
 
   @media (max-width: 1199px) {
     .hx__in { grid-template-columns: 1fr; gap: 0; }
-    .hx__photo { order: -1; margin-inline: calc(-1 * var(--gutter)); }
+    .hx__photo { order: -1; padding-top: clamp(24px, 2.5vw, 40px); }
     .hx__photo img { max-width: 560px; }
   }
   @media (max-width: 767px) {
