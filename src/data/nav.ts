@@ -24,7 +24,7 @@ export const productLines: { id: string; title: string; text: string; images: { 
     title: 'Металлическая облицовка',
     text: 'Фасадный сайдинг Saturn, Jupiter и Venus, а также декоративные металлические рейки SENA для фасадов, стен и потолков.',
     images: [
-      { src: '/img/photos/jupiter-facade-house.jpg', alt: 'Фасад дома с сайдингом Jupiter', label: 'Фасад', labelMore: ': Saturn, Jupiter, Venus' },
+      { src: '/img/photos/siding-grey-building.jpg', alt: 'Фасад здания с металлическим сайдингом', label: 'Фасад', labelMore: ': Saturn, Jupiter, Venus' },
       { src: '/img/photos/sena-interior.jpg', alt: 'Интерьер с декоративными рейками SENA', label: 'Интерьер', labelMore: ': рейки SENA' },
     ],
   },

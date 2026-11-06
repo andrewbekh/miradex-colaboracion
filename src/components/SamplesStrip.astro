@@ -1,6 +1,6 @@
 ---
 // «Образцы и демонстрационные материалы» as photos, not an icon card (team meeting: the strip of the TPS partner page, with MIRADEX).
-// Neutral placeholders until the photos are chosen; the list lives in src/data/shared.ts.
+// Square frames: the stands are upright and a 4/3 frame cut them. The list lives in src/data/shared.ts.
 import Media from './Media.astro';
 import { samplePhotos } from '../data/shared';
 import { ui } from '../data/ui';
@@ -10,7 +10,7 @@ import { ui } from '../data/ui';
   <ul class="ss__row" role="list">
     {samplePhotos.map((p) => (
       <li>
-        <Media src={p.src} alt={p.title} ratio="4/3" />
+        <Media src={p.src} alt={p.title} ratio="1/1" />
         <h4 class="ss__name">{p.title}</h4>
         <p class="ss__text">{p.text}</p>
       </li>
