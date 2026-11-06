@@ -1,7 +1,7 @@
 ---
 // Hub first screen on white. Left: the offer and the main action, «how do you want to work with MIRADEX»
 // (5 answers, each opens its format; Business MIRADEX full width as the priority format), then a compact
-// short application as the secondary action. Right: the team photo in its own proportions on white, so nobody is cropped.
+// short application as the secondary action. Right: the team photo on white, as large as the window allows, so nobody is cropped.
 // Under 1200px the photo is on top, on phones it is hidden.
 import QuickForm from './QuickForm.astro';
 import Icon from './Icon.astro';
@@ -48,7 +48,7 @@ const { title, lead, image, imageAlt = '' } = Astro.props;
 
 <style>
   .hx { overflow: clip; }
-  .hx__in { display: grid; grid-template-columns: minmax(0, 13fr) minmax(0, 11fr); gap: clamp(32px, 4vw, 64px); }
+  .hx__in { display: grid; grid-template-columns: minmax(0, 664px) minmax(0, 1fr); gap: clamp(32px, 3vw, 48px); }
   .hx__copy { display: grid; gap: clamp(24px, 1rem + 1.5vw, 36px); align-content: start; padding-block: clamp(32px, 1rem + 2.5vw, 56px) clamp(40px, 1rem + 3vw, 64px); }
   .hx__head { display: grid; gap: var(--sp-4); }
   .hx__title { max-width: 16ch; }
@@ -73,14 +73,14 @@ const { title, lead, image, imageAlt = '' } = Astro.props;
   .hx__sub { display: block; margin-top: 2px; font-size: var(--fs-micro); font-weight: var(--fw-regular); color: var(--text-muted); }
   .hx__quick { margin-top: calc(var(--sp-2) * -1); }
 
-  /* the photo keeps its proportions, centred against the text */
-  .hx__photo { display: grid; place-items: center; }
-  .hx__photo img { width: 100%; height: auto; border-radius: var(--radius-lg); }
+  /* the column runs to the right edge of the window, so the photo grows with it; the width cap keeps it within the first screen on very wide windows */
+  .hx__photo { display: grid; align-items: center; justify-items: start; padding-right: clamp(24px, 2.5vw, 40px); margin-right: calc(-1 * max(var(--gutter), (100vw - var(--container)) / 2)); }
+  .hx__photo img { width: 100%; max-width: 1100px; height: auto; border-radius: var(--radius-lg); }
 
   @media (max-width: 1199px) {
     .hx__in { grid-template-columns: 1fr; gap: 0; }
-    .hx__photo { order: -1; padding-top: clamp(24px, 2.5vw, 40px); }
-    .hx__photo img { max-width: 560px; }
+    .hx__photo { order: -1; justify-items: center; padding: clamp(24px, 2.5vw, 40px) 0 0; margin-right: 0; }
+    .hx__photo img { max-width: 720px; }
   }
   @media (max-width: 767px) {
     .hx__photo { display: none; }
