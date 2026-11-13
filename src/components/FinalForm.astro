@@ -40,19 +40,19 @@ const { title, text, scenario = '', lockScenario = false, points = [], pointsTit
 </section>
 
 <style>
-  .ff { background: var(--bg-accent); color: var(--text-on-accent); padding-block: var(--section-y); }
+  .ff { background: var(--bg-accent); color: var(--text-on-accent); padding-block: var(--section-top) var(--section-bottom); }
   .ff__inner { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 5vw, 96px); align-items: start; }
   .ff__aside { display: grid; gap: var(--sp-7); position: sticky; top: calc(var(--header-h) + 24px); }
   .ff__benefits { display: grid; gap: var(--sp-4); }
-  .ff__label { font-size: var(--fs-micro); font-weight: var(--fw-medium); letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--text-on-accent-muted); }
+  .ff__label { font-size: var(--fs-micro); font-weight: var(--fw-medium); letter-spacing: 0; color: var(--text-on-accent-muted); }
   .ff__points { display: grid; gap: var(--sp-3); }
   .ff__now { display: grid; gap: var(--sp-2); }
   .ff__now-title { font-weight: var(--fw-medium); }
   .ff__now-text { color: var(--text-on-accent-muted); font-size: var(--fs-small); margin-bottom: var(--sp-3); }
-  .ff__points li { display: grid; grid-template-columns: 24px 1fr; gap: var(--sp-3); color: var(--text-on-accent-muted); }
+  .ff__points li { display: grid; grid-template-columns: 24px 1fr; gap: var(--sp-3); color: var(--text-on-accent-muted); font-weight: var(--fw-medium); }
   .ff__points :global(svg) { color: var(--c-mint); }
   .ff__contacts { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-4); }
-  .ff__mail { color: var(--text-on-accent-muted); font-size: var(--fs-small); line-height: 1.6; }
+  .ff__mail { color: var(--text-on-accent-muted); font-size: var(--fs-small); line-height: 1.4; }
   .ff__mail a { color: var(--c-white); }
   .ff__panel { background: var(--c-white); color: var(--text); padding: clamp(20px, 3vw, 48px); border-radius: var(--radius-lg); }
   @media (max-width: 1199px) {

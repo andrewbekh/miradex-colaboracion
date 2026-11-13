@@ -55,7 +55,7 @@ const { title, lead, image, imageAlt = '' } = Astro.props;
   .hx__lead { max-width: 48ch; color: var(--text-muted); }
 
   .hx__path { display: grid; gap: var(--sp-4); }
-  .hx__label { font-size: var(--fs-h3); font-weight: var(--fw-medium); line-height: 1.25; text-transform: none; letter-spacing: 0; }
+  .hx__label { font-size: var(--fs-h3); font-weight: var(--fw-medium); line-height: 1.2; text-transform: none; letter-spacing: 0; }
 
   .hx__list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
   .hx__fmt {
@@ -65,7 +65,7 @@ const { title, lead, image, imageAlt = '' } = Astro.props;
   }
   .hx__fmt:hover { border-color: var(--c-blue); }
   .hx__num { display: grid; place-items: center; flex: none; width: 32px; height: 32px; border-radius: var(--radius-xs); font-size: 12px; }
-  .hx__name { min-width: 0; line-height: 1.25; }
+  .hx__name { min-width: 0; line-height: 1.2; }
   /* the arrow shows on hover only */
   .hx__fmt :global(.hx__arrow) { margin-left: auto; flex: none; opacity: 0; transform: translateX(-4px); transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease); }
   .hx__fmt:hover :global(.hx__arrow), .hx__fmt:focus-visible :global(.hx__arrow) { opacity: 1; transform: none; }

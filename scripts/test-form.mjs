@@ -17,7 +17,6 @@ console.log('phone masked:', await p.$eval(`${f} input[name=phone]`, (e) => e.va
 await p.click(`${f} .lf__more-sum`); // optional details are folded
 await p.click(`${f} .chip input[value="Металлическая облицовка"]`);
 await p.type(`${f} textarea[name=comment]`, 'Тестовый комментарий');
-await p.click(`${f} input[name=consent]`);
 await p.click(`${f} button[type=submit]`);
 await new Promise((r) => setTimeout(r, 300));
 console.log('success visible:', await p.$eval(`${f} .lf__done`, (e) => !e.hidden));

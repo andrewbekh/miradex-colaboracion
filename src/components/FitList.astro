@@ -24,7 +24,7 @@ const { fit, notFit, fitTitle = ui.fit.yes, notFitTitle = ui.fit.no } = Astro.pr
   .fit { display: grid; grid-template-columns: 1fr 1fr; gap: var(--grid-gap); }
   .fit__col { padding: var(--sp-7); border-radius: var(--radius-md); display: grid; align-content: start; gap: var(--sp-5); }
   .fit__col--yes { background: var(--c-mint); }
-  .fit__col--no { background: var(--bg); border: 1px solid var(--border); }
+  .fit__col--no { background: var(--bg); border: 1px solid var(--card-line, var(--border)); }
   .fit__title { font-size: var(--fs-h3); }
   .fit ul { display: grid; gap: var(--sp-4); }
   .fit li { display: grid; grid-template-columns: 28px 1fr; gap: var(--sp-3); align-items: start; }

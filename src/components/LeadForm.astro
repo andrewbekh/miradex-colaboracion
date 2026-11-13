@@ -178,11 +178,6 @@ const forRoles = (...r: string[]) => ({ 'data-for': r.join(' ') });
   </details>
 
   <div class="lf__footer">
-    <label class="lf__consent">
-      <input type="checkbox" name="consent" required />
-      <span>{ui.form.consent} <a href={site.privacyUrl}>{ui.form.consentLink}</a> {ui.form.consentTail}</span>
-    </label>
-    <p class="lf__err lf__err--consent" aria-live="polite"></p>
     <button type="submit" class="btn btn--primary lf__send">
       <span>{cta}</span><Icon name="arrow-right" size={18} />
     </button>
@@ -253,16 +248,11 @@ const forRoles = (...r: string[]) => ({ 'data-for': r.join(' ') });
   .chip input:checked + span { background: var(--c-mint); border-color: var(--c-mint); font-weight: var(--fw-medium); }
   .chip input:focus-visible + span { outline: 2px solid var(--focus); outline-offset: 2px; }
 
-  /* consent on its own row (the button label is long), then what happens next + send */
+  /* what happens next + send */
   .lf__footer { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--sp-3) var(--sp-5); align-items: center; }
-  .lf__consent { grid-column: 1 / -1; }
-  .lf__consent { display: grid !important; grid-template-columns: 20px 1fr; gap: 8px; font-weight: var(--fw-regular) !important; color: var(--text-muted); font-size: var(--fs-micro) !important; line-height: 1.45; cursor: pointer; }
-  .lf__consent input { width: 18px; height: 18px; margin: 1px 0 0; accent-color: var(--c-blue); }
-  .lf__consent a { color: var(--link); }
   .lf__send { --btn-h: 52px; }
-  .lf__err--consent { grid-column: 1 / -1; margin-top: -6px; }
-  .lf__send { grid-column: 2; grid-row: 3; }
-  .lf__note { grid-column: 1; grid-row: 3; font-size: var(--fs-micro); color: var(--text-muted); }
+  .lf__send { grid-column: 2; grid-row: 1; }
+  .lf__note { grid-column: 1; grid-row: 1; font-size: var(--fs-micro); color: var(--text-muted); }
   .lf__note a { color: var(--link); }
 
   .lf__done { position: absolute; inset: 0; border-radius: inherit; display: grid; align-content: center; justify-items: start; gap: var(--sp-4); padding: var(--sp-6); background: var(--c-white); }

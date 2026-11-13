@@ -28,12 +28,14 @@ const { id, tone = 'light', title, eyebrow, lead, align = 'start', tight = false
 </section>
 
 <style>
-  .section { padding-block: var(--section-y); }
-  .section--tight { padding-block: calc(var(--section-y) * 0.6); }
+  .section { padding-block: var(--section-top) var(--section-bottom); }
+  .section--tight { padding-block: var(--section-top) var(--section-bottom); }
   /* alternate white and grey: the paper tint was too close to white to separate blocks */
   .section--tint { background: var(--bg-grey); }
   .section--grey { background: var(--bg-grey); }
   .section--blue { background: var(--c-blue); color: var(--c-white); }
   .section--mint { background: var(--c-mint); }
+  /* no card outlines on coloured backgrounds */
+  .section--tint, .section--grey, .section--mint { --card-line: transparent; }
   .section__body--spaced { margin-top: var(--stack-gap); }
 </style>

@@ -6,19 +6,20 @@ interface Props { stages: Stage[]; total: string; caveat?: string; notes?: { ico
 const { stages, total, caveat, notes = [] } = Astro.props;
 ---
 <div class="lt">
-  <div class="lt__track" role="list">
-    {stages.map((s) => (
-      <div class="lt__stage" role="listitem" style={`--w:${s.weight}`}>
+  <div class="lt__track" style={`--cols:${stages.map((s) => `${s.weight}fr`).join(' ')};--span:${stages.length - 1}`}>
+    {stages.map((s, i) => (
+      <div class:list={['lt__stage', { 'lt__stage--after': i === stages.length - 1 }]}>
         <span class={`lt__bar lt__bar--${s.tone}`}><span class="lt__time">{s.time}</span></span>
         <h3 class="lt__title">{s.title}</h3>
         <p class="lt__text">{s.text}</p>
       </div>
     ))}
+    <!-- the total spans every stage but the last one (installation is not included) -->
+    <div class="lt__span">
+      <p class="lt__total"><Icon name="clock" size={20} /><span>{total}</span></p>
+    </div>
   </div>
-  <div class="lt__sum">
-    <p class="lt__total"><Icon name="clock" size={20} /><span>{total}</span></p>
-    {caveat && <p class="lt__caveat">{caveat}</p>}
-  </div>
+  {caveat && <p class="lt__caveat">{caveat}</p>}
   {notes.length > 0 && (
     <ul class="lt__notes" role="list">
       {notes.map((n, i) => <li><span class={`lt__ic lt__ic--${['blue', 'sky', 'mint', 'blue'][i % 4]}`}><Icon name={n.icon} size={24} /></span><span set:html={n.text} /></li>)}
@@ -28,27 +29,34 @@ const { stages, total, caveat, notes = [] } = Astro.props;
 
 <style>
   .lt { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--sp-6); }
-  .lt__track { display: flex; gap: 6px; }
-  .lt__stage { flex: var(--w) 1 0; min-width: 0; display: grid; align-content: start; gap: var(--sp-2); }
+  .lt__track { display: grid; grid-template-columns: var(--cols); column-gap: 6px; row-gap: var(--sp-5); }
+  .lt__stage { min-width: 0; display: grid; align-content: start; gap: var(--sp-2); }
+  /* bracket under the stages it sums up: a line with end ticks, the total in the middle */
+  .lt__span { grid-row: 2; grid-column: 1 / span var(--span); position: relative; display: grid; justify-items: center; padding-top: var(--sp-4); border-top: 2px solid var(--c-blue); }
+  .lt__span::before, .lt__span::after { content: ''; position: absolute; top: -10px; width: 2px; height: 10px; background: var(--c-blue); }
+  .lt__span::before { left: 0; }
+  .lt__span::after { right: 0; }
   .lt__bar { display: flex; align-items: center; height: 56px; padding: 0 var(--sp-4); border-radius: var(--radius-sm); margin-bottom: var(--sp-3); }
   .lt__bar--blue { background: var(--c-blue); color: var(--c-white); }
   .lt__bar--sky { background: var(--c-sky); color: var(--c-white); }
   .lt__bar--mint { background: var(--c-mint); }
   .lt__bar--grey { background: var(--c-grey); color: var(--c-ink); }
-  .lt__time { font-weight: var(--fw-medium); font-size: var(--fs-small); letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap; }
+  .lt__time { font-weight: var(--fw-medium); font-size: var(--fs-small); letter-spacing: 0; white-space: nowrap; }
   .lt__title { font-size: 1.0625rem; padding-right: var(--sp-3); }
   .lt__text { color: var(--text-muted); font-size: var(--fs-small); max-width: 32ch; }
-  .lt__sum { display: grid; gap: var(--sp-3); justify-items: start; }
   .lt__caveat { color: var(--text-muted); font-size: var(--fs-small); max-width: 72ch; }
-  .lt__total { display: inline-flex; align-items: center; gap: 10px; justify-self: start; padding: 10px 16px; border-radius: var(--radius-sm); background: var(--c-blue); color: var(--c-white); font-weight: var(--fw-medium); }
+  .lt__total { display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: var(--radius-sm); background: var(--c-blue); color: var(--c-white); font-weight: var(--fw-medium); }
   .lt__notes { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--grid-gap); }
-  .lt__notes li { display: grid; grid-template-columns: 48px 1fr; align-items: center; gap: var(--sp-4); padding: var(--sp-5); border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--bg); color: var(--text); }
+  .lt__notes li { display: grid; grid-template-columns: 48px 1fr; align-items: center; gap: var(--sp-4); padding: var(--sp-5); border: 1px solid var(--card-line, var(--border)); border-radius: var(--radius-md); background: var(--bg); color: var(--text); }
   .lt__ic { display: grid; place-items: center; width: 48px; height: 48px; border-radius: var(--radius-sm); }
   .lt__ic--blue { background: var(--c-blue); color: var(--c-white); }
   .lt__ic--sky { background: var(--c-sky); color: var(--c-white); }
   .lt__ic--mint { background: var(--c-mint); color: var(--c-ink); }
   @media (max-width: 1199px) {
-    .lt__track { flex-direction: column; gap: var(--sp-4); }
+    .lt__track { grid-template-columns: 1fr; row-gap: var(--sp-4); }
+    .lt__span { grid-row: auto; grid-column: 1; justify-items: start; padding-top: 0; border-top: 0; }
+    .lt__span::before, .lt__span::after { display: none; }
+    .lt__stage--after { order: 1; }
     .lt__stage { display: grid; grid-template-columns: clamp(112px, 22vw, 168px) 1fr; column-gap: var(--sp-4); }
     .lt__bar { grid-row: span 2; height: 100%; min-height: 64px; margin: 0; justify-content: center; padding: 0 8px; }
     .lt__time { white-space: normal; text-align: center; }

@@ -32,7 +32,7 @@ const { items } = Astro.props;
 <style>
   .sfm { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--grid-gap); }
   .sfm--one { grid-template-columns: minmax(0, 720px); }
-  .sfm__card { display: flex; flex-direction: column; gap: var(--sp-4); padding: var(--sp-6); border-radius: var(--radius-md); background: var(--c-white); border: 1px solid var(--border); }
+  .sfm__card { display: flex; flex-direction: column; gap: var(--sp-4); padding: var(--sp-6); border-radius: var(--radius-md); background: var(--c-white); border: 1px solid var(--card-line, var(--border)); }
   .sfm__head { display: flex; align-items: center; gap: var(--sp-3); }
   .sfm__num { display: grid; place-items: center; flex: none; width: 36px; height: 36px; border-radius: var(--radius-sm); font-size: var(--fs-micro); font-weight: var(--fw-medium); }
   .sfm__title { font-size: var(--fs-h3); line-height: 1.2; }
@@ -41,7 +41,7 @@ const { items } = Astro.props;
   .sfm__ways li { display: grid; gap: 2px; padding: var(--sp-3) var(--sp-4); border-radius: var(--radius-sm); background: var(--bg-tint); }
   .sfm__way-title { font-size: var(--fs-small); font-weight: var(--fw-medium); }
   .sfm__way-text { font-size: var(--fs-small); color: var(--text-muted); }
-  .sfm__more { margin-top: auto; display: inline-flex; align-items: center; gap: 8px; align-self: flex-start; padding-top: var(--sp-2); color: var(--c-ink); text-decoration: none; font-size: var(--fs-small); font-weight: var(--fw-medium); letter-spacing: 0.06em; text-transform: uppercase; }
+  .sfm__more { margin-top: auto; display: inline-flex; align-items: center; gap: 8px; align-self: flex-start; padding-top: var(--sp-2); color: var(--c-ink); text-decoration: none; font-size: var(--fs-small); font-weight: var(--fw-medium); letter-spacing: 0; }
   .sfm__more :global(svg) { transition: transform var(--dur) var(--ease); }
   .sfm__more:hover :global(svg) { transform: translateX(4px); }
   @media (max-width: 767px) {

@@ -93,7 +93,7 @@ export const coatingLayers = {
 
 /** «Образцы и демонстрационные материалы» (photos from the team's selection; src undefined = grey placeholder). */
 export const samplePhotos: { title: string; text: string; src?: string }[] = [
-  { title: 'Образцы продукции и покрытий', src: '/img/photos/color-fan.jpg', text: 'Реальные образцы моделей, цветов и фактур для демонстрации клиентам.' },
+  { title: 'Образцы продукции и покрытий', src: '/img/photos/samples-macro.jpg', text: 'Реальные образцы моделей, цветов и фактур для демонстрации клиентам.' },
   { title: 'Демонстрационные стенды MIRADEX', src: '/img/photos/stand-studio.jpg', text: 'Готовые решения для представления продукции MIRADEX в магазинах, шоурумах и торговых точках.' },
-  { title: 'Каталоги и рекламные материалы', src: '/img/photos/qr-window.jpg', text: 'Каталоги, фотографии, видео, презентации и другие материалы для продвижения продукции и работы с клиентами.' },
+  { title: 'Каталоги и рекламные материалы', src: '/img/photos/color-fan.jpg', text: 'Каталоги, фотографии, видео, презентации и другие материалы для продвижения продукции и работы с клиентами.' },
 ];

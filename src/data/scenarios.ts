@@ -27,7 +27,7 @@ export const scenarios: Scenario[] = [
     description: 'Получайте доход от продажи современных ограждений на партнёрских условиях: без собственного производства и необходимости содержать склад.',
     audience: ['Компании по заборам и воротам', 'Строительные магазины и шоурумы', 'Дистрибьюторы и интернет-магазины'],
     href: '/colaboracion/vender',
-    image: '/img/photos/showroom-bulgaria.jpg',
+    image: '/img/photos/stand-atlas.jpg',
   },
   {
     id: 'instalar', tone: 'sky', num: '02',

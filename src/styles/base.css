@@ -34,18 +34,19 @@ h1, h2, h3, h4 {
   letter-spacing: var(--tracking-caps);
   text-wrap: balance;
 }
+/* capitals only for page and section titles; everything smaller in sentence case */
+h3, h4 { text-transform: none; letter-spacing: 0; }
 .h-display { font-size: var(--fs-display); line-height: var(--lh-tight); letter-spacing: 0; }
 .h2 { font-size: var(--fs-h2); }
 .h3 { font-size: var(--fs-h3); }
 
 p { text-wrap: pretty; }
-.lead { font-size: var(--fs-lead); font-weight: var(--fw-light); line-height: 1.45; }
+.lead { font-size: var(--fs-lead); font-weight: var(--fw-light); line-height: 1.4; }
 .muted { color: var(--text-muted); }
 .eyebrow {
   font-size: var(--fs-micro);
   font-weight: var(--fw-medium);
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
+  letter-spacing: 0;
 }
 
 a { color: var(--link); text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
@@ -78,7 +79,7 @@ a:hover { color: var(--text); }
   font-size: var(--fs-small);
   font-weight: var(--fw-medium);
   letter-spacing: 0.06em;
-  line-height: 1.1;
+  line-height: 1.2;
   text-transform: uppercase;
   text-decoration: none;
   white-space: nowrap;

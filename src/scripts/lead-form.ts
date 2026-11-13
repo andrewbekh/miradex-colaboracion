@@ -121,7 +121,6 @@ document.querySelectorAll<HTMLInputElement>('[data-phone-es]').forEach((input) =
 const messages = ui.errors;
 
 function fieldError(el: HTMLInputElement | HTMLSelectElement): string {
-  if (el.type === 'checkbox') return (el as HTMLInputElement).checked ? '' : messages.consent;
   const v = el.value.trim();
   if (el.required && !v) return messages.required;
   if (el.type === 'email' && v && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) return messages.email;
@@ -131,9 +130,7 @@ function fieldError(el: HTMLInputElement | HTMLSelectElement): string {
 
 function showError(el: HTMLInputElement | HTMLSelectElement, msg: string) {
   el.setAttribute('aria-invalid', msg ? 'true' : 'false');
-  const box = el.type === 'checkbox'
-    ? el.closest('form')!.querySelector('.lf__err--consent')
-    : el.closest('.lf__field')?.querySelector('.lf__err');
+  const box = el.closest('.lf__field')?.querySelector('.lf__err');
   if (box) box.textContent = msg;
 }
 

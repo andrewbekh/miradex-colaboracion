@@ -32,7 +32,7 @@ const { linked = false, texts = {} } = Astro.props;
 <style>
   .cc { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--grid-gap); }
   .cc > li { display: flex; }
-  .cc__card { display: flex; flex-direction: column; width: 100%; color: var(--text); text-decoration: none; border-radius: var(--radius-md); overflow: hidden; background: var(--bg); border: 1px solid var(--border); transition: box-shadow var(--dur) var(--ease), transform var(--dur) var(--ease); }
+  .cc__card { display: flex; flex-direction: column; width: 100%; color: var(--text); text-decoration: none; border-radius: var(--radius-md); overflow: hidden; background: var(--bg); border: 1px solid var(--card-line, var(--border)); transition: box-shadow var(--dur) var(--ease), transform var(--dur) var(--ease); }
   a.cc__card[href]:hover { box-shadow: var(--shadow-soft); transform: translateY(-2px); }
   .cc__img { position: relative; display: grid; aspect-ratio: 4 / 3; overflow: hidden; container-type: inline-size; }
   /* a narrow card keeps only the name of the group: the models are in the text under the photo */
@@ -47,7 +47,7 @@ const { linked = false, texts = {} } = Astro.props;
   .cc__body { display: grid; gap: var(--sp-2); padding: var(--sp-5); flex: 1; align-content: start; }
   .cc__title { font-size: var(--fs-h3); }
   .cc__text { color: var(--text-muted); font-size: var(--fs-small); }
-  .cc__more { display: inline-flex; align-items: center; gap: 6px; margin-top: var(--sp-2); font-size: var(--fs-micro); font-weight: var(--fw-medium); letter-spacing: var(--tracking-label); text-transform: uppercase; }
+  .cc__more { display: inline-flex; align-items: center; gap: 6px; margin-top: var(--sp-2); font-size: var(--fs-micro); font-weight: var(--fw-medium); letter-spacing: 0; }
   @media (max-width: 1199px) { .cc { grid-template-columns: repeat(3, 1fr); } .cc__body { padding: var(--sp-4); } }
   @media (max-width: 767px) { .cc { grid-template-columns: 1fr; } }
 </style>
