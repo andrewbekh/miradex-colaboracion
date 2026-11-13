@@ -1,0 +1,30 @@
+---
+// Coating cross-section next to the warranty seals: why the terms are that long. Numbers match the picture.
+import { coatingLayers } from '../data/shared';
+---
+<div class="cl">
+  <img class="cl__img" src="/img/photos/coating-layers.jpg" alt={coatingLayers.title} loading="lazy" />
+  <div class="cl__body">
+    <h3 class="cl__title">{coatingLayers.title}</h3>
+    <ol class="cl__list" role="list">
+      {coatingLayers.items.map((l, i) => (
+        <li class="cl__item">
+          <span class="cl__num">{i + 1}</span>
+          <p class="cl__name">{l}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</div>
+
+<style>
+  .cl { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--sp-6); align-items: center; padding: var(--sp-5); border-radius: var(--radius-md); background: var(--c-white); }
+  .cl__img { width: 100%; height: auto; display: block; }
+  .cl__body { display: grid; gap: var(--sp-4); }
+  .cl__title { font-size: var(--fs-h3); }
+  .cl__list { display: grid; gap: var(--sp-3); }
+  .cl__item { display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: var(--sp-3); align-items: center; }
+  .cl__num { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: var(--c-blue); color: var(--c-white); font-size: var(--fs-small); font-weight: var(--fw-medium); }
+  .cl__name { font-weight: var(--fw-medium); }
+  @media (max-width: 767px) { .cl { grid-template-columns: 1fr; gap: var(--sp-4); } }
+</style>

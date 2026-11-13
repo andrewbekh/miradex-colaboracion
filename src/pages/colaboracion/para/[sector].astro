@@ -12,6 +12,7 @@ import Economics from '../../../components/Economics.astro';
 import SupportGroups from '../../../components/SupportGroups.astro';
 import SamplesStrip from '../../../components/SamplesStrip.astro';
 import WarrantyBadges from '../../../components/WarrantyBadges.astro';
+import CoatingLayers from '../../../components/CoatingLayers.astro';
 import TpsStats from '../../../components/TpsStats.astro';
 import CategoryCards from '../../../components/CategoryCards.astro';
 import Steps from '../../../components/Steps.astro';
@@ -86,6 +87,7 @@ const video = landings.flatMap((l) => l.videos.items).find((v) => v.num === sect
     <FeatureGrid items={clientAdvantages} />
     <p class="note">{clientAdvantagesNote}</p>
     <div class="gap-top"><WarrantyBadges /></div>
+    <div class="gap-top"><CoatingLayers /></div>
     <div class="gap-top range">
       <h3 class="range__title">{ui.rangeTitle}</h3>
       <CategoryCards texts={sector.range} />

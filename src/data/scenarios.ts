@@ -27,7 +27,7 @@ export const scenarios: Scenario[] = [
     description: 'Получайте доход от продажи современных ограждений на партнёрских условиях: без собственного производства и необходимости содержать склад.',
     audience: ['Компании по заборам и воротам', 'Строительные магазины и шоурумы', 'Дистрибьюторы и интернет-магазины'],
     href: '/colaboracion/vender',
-    image: '/img/photos/stand-interior.jpg',
+    image: '/img/photos/showroom-bulgaria.jpg',
   },
   {
     id: 'instalar', tone: 'sky', num: '02',
@@ -57,7 +57,7 @@ export const scenarios: Scenario[] = [
     description: 'Рекомендуйте MIRADEX своим клиентам и получайте вознаграждение за состоявшиеся продажи. Консультации, расчёты и сопровождение заказов мы берём на себя.',
     audience: ['Архитекторы и дизайнеры', 'Риелторы и агентства недвижимости', 'Ландшафтные и смежные компании'],
     href: '/colaboracion/recomendar',
-    image: '/img/photos/stand-store.jpg',
+    image: '/img/photos/sample-in-hands.jpg',
   },
   {
     id: 'negocio', tone: 'sky', num: '05',
@@ -68,7 +68,7 @@ export const scenarios: Scenario[] = [
     includes: ['Собственный сайт и систему продаж', 'Команду продаж', 'Маркетинг и рекламу', 'Шоурум и демонстрационные стенды', 'Монтажную инфраструктуру', 'Собственную партнёрскую сеть'],
     audience: ['Предприниматели', 'Компании, открывающие новое направление', 'Крупные дилеры и дистрибьюторы'],
     href: '/colaboracion/negocio-miradex',
-    image: '/img/photos/villa-palms.jpg',
+    image: '/img/photos/atlas-modern-house.jpg',
   },
 ];
 

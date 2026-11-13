@@ -36,7 +36,7 @@ export const sectors: Sector[] = [
     id: 'instaladores', name: 'Монтажные компании и установщики', short: 'Монтаж и бригады', icon: 'wrench',
     title: 'Зарабатывайте на продаже и монтаже MIRADEX',
     lead: ['Зарабатывайте на продаже продукции и её монтаже. Получайте дополнительные местные заказы от MIRADEX и загружайте свою бригаду новыми объектами.', 'Партнёрские цены, обучение монтажу и техническая поддержка на первых объектах.'],
-    image: '/img/photos/installer-fence.jpg', video: 3, primary: 'instalar',
+    image: '/img/photos/installer-drill.jpg', video: 3, primary: 'instalar',
     formats: [['instalar', 'installers'], ['recomendar', 'installers']], form: 'Монтаж и установка', why: installerDrivers,
   },
   {

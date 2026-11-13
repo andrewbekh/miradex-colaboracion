@@ -32,7 +32,7 @@ export const productLines: { id: string; title: string; text: string; images: { 
     id: 'sistemas',
     title: 'Системы для ограждений',
     text: 'Столбы, крепёжные элементы, ворота, калитки и сопутствующие конструкции для оформления объекта в едином архитектурном стиле.',
-    images: [{ src: '/img/photos/gate-wood.jpg', alt: 'Ворота MIRADEX' }],
+    images: [{ src: '/img/photos/terra-max-gate.jpg', alt: 'Ограждение и ворота Terra Max' }],
   },
 ];
 

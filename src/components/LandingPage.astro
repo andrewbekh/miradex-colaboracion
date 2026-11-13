@@ -13,6 +13,7 @@ import SupportGroups from './SupportGroups.astro';
 import SamplesStrip from './SamplesStrip.astro';
 import Responsibilities from './Responsibilities.astro';
 import WarrantyBadges from './WarrantyBadges.astro';
+import CoatingLayers from './CoatingLayers.astro';
 import TpsStats from './TpsStats.astro';
 import CategoryCards from './CategoryCards.astro';
 import Steps from './Steps.astro';
@@ -70,6 +71,7 @@ for (const k of order) if (sectionKeys.includes(k)) tone[k] = n++ % 2 === 0 ? 't
             <FeatureGrid items={clientAdvantages} />
             <p class="note">{clientAdvantagesNote}</p>
             <div class="gap-top"><WarrantyBadges /></div>
+            <div class="gap-top"><CoatingLayers /></div>
             <div class="gap-top range">
               <h3 class="range__title">{ui.rangeTitle}</h3>
               <CategoryCards />
