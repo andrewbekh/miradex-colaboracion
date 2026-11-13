@@ -138,7 +138,12 @@ const swatches = ['mint', 'sky', 'blue'];
   .bt__cols--stack .bt__ways ul { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; }
 
   /* film at the width of the left column, the action next to it */
-  .bt__foot { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-7); align-items: end; margin-top: var(--sp-7); padding-top: var(--sp-6); border-top: 1px solid var(--border); }
+  /* desktop: film left, the hint at its top line and the button at its bottom line on the right, caption under the film */
+  .bt__foot { display: grid; grid-template-columns: 1fr 1fr; column-gap: var(--sp-7); row-gap: var(--sp-3); align-items: stretch; margin-top: var(--sp-7); padding-top: var(--sp-6); border-top: 1px solid var(--border); }
+  .bt__foot:not(.bt__foot--solo) .bt__video { display: contents; }
+  .bt__video > :global(:first-child) { grid-column: 1; grid-row: 1; }
+  .bt__video-text { grid-column: 1; grid-row: 2; }
+  .bt__foot:not(.bt__foot--solo) .bt__action { grid-column: 2; grid-row: 1; display: flex; flex-direction: column; justify-content: space-between; }
   .bt__foot--solo { grid-template-columns: minmax(0, 1fr); }
   .bt__video { display: grid; gap: var(--sp-3); min-width: 0; }
   .bt__video :global(.video__frame) { border-radius: var(--radius-md); }
@@ -177,6 +182,9 @@ const swatches = ['mint', 'sky', 'blue'];
     .bt__cols { grid-template-columns: 1fr; gap: var(--sp-5); margin-top: var(--sp-5); }
     .bt__cols--stack .bt__ways ul { grid-template-columns: minmax(0, 1fr); }
     .bt__foot { grid-template-columns: minmax(0, 1fr); gap: var(--sp-5); margin-top: var(--sp-5); padding-top: var(--sp-5); }
+    .bt__foot:not(.bt__foot--solo) .bt__video { display: grid; }
+    .bt__video > :global(:first-child), .bt__video-text, .bt__foot:not(.bt__foot--solo) .bt__action { grid-column: auto; grid-row: auto; }
+    .bt__foot:not(.bt__foot--solo) .bt__action { display: grid; }
   }
 </style>
 

@@ -16,6 +16,7 @@ export interface Scenario {
   includes?: string[]; // Business MIRADEX: what the partner builds (shown on the hub banner)
   href: string;
   image: string;      // banner photo on the hub (provisional, miradex.bg)
+  imagePos?: string;  // object-position when the frame crops the subject (phones: 16:10)
 }
 
 export const scenarios: Scenario[] = [
@@ -58,6 +59,7 @@ export const scenarios: Scenario[] = [
     audience: ['Архитекторы и дизайнеры', 'Риелторы и агентства недвижимости', 'Ландшафтные и смежные компании'],
     href: '/colaboracion/recomendar',
     image: '/img/photos/sample-in-hands.jpg',
+    imagePos: '50% 22%',
   },
   {
     id: 'negocio', tone: 'sky', num: '05',

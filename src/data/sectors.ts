@@ -132,5 +132,6 @@ export const businessCards = [
   ...sectors.map((s) => ({ icon: s.icon, name: s.short, title: s.name, href: sectorHref(s.id), formats: order.filter((id) => s.formats.some(([f]) => f === id)) })),
   { icon: 'hotel', name: 'Отели и объекты', title: 'Отели и коммерческие объекты', href: '/colaboracion/proyectos?type=hotels', formats: ['proyectos'] as ScenarioId[] },
   { icon: 'rocket', name: 'Новый бизнес', title: 'Предприниматели и новый бизнес', href: '/colaboracion/negocio-miradex', formats: ['negocio'] as ScenarioId[] },
-  { icon: 'handshake', name: 'Другой бизнес', title: 'Другой бизнес: рекомендуйте клиентов', href: '/colaboracion/recomendar', formats: ['recomendar'] as ScenarioId[] },
+  // other: says the same as the «Не нашли свой бизнес» bar under the grid, so it is hidden where it would stand alone in a row
+  { icon: 'handshake', name: 'Другой бизнес', other: true, title: 'Другой бизнес: рекомендуйте клиентов', href: '/colaboracion/recomendar', formats: ['recomendar'] as ScenarioId[] },
 ];

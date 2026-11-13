@@ -30,7 +30,7 @@ import { scenarios, toneStyle } from '../data/scenarios';
           <span class="bn__more">{ui.cta.seeFormat}<Icon name="arrow-right" size={18} /></span>
         </span>
         <span class="bn__media" aria-hidden="true">
-          <img class="bn__img" src={s.image} alt="" loading="lazy" />
+          <img class="bn__img" src={s.image} alt="" loading="lazy" style={s.imagePos ? `object-position:${s.imagePos}` : undefined} />
         </span>
       </a>
     </li>

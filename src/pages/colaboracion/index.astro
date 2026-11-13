@@ -100,14 +100,13 @@ const v1 = videos[1];
 </Page>
 
 <style>
-  /* film and the three pillars side by side, so the block is one screen, not two */
-  /* the film takes the height of the pillars column */
-  .film { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: var(--grid-gap); align-items: stretch; }
-  .film > :global(.video) { height: 100%; }
-  .film :global(.video__frame) { height: 100%; aspect-ratio: auto; min-height: 360px; }
-  @media (max-width: 1023px) {
-    .film { grid-template-columns: 1fr; }
-    .film :global(.video__frame) { height: auto; aspect-ratio: 16 / 9; min-height: 0; }
+  /* the film at full width in its own 16:9, the three pillars in a row under it: side by side the long pillar texts stretched the film */
+  .film { display: grid; gap: var(--grid-gap); }
+  .film :global(.video__frame) { aspect-ratio: 16 / 9; }
+  /* a row of three: the cards share their rows (subgrid), so the titles stand on one line whatever the text length */
+  @media (min-width: 1024px) {
+    .film :global(.mp--compact) { grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: repeat(3, auto); }
+    .film :global(.mp--compact .mp__item) { display: grid; grid-row: span 3; grid-template-rows: subgrid; row-gap: 0; align-items: start; }
   }
 
   /* quiz folded under the cards: one click opens it, so the 16 businesses are not shown twice */

@@ -6,7 +6,7 @@ import { businessCards } from '../data/sectors';
 ---
 <ul class="sc-grid" role="list">
   {businessCards.map((c) => (
-    <li>
+    <li class:list={{ 'sc-other': 'other' in c }}>
       <a class="sct" href={c.href} title={c.title} aria-label={c.title}>
         <Icon name={c.icon} size={20} class="sct__ic" />
         <span class="sct__name">{c.name}</span>
@@ -29,7 +29,8 @@ import { businessCards } from '../data/sectors';
   .sct__name { flex: 1; min-width: 0; font-size: var(--fs-small); font-weight: var(--fw-medium); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .sct :global(.sct__arrow) { flex: none; color: var(--c-line-strong); transition: transform var(--dur) var(--ease), color var(--dur) var(--ease); }
   .sct:hover :global(.sct__arrow) { color: var(--c-ink); transform: translateX(3px); }
-  @media (max-width: 1199px) { .sc-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  /* three per row: 15 cards fill five rows, «Другой бизнес» would stand alone and repeats the bar below */
+  @media (min-width: 768px) and (max-width: 1199px) { .sc-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } .sc-other { display: none !important; } }
   @media (max-width: 767px) {
     .sc-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
     /* two columns: names may take two lines, every item keeps the same height */
